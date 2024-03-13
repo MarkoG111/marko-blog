@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 footer ul a {
-  background-color: #292242;
+  background-color: rgb(16 32 42);
   color: #fff;
   padding: 0.6rem 1.4rem;
   border-radius: 0.6rem;

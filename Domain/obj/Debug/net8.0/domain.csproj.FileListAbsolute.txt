@@ -1,0 +1,12 @@
+C:\Users\Gacho\Desktop\My_Blog\domain\obj\Debug\net8.0\domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Gacho\Desktop\My_Blog\domain\obj\Debug\net8.0\domain.AssemblyInfoInputs.cache
+C:\Users\Gacho\Desktop\My_Blog\domain\obj\Debug\net8.0\domain.AssemblyInfo.cs
+C:\Users\Gacho\Desktop\My_Blog\domain\obj\Debug\net8.0\domain.csproj.CoreCompileInputs.cache
+C:\Users\Gacho\Desktop\My_Blog\domain\obj\Debug\net8.0\domain.sourcelink.json
+C:\Users\Gacho\Desktop\My_Blog\domain\bin\Debug\net8.0\domain.deps.json
+C:\Users\Gacho\Desktop\My_Blog\domain\bin\Debug\net8.0\domain.dll
+C:\Users\Gacho\Desktop\My_Blog\domain\bin\Debug\net8.0\domain.pdb
+C:\Users\Gacho\Desktop\My_Blog\domain\obj\Debug\net8.0\domain.dll
+C:\Users\Gacho\Desktop\My_Blog\domain\obj\Debug\net8.0\refint\domain.dll
+C:\Users\Gacho\Desktop\My_Blog\domain\obj\Debug\net8.0\domain.pdb
+C:\Users\Gacho\Desktop\My_Blog\domain\obj\Debug\net8.0\ref\domain.dll

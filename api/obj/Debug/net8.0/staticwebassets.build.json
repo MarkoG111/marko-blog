@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "EVu1yHI8hXl6XPVEoOxfvZMljR1iB9Xzizb/a8WYi9U=",
+  "Source": "api",
+  "BasePath": "_content/api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "api\\wwwroot",
+      "Source": "api",
+      "ContentRoot": "C:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\",
+      "BasePath": "_content/api",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\27bfe790-22ca-4bab-9894-df84452ede7d.png",
+      "SourceId": "api",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\",
+      "BasePath": "_content/api",
+      "RelativePath": "Images/27bfe790-22ca-4bab-9894-df84452ede7d.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Images\\27bfe790-22ca-4bab-9894-df84452ede7d.png"
+    }
+  ]
+}

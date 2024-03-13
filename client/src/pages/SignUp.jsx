@@ -17,6 +17,14 @@ export default function SignUp() {
         <div className='flex-1'>
           <form className='flex flex-col gap-4'>
             <div>
+              <Label value='First name' />
+              <TextInput type='text' placeholder='Peter' id='firstName' />
+            </div>
+            <div>
+              <Label value='Last name' />
+              <TextInput type='text' placeholder='Clyne' id='lastName' />
+            </div>
+            <div>
               <Label value='Your username' />
               <TextInput type='text' placeholder='Username' id='username' />
             </div>
