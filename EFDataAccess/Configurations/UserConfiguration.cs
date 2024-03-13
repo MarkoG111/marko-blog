@@ -23,7 +23,7 @@ namespace EFDataAccess.Configurations
             builder.HasMany(x => x.Blogs)
                    .WithOne(y => y.User)
                    .HasForeignKey(x => x.IdUser)
-                   .OnDelete(DeleteBehavior.Restrict);
+                   .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasMany(x => x.Comments)
                 .WithOne(y => y.User)

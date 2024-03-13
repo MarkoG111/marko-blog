@@ -10,10 +10,13 @@ using Application.Queries.Blog;
 using Application.Queries.Image;
 using Application.Commands.Blog;
 using Application.Commands.Category;
+using Application.Commands.User;
 
 using Implementation.Commands;
 using Implementation.Commands.Blog;
 using Implementation.Commands.Category;
+using Implementation.Commands.User;
+
 using Implementation.Queries;
 using Implementation.Queries.Blog;
 using Implementation.Queries.Image;
@@ -21,9 +24,12 @@ using Implementation.Queries.Image;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+
 using Implementation.Validators.Blog;
 using Implementation.Validators.Category;
-
+using Implementation.Validators.User;
+using Application.Queries.User;
+using Implementation.Queries.User;
 
 namespace api.Core
 {
@@ -34,6 +40,7 @@ namespace api.Core
             services.AddTransient<UseCaseExecutor>();
 
             // Commands
+            services.AddTransient<IRegisterUserCommand, EFRegisterUserCommand>();
             services.AddTransient<ICreateBlogCommand, EFCreateBlogCommand>();
             services.AddTransient<ICreateCategoryCommand, EFCreateCategoryCommand>();
 
@@ -42,10 +49,12 @@ namespace api.Core
             services.AddTransient<IGetBlogQuery, EFGetBlogQuery>();
             services.AddTransient<IGetUseCaseLogsQuery, EFGetUseCaseLogsQuery>();
             services.AddTransient<IGetImagesQuery, EFGetImagesQuery>();
+            services.AddTransient<IGetUserQuery, EFGetUserQuery>();
 
             // Validators
             services.AddTransient<CreateBlogValidator>();
             services.AddTransient<CreateCategoryValidator>();
+            services.AddTransient<RegisterUserValidator>();
         }
 
         public static void AddApplicationActor(this IServiceCollection services)

@@ -11,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Application.Commands.Email;
+using Implementation.Commands.Email;
+
 
 namespace api
 {
@@ -73,6 +76,8 @@ namespace api
                     }
                 });
             });
+
+            services.AddTransient<IEmailSender, SMTPEmailSender>();
 
             services.AddControllers();
         }
