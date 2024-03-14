@@ -8,6 +8,6 @@ namespace Application.Commands.User
 {
     public interface IRegisterUserCommand : ICommand<RegisterUserDto>
     {
-
+        
     }
 }

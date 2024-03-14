@@ -32,7 +32,7 @@ namespace Implementation.Commands.Blog
         public void Execute(InsertBlogDto request)
         {
             _validator.ValidateAndThrow(request);
-
+            
             var blog = new Domain.Blog
             {
                 Title = request.Title,

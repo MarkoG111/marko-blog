@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
 
 namespace api.Core
@@ -23,6 +24,16 @@ namespace api.Core
             _context = context;
         }
 
+        private static byte[] GenerateRandomBytes(int length)
+        {
+            byte[] randomBytes = new byte[length];
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(randomBytes);
+            }
+            return randomBytes;
+        }
+
         public string MakeToken(string username, string password)
         {
             var user = _context.Users.Include(u => u.UserUseCases)
@@ -33,6 +44,11 @@ namespace api.Core
                 return null;
             }
 
+            byte[] keyBytes = GenerateRandomBytes(32); // 32 bajta = 256 bita
+            string secretKey = Convert.ToBase64String(keyBytes);
+
+            Console.WriteLine("Generisani tajni ključ: " + secretKey);
+
             var actor = new JWTActor
             {
                 Id = user.Id,
@@ -41,7 +57,6 @@ namespace api.Core
             };
 
             var issuer = "asp_api";
-            var secretKey = "ThisIsMyVerySecretKey";
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString(), ClaimValueTypes.String, issuer),

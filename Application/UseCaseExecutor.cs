@@ -20,12 +20,22 @@ namespace Application
         {
             _logger.Log(command, _actor, data);
 
+            if (!_actor.AllowedUseCases.Contains(command.Id))
+            {
+                throw new UnauthorizedUseCaseException(command, _actor);
+            }
+
             command.Execute(data);
         }
 
         public TResponse ExecuteQuery<TResponse, TSearch>(IQuery<TResponse, TSearch> query, TSearch data)
         {
             _logger.Log(query, _actor, data);
+
+            if (!_actor.AllowedUseCases.Contains(query.Id))
+            {
+                throw new UnauthorizedUseCaseException(query, _actor);
+            }
 
             return query.Execute(data);
         }

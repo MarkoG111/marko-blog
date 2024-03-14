@@ -30,6 +30,7 @@ using Implementation.Validators.Category;
 using Implementation.Validators.User;
 using Application.Queries.User;
 using Implementation.Queries.User;
+using System.Security.Cryptography;
 
 namespace api.Core
 {
@@ -78,8 +79,21 @@ namespace api.Core
             });
         }
 
+        private static byte[] GenerateRandomBytes(int length)
+        {
+            byte[] randomBytes = new byte[length];
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(randomBytes);
+            }
+            return randomBytes;
+        }
+
         public static void AddJWT(this IServiceCollection services)
         {
+            byte[] keyBytes = GenerateRandomBytes(32); // 32 bajta = 256 bita
+            string secretKey = Convert.ToBase64String(keyBytes);
+
             services.AddAuthentication(options =>
             {
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
