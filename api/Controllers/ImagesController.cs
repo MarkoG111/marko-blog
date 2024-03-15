@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Application;
 using Application.DataTransfer;
-using Application.Queries.Image;
 using Application.Searches;
 using Domain;
 using EFDataAccess;

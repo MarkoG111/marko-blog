@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Application.Searches
 {
-    public class ImageSearch : PagedSearch
+    public class CategorySearch : PagedSearch
     {
-        public string ImagePath { get; set; }
+        public string Name { get; set; }
     }
 }

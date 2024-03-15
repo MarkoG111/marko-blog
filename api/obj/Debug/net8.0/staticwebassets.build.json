@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "IKuT2yEWfpILhe82vTyR3po2RkrbpvGEx2pzNtlnupc=",
+  "Hash": "EVu1yHI8hXl6XPVEoOxfvZMljR1iB9Xzizb/a8WYi9U=",
   "Source": "api",
   "BasePath": "_content/api",
   "Mode": "Default",
@@ -10,7 +10,7 @@
     {
       "Name": "api\\wwwroot",
       "Source": "api",
-      "ContentRoot": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\",
       "BasePath": "_content/api",
       "Pattern": "**"
     }
@@ -20,7 +20,7 @@
       "Identity": "C:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\27bfe790-22ca-4bab-9894-df84452ede7d.png",
       "SourceId": "api",
       "SourceType": "Discovered",
-      "ContentRoot": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\",
       "BasePath": "_content/api",
       "RelativePath": "Images/27bfe790-22ca-4bab-9894-df84452ede7d.png",
       "AssetKind": "All",

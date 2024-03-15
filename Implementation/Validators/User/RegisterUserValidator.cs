@@ -18,28 +18,28 @@ namespace Implementation.Validators.User
             _context = context;
 
             RuleFor(x => x.FirstName).NotEmpty()
-                                     .WithMessage("First name is required.");
+                .WithMessage("First name is required.");
 
             RuleFor(x => x.LastName).NotEmpty()
-                                    .WithMessage("Last name is required.");
+                .WithMessage("Last name is required.");
 
             RuleFor(x => x.Password).NotEmpty()
-                                    .MinimumLength(3)
-                                    .WithMessage("Password must be with at least 3 characters and not empty.");
+                .MinimumLength(3)
+                .WithMessage("Password must be with at least 3 characters and not empty.");
 
             RuleFor(x => x.Username).NotEmpty()
-                                    .WithMessage("Username is required.")
-                                    .MinimumLength(4)
-                                    .WithMessage("Minimum length for username is 4 characters.")
-                                    .Must(DoesNotExistUsername)
-                                    .WithMessage("Username must be unique.");
+                .WithMessage("Username is required.")
+                .MinimumLength(4)
+                .WithMessage("Minimum length for username is 4 characters.")
+                .Must(DoesNotExistUsername)
+                .WithMessage("Username must be unique.");
 
             RuleFor(x => x.Email).NotEmpty()
-                                 .WithMessage("Email is required.")
-                                 .EmailAddress()
-                                 .WithMessage("Not a valid email format.")
-                                 .Must(x => !context.Users.Any(user => user.Email == x))
-                                 .WithMessage("Email adress must be unique.");
+                .WithMessage("Email is required.")
+                .EmailAddress()
+                .WithMessage("Not a valid email format.")
+                .Must(x => !context.Users.Any(user => user.Email == x))
+                .WithMessage("Email adress must be unique.");
         }
 
         private bool DoesNotExistUsername(string username)

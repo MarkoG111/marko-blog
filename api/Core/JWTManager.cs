@@ -47,8 +47,6 @@ namespace api.Core
             byte[] keyBytes = GenerateRandomBytes(32); // 32 bajta = 256 bita
             string secretKey = Convert.ToBase64String(keyBytes);
 
-            Console.WriteLine("Generisani tajni ključ: " + secretKey);
-
             var actor = new JWTActor
             {
                 Id = user.Id,

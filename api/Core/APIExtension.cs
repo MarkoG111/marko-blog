@@ -5,31 +5,42 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Application;
-using Application.Queries;
-using Application.Queries.Blog;
-using Application.Queries.Image;
+
 using Application.Commands.Blog;
 using Application.Commands.Category;
 using Application.Commands.User;
+using Application.Commands.Like;
+using Application.Commands.Comment;
 
-using Implementation.Commands;
+using Application.Queries;
+using Application.Queries.Blog;
+using Application.Queries.Category;
+using Application.Queries.User;
+using Application.Queries.Comment;
+
+
+using Implementation.Validators.Blog;
+using Implementation.Validators.Category;
+using Implementation.Validators.User;
+using Implementation.Validators.Like;
+using Implementation.Validators.Comment;
+
 using Implementation.Commands.Blog;
 using Implementation.Commands.Category;
 using Implementation.Commands.User;
+using Implementation.Commands.Comment;
+using Implementation.Commands.Like;
 
 using Implementation.Queries;
 using Implementation.Queries.Blog;
-using Implementation.Queries.Image;
+using Implementation.Queries.Category;
+using Implementation.Queries.Comment;
+using Implementation.Queries.User;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
-using Implementation.Validators.Blog;
-using Implementation.Validators.Category;
-using Implementation.Validators.User;
-using Application.Queries.User;
-using Implementation.Queries.User;
 using System.Security.Cryptography;
 
 namespace api.Core
@@ -42,20 +53,41 @@ namespace api.Core
 
             // Commands
             services.AddTransient<IRegisterUserCommand, EFRegisterUserCommand>();
+
             services.AddTransient<ICreateBlogCommand, EFCreateBlogCommand>();
+            services.AddTransient<IUpdateBlogCommand, EFUpdateBlogCommand>();
+            services.AddTransient<IDeleteBlogCommand, EFDeleteBlogCommand>();
+            services.AddTransient<IUpdatePersonalBlogCommand, EFUpdatePersonalBlogCommand>();
+            services.AddTransient<IDeletePersonalBlogCommand, EFDeletePersonalBlogCommand>();
+
             services.AddTransient<ICreateCategoryCommand, EFCreateCategoryCommand>();
+            services.AddTransient<IUpdateCategoryCommand, EFUpdateCategoryCommand>();
+            services.AddTransient<IDeleteCategoryCommand, EFDeleteCategoryCommand>();
 
             // Queries
             services.AddTransient<IGetBlogsQuery, EFGetBlogsQuery>();
             services.AddTransient<IGetBlogQuery, EFGetBlogQuery>();
             services.AddTransient<IGetUseCaseLogsQuery, EFGetUseCaseLogsQuery>();
-            services.AddTransient<IGetImagesQuery, EFGetImagesQuery>();
             services.AddTransient<IGetUserQuery, EFGetUserQuery>();
 
             // Validators
+            services.AddTransient<RegisterUserValidator>();
+            
             services.AddTransient<CreateBlogValidator>();
             services.AddTransient<CreateCategoryValidator>();
-            services.AddTransient<RegisterUserValidator>();
+            services.AddTransient<CreateCommentValidator>();
+            services.AddTransient<CreateUserValidator>();
+
+            services.AddTransient<LikeValidator>();
+
+            services.AddTransient<UpdateBlogValidator>();
+            services.AddTransient<UpdateCategoryValidator>();
+            services.AddTransient<UpdateCommentValidator>();
+            services.AddTransient<UpdateUserValidator>();
+
+            services.AddTransient<DeleteBlogValidator>();
+            services.AddTransient<DeleteCategoryValidator>();
+            services.AddTransient<DeleteCommentValidator>();
         }
 
         public static void AddApplicationActor(this IServiceCollection services)
