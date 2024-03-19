@@ -1,7 +1,8 @@
-﻿using Domain;
-using EFDataAccess.Configurations;
+﻿using System;
+
 using Microsoft.EntityFrameworkCore;
-using System;
+using Domain;
+using EFDataAccess.Configurations;
 
 namespace EFDataAccess
 {

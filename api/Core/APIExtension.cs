@@ -18,7 +18,6 @@ using Application.Queries.Category;
 using Application.Queries.User;
 using Application.Queries.Comment;
 
-
 using Implementation.Validators.Blog;
 using Implementation.Validators.Category;
 using Implementation.Validators.User;
@@ -41,8 +40,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
-using System.Security.Cryptography;
-
 namespace api.Core
 {
     public static class APIExtension
@@ -64,15 +61,29 @@ namespace api.Core
             services.AddTransient<IUpdateCategoryCommand, EFUpdateCategoryCommand>();
             services.AddTransient<IDeleteCategoryCommand, EFDeleteCategoryCommand>();
 
+            services.AddTransient<ICreateCommentCommand, EFCreateCommentCommand>();
+            services.AddTransient<IUpdatePersonalCommentCommand, EFUpdatePersonalCommentCommand>();
+            services.AddTransient<IDeleteCommentCommand, EFDeleteCommentCommand>();
+            services.AddTransient<IDeletePersonalCommentCommand, EFDeletePersonalCommentCommand>();
+
+            services.AddTransient<ILikeBlogCommand, EFLikeBlogCommand>();
+
             // Queries
             services.AddTransient<IGetBlogsQuery, EFGetBlogsQuery>();
             services.AddTransient<IGetBlogQuery, EFGetBlogQuery>();
-            services.AddTransient<IGetUseCaseLogsQuery, EFGetUseCaseLogsQuery>();
+
+            services.AddTransient<IGetCategoriesQuery, EFGetCategoriesQuery>();
+            services.AddTransient<IGetCategoryQuery, EFGetCategoryQuery>();
+
+            services.AddTransient<IGetCommentQuery, EFGetCommentQuery>();
+
             services.AddTransient<IGetUserQuery, EFGetUserQuery>();
+
+            services.AddTransient<IGetUseCaseLogsQuery, EFGetUseCaseLogsQuery>();
 
             // Validators
             services.AddTransient<RegisterUserValidator>();
-            
+
             services.AddTransient<CreateBlogValidator>();
             services.AddTransient<CreateCategoryValidator>();
             services.AddTransient<CreateCommentValidator>();
@@ -111,21 +122,8 @@ namespace api.Core
             });
         }
 
-        private static byte[] GenerateRandomBytes(int length)
-        {
-            byte[] randomBytes = new byte[length];
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                rng.GetBytes(randomBytes);
-            }
-            return randomBytes;
-        }
-
         public static void AddJWT(this IServiceCollection services)
         {
-            byte[] keyBytes = GenerateRandomBytes(32); // 32 bajta = 256 bita
-            string secretKey = Convert.ToBase64String(keyBytes);
-
             services.AddAuthentication(options =>
             {
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -1,15 +1,8 @@
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Application;
 using Application.DataTransfer;
-using Application.Searches;
 using Domain;
 using EFDataAccess;
-using Microsoft.AspNetCore.Http;
 
 namespace api.Controllers
 {

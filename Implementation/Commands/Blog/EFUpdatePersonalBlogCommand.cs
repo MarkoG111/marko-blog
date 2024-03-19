@@ -33,7 +33,7 @@ namespace Implementation.Commands.Blog
         {
             _validator.ValidateAndThrow(request);
 
-            var blog = _context.Blog.Include(x => x.BlogCategories).FirstOrDefault(x => x.Id == request.Id);
+            var blog = _context.Blogs.Include(x => x.BlogCategories).FirstOrDefault(x => x.Id == request.Id);
 
             if (blog == null)
             {
