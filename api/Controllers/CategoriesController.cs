@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-
 using Application;
 using Application.Commands.Category;
 using Application.DataTransfer;
+using Application.Queries.Category;
+using Application.Searches;
 
 namespace api.Controllers
 {
@@ -19,11 +20,38 @@ namespace api.Controllers
             _executor = executor;
         }
 
+        [HttpGet]
+        public IActionResult Get([FromQuery] CategorySearch search, [FromServices] IGetCategoriesQuery query)
+        {
+            return Ok(_executor.ExecuteQuery(query, search));
+        }
+
+        [HttpGet("{id}", Name = "GetCategory")]
+        public IActionResult Get(int id, [FromServices] IGetCategoryQuery query)
+        {
+            return Ok(_executor.ExecuteQuery(query, id));
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] CategoryDto dto, [FromServices] ICreateCategoryCommand command)
         {
             _executor.ExecuteCommand(command, dto);
             return StatusCode(StatusCodes.Status201Created);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] CategoryDto dto, [FromServices] IUpdateCategoryCommand command)
+        {
+            dto.Id = id;
+            _executor.ExecuteCommand(command, dto);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id, [FromServices] IDeleteCategoryCommand command)
+        {
+            _executor.ExecuteCommand(command, id);
+            return NoContent();
         }
     }
 }

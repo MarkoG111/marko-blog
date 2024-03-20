@@ -10,7 +10,7 @@ namespace Application.Queries
         public int TotalCount { get; set; }
         public int ItemsPerPage { get; set; }
         public int CurrentPage { get; set; }
-        public int PageCount => (int)Math.Ceiling((float)TotalCount / ItemsPerPage);
+        public int PageCount => (int)Math.Ceiling((float)TotalCount / ItemsPerPage); 
         public IEnumerable<T> Items { get; set; } = new List<T>();
     }
 }

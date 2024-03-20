@@ -4,6 +4,7 @@ using Application.DataTransfer;
 using Application.Commands.Blog;
 using Application.Queries.Blog;
 using Application.Searches;
+using Application.Commands.Like;
 
 namespace api.Controllers
 {
@@ -18,6 +19,17 @@ namespace api.Controllers
         {
             _executor = executor;
             _actor = actor;
+        }
+
+        [HttpPost]
+        [Route("/api/like")]
+        public IActionResult Like([FromBody] LikeDto request, [FromServices] ILikeBlogCommand command)
+        {
+            string json = System.Text.Json.JsonSerializer.Serialize(request);
+
+            request.IdUser = _actor.Id;
+            _executor.ExecuteCommand(command, request);
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpGet]
@@ -37,6 +49,21 @@ namespace api.Controllers
         {
             _executor.ExecuteCommand(command, dto);
             return StatusCode(StatusCodes.Status201Created);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] UpdateBlogDto dto, [FromServices] IUpdateBlogCommand command)
+        {
+            dto.Id = id;
+            _executor.ExecuteCommand(command, dto);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id, [FromServices] IDeleteBlogCommand command)
+        {
+            _executor.ExecuteCommand(command, id);
+            return NoContent();
         }
     }
 }

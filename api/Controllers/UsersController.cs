@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-
 using Application;
 using Application.Commands.User;
 using Application.DataTransfer;
@@ -24,10 +18,38 @@ namespace api.Controllers
             _executor = executor;
         }
 
+        [HttpGet]
+        public IActionResult Get([FromServices] IGetUsersQuery query, [FromQuery] UserSearch search)
+        {
+            return Ok(_executor.ExecuteQuery(query, search));
+        }
+
         [HttpGet("{id}", Name = "GetUser")]
         public IActionResult Get(int id, [FromServices] IGetUserQuery query)
         {
             return Ok(_executor.ExecuteQuery(query, id));
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] InsertUserDto dto, [FromServices] ICreateUserCommand command)
+        {
+            _executor.ExecuteCommand(command, dto);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] UpdateUserDto dto, [FromServices] IUpdateUserCommand command)
+        {
+            dto.Id = id;
+            _executor.ExecuteCommand(command, dto);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id, [FromServices] IDeleteUserCommand command)
+        {
+            _executor.ExecuteCommand(command, id);
+            return NoContent();
         }
     }
 }

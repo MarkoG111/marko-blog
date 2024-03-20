@@ -22,6 +22,7 @@ namespace Implementation.Commands.Email
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
+                // Allow less security apps
                 Credentials = new NetworkCredential("blogapiasp@gmail.com", "tmoe xbbp gxmn jeco")
             };
 

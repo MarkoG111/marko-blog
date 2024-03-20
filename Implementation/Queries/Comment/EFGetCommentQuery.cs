@@ -20,7 +20,6 @@ namespace Implementation.Queries.Comment
         }
 
         public int Id => (int)UseCaseEnum.EFGetOneUserQuery;
-
         public string Name => UseCaseEnum.EFGetOneUserQuery.ToString();
 
         public CommentDto Execute(int search)

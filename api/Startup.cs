@@ -102,6 +102,8 @@ namespace api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "BlogAPI v1");
             });
 
+            app.UseMiddleware<GlobalExceptionHandler>();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

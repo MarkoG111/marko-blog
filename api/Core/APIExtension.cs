@@ -66,6 +66,10 @@ namespace api.Core
             services.AddTransient<IDeleteCommentCommand, EFDeleteCommentCommand>();
             services.AddTransient<IDeletePersonalCommentCommand, EFDeletePersonalCommentCommand>();
 
+            services.AddTransient<ICreateUserCommand, EFCreateUserCommand>();
+            services.AddTransient<IUpdateUserCommand, EFUpdateUserCommand>();
+            services.AddTransient<IDeleteUserCommand, EFDeleteUserCommand>();
+
             services.AddTransient<ILikeBlogCommand, EFLikeBlogCommand>();
 
             // Queries
@@ -99,6 +103,9 @@ namespace api.Core
             services.AddTransient<DeleteBlogValidator>();
             services.AddTransient<DeleteCategoryValidator>();
             services.AddTransient<DeleteCommentValidator>();
+
+            services.AddTransient<CreateUserValidator>();
+            services.AddTransient<UpdateUserValidator>();
         }
 
         public static void AddApplicationActor(this IServiceCollection services)

@@ -42,6 +42,7 @@ namespace Implementation.Commands.Blog
             blog.IdImage = request.IdImage;
             blog.ModifiedAt = DateTime.Now;
 
+            // Ako postoje kategorije koje nisu prisutne u prosleđenom UpdateBlogDto objektu, one se označavaju kao neaktivne i obrisane, a za nove kategorije se dodaju nove veze između bloga i kategorija.
             var categoryDelete = blog.BlogCategories.Where(x => !request.BlogCategories.Contains(x.IdCategory));
 
             foreach (var category in categoryDelete)

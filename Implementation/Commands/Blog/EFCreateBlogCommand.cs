@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 using Application;
 using Application.Commands.Blog;
 using Application.DataTransfer;
@@ -5,11 +10,6 @@ using Domain;
 using EFDataAccess;
 using FluentValidation;
 using Implementation.Validators.Blog;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Implementation.Commands.Blog
 {
