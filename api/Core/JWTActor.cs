@@ -1,6 +1,6 @@
 using Application;
 
-namespace api.Core
+namespace API.Core
 {
     public class JWTActor : IApplicationActor
     {

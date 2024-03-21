@@ -6,7 +6,7 @@ using Application.Queries.Blog;
 using Application.Searches;
 using Application.Commands.Like;
 
-namespace api.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

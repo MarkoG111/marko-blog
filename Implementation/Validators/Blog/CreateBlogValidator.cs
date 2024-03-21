@@ -33,7 +33,7 @@ namespace Implementation.Validators.Blog
             RuleForEach(x => x.BlogCategories).ChildRules(categories =>
             {
                 categories.RuleFor(x => x.IdCategory).Must(CategoryExists)
-                    .WithMessage("Category with provied ID doesn't exists");
+                    .WithMessage("Category with provied ID doesn't exists.");
             });
 
             RuleFor(x => x.BlogCategories).Must(x => x.Select(y => y.IdCategory).Distinct().Count() == x.Count())

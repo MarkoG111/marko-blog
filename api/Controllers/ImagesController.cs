@@ -4,7 +4,7 @@ using Application.DataTransfer;
 using Domain;
 using EFDataAccess;
 
-namespace api.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

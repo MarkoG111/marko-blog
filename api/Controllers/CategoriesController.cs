@@ -5,7 +5,7 @@ using Application.DataTransfer;
 using Application.Queries.Category;
 using Application.Searches;
 
-namespace api.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

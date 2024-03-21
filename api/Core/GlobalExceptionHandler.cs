@@ -6,7 +6,7 @@ using Application.Exceptions;
 using FluentValidation;
 using Newtonsoft.Json;
 
-namespace api.Core
+namespace API.Core
 {
     public class GlobalExceptionHandler
     {

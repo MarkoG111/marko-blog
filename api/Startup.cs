@@ -1,4 +1,4 @@
-using api.Core;
+using API.Core;
 using Application;
 using EFDataAccess;
 using Implementation.Logging;
@@ -7,7 +7,7 @@ using Microsoft.OpenApi.Models;
 using Application.Commands.Email;
 using Implementation.Commands.Email;
 
-namespace api
+namespace API
 {
     public class Startup
     {

@@ -40,7 +40,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
-namespace api.Core
+namespace API.Core
 {
     public static class APIExtension
     {

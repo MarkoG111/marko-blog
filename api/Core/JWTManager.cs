@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 
-namespace api.Core
+namespace API.Core
 {
     public class JWTManager
     {

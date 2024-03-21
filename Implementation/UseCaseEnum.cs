@@ -18,7 +18,6 @@ namespace Implementation
         EFUpdateCommentCommand = 10,
         EFDeleteCommentCommand = 11,
         EFGetOneCommentQuery = 12,
-        EFGetCommentsQuery = 13,
         EFUpdatePersonalCommentCommand = 14,
         EFDeletePersonalCommentCommand = 15,
 
@@ -37,7 +36,5 @@ namespace Implementation
         EFDeleteCategoryCommand = 25,
         EFGetOneCategoryQuery = 26,
         EFGetCategoriesQuery = 27,
-
-        EFGetImagesQuery = 28
     }
 }

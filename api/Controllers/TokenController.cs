@@ -1,8 +1,8 @@
-using api.Core;
+using API.Core;
 using Microsoft.AspNetCore.Mvc;
 using Application.DataTransfer;
 
-namespace api.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -25,7 +25,7 @@ namespace api.Controllers
                 return Unauthorized();
             }
 
-            return Ok(new 
+            return Ok(new
             {
                 token
             });
