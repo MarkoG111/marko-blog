@@ -1,7 +1,62 @@
-import { Button, Label, TextInput } from 'flowbite-react'
-import { Link } from 'react-router-dom'
+import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'
+import OAuth from '../components/OAuth';
 
 export default function SignUp() {
+  const [formData, setFormData] = useState({});
+  const [errorMessages, setErrorMessage] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      const res = await fetch('/api/Register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      setLoading(false);
+
+      if (!res.ok) {
+        const data = await res.json();
+
+        let validationErrors = [];
+
+        if (Array.isArray(data.errors)) {
+          validationErrors = data.errors.map(error => {
+            error.fieldName === 'FirstName' ? 'First Name' : (error.fieldName === 'LastName' ? 'Last Name' : error.fieldName);
+            return `${error.ErrorMessage}`;
+          });
+        } else if (typeof data.errors === 'object') {
+          validationErrors = Object.entries(data.errors).map(([fieldName]) => {
+            const fortmattedFieldName = fieldName === 'FirstName' ? 'First Name' : (fieldName === 'LastName' ? 'Last Name' : fieldName);
+            return `${fortmattedFieldName} is required.`;
+          }).flat();
+        } else {
+          validationErrors = [data.message];
+        }
+
+        setErrorMessage(validationErrors);
+      } else {
+        navigate('/sign-in');
+        setErrorMessage([]);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  }
+
   return (
     <div className='min-h-screen mt-20'>
       <div className='flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5'>
@@ -15,31 +70,35 @@ export default function SignUp() {
         </div>
 
         <div className='flex-1'>
-          <form className='flex flex-col gap-4'>
+          <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
             <div>
               <Label value='First name' />
-              <TextInput type='text' placeholder='Peter' id='firstName' />
+              <TextInput type='text' placeholder='Peter' id='firstName' onChange={handleChange} />
             </div>
             <div>
               <Label value='Last name' />
-              <TextInput type='text' placeholder='Clyne' id='lastName' />
+              <TextInput type='text' placeholder='Clyne' id='lastName' onChange={handleChange} />
             </div>
             <div>
               <Label value='Your username' />
-              <TextInput type='text' placeholder='Username' id='username' />
+              <TextInput type='text' placeholder='Username' id='username' onChange={handleChange} />
             </div>
             <div>
               <Label value='Your email' />
-              <TextInput type='text' placeholder='name@company.com' id='email' />
+              <TextInput type='text' placeholder='name@company.com' id='email' onChange={handleChange} />
             </div>
             <div>
               <Label value='Your password' />
-              <TextInput type='text' placeholder='Password' id='password' />
+              <TextInput type='password' placeholder='Password' id='password' onChange={handleChange} />
             </div>
 
-            <Button gradientDuoTone='purpleToPink' type='submit'>
-              Sign Up
+            <Button gradientDuoTone='purpleToPink' type='submit' disabled={loading}>
+              {
+                loading ? <>(<Spinner size='sm' /> <span className='pl-3'>Loading...</span>)</> : 'Sign up'
+              }
             </Button>
+
+            <OAuth />
           </form>
 
           <div className='flex gap-2 text-sm mt-5'>
@@ -48,6 +107,14 @@ export default function SignUp() {
               Sign In
             </Link>
           </div>
+
+          {errorMessages && errorMessages.length > 0 && (
+            <Alert className='mt-5' color='failure'>
+              {errorMessages.map((error, index) => (
+                <div key={index}>{error}</div>
+              ))}
+            </Alert>
+          )}
         </div>
       </div>
     </div>

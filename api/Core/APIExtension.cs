@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using EFDataAccess;
+
 using Application;
 
 using Application.Commands.Blog;
@@ -82,6 +84,7 @@ namespace API.Core
             services.AddTransient<IGetCommentQuery, EFGetCommentQuery>();
 
             services.AddTransient<IGetUserQuery, EFGetUserQuery>();
+            services.AddTransient<IGetUsersQuery, EFGetUsersQuery>();
 
             services.AddTransient<IGetUseCaseLogsQuery, EFGetUseCaseLogsQuery>();
 
@@ -129,8 +132,14 @@ namespace API.Core
             });
         }
 
-        public static void AddJWT(this IServiceCollection services)
+        public static void AddJWT(this IServiceCollection services, AppSettings appSettings)
         {
+            services.AddTransient<JWTManager>(x =>
+            {
+                var context = x.GetService<BlogContext>();
+                return new JWTManager(context, appSettings.JwtIssuer, appSettings.JwtSecretKey);
+            });
+
             services.AddAuthentication(options =>
             {
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -142,10 +151,10 @@ namespace API.Core
                 cfg.SaveToken = true;
                 cfg.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = "asp_api",
+                    ValidIssuer = appSettings.JwtIssuer,
                     ValidateIssuer = true,
                     ValidAudience = "Any",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisIsMyVerySecretKey")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.JwtSecretKey)),
                     ValidateIssuerSigningKey = true,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero

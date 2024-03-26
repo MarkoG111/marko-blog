@@ -23,6 +23,7 @@ namespace EFDataAccess
       modelBuilder.Entity<BlogCategory>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<Image>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDeleted);
+      modelBuilder.Entity<Role>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<Comment>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<Like>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<UserUseCase>().HasQueryFilter(x => !x.IsDeleted);
@@ -64,6 +65,7 @@ namespace EFDataAccess
     public DbSet<BlogCategory> BlogCategories { get; set; }
     public DbSet<Image> Images { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Like> Likes { get; set; }
     public DbSet<UserUseCase> UserUseCases { get; set; }

@@ -7,6 +7,8 @@ using Microsoft.OpenApi.Models;
 using Application.Commands.Email;
 using Implementation.Commands.Email;
 
+using Newtonsoft.Json;
+
 namespace API
 {
     public class Startup
@@ -29,12 +31,10 @@ namespace API
 
             services.AddTransient<IUseCaseLogger, EFDatabaseLogger>();
 
-            services.AddApplicationActor();
-            services.AddJWT();
-
             services.AddHttpContextAccessor();
+            services.AddApplicationActor();
 
-            services.AddTransient<JWTManager>();
+            services.AddJWT(appSettings);
 
             services.AddSwaggerGen(c =>
             {
@@ -71,7 +71,10 @@ namespace API
 
             services.AddTransient<IEmailSender, SMTPEmailSender>();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
         }
 
 

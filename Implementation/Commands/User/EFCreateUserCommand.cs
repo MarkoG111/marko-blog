@@ -7,6 +7,7 @@ using Application.DataTransfer;
 using Domain;
 using EFDataAccess;
 using FluentValidation;
+using Implementation.Extensions;
 using Implementation.Validators.User;
 
 namespace Implementation.Commands.User
@@ -35,7 +36,8 @@ namespace Implementation.Commands.User
                 LastName = request.LastName,
                 Username = request.Username,
                 Email = request.Email,
-                Password = request.Password
+                Password = request.Password,
+                ProfilePicture = request.ProfilePicture.UploadImage("UserImages"),
             };
 
             int idUser = user.Id;

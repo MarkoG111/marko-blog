@@ -12,6 +12,9 @@ namespace Domain
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
+        public string ProfilePicture { get; set; }
+        public int IdRole { get; set; }
+        public virtual Role Role { get; set; }
         public virtual ICollection<Blog> Blogs { get; set; } = new HashSet<Blog>();
         public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
         public virtual ICollection<Like> Likes { get; set; } = new HashSet<Like>();

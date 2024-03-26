@@ -7,5 +7,10 @@ namespace API.Core
         public int Id { get; set; }
         public string Identity { get; set; }
         public IEnumerable<int> AllowedUseCases { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string RoleName { get; set; }
     }
 }

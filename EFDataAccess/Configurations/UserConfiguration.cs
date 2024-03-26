@@ -33,6 +33,11 @@ namespace EFDataAccess.Configurations
             builder.HasMany(x => x.Likes)
                 .WithOne(y => y.User)
                 .HasForeignKey(x => x.IdUser);
+            
+            builder.HasOne(x => x.Role)
+                .WithMany(y => y.Users)
+                .HasForeignKey(x => x.IdRole)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasMany(x => x.UserUseCases)
                 .WithOne(y => y.User)

@@ -246,6 +246,38 @@ namespace EFDataAccess.Migrations
                     b.ToTable("Likes");
                 });
 
+            modelBuilder.Entity("Domain.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("Domain.UseCaseLog", b =>
                 {
                     b.Property<int>("Id")
@@ -298,6 +330,9 @@ namespace EFDataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("IdRole")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -316,6 +351,10 @@ namespace EFDataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProfilePicture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -325,6 +364,8 @@ namespace EFDataAccess.Migrations
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("IdRole");
 
                     b.HasIndex("Username")
                         .IsUnique();
@@ -379,7 +420,7 @@ namespace EFDataAccess.Migrations
                     b.HasOne("Domain.User", "User")
                         .WithMany("Blogs")
                         .HasForeignKey("IdUser")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Image");
@@ -451,6 +492,17 @@ namespace EFDataAccess.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.User", b =>
+                {
+                    b.HasOne("Domain.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("IdRole")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("Domain.UserUseCase", b =>
                 {
                     b.HasOne("Domain.User", "User")
@@ -484,6 +536,11 @@ namespace EFDataAccess.Migrations
             modelBuilder.Entity("Domain.Image", b =>
                 {
                     b.Navigation("Blogs");
+                });
+
+            modelBuilder.Entity("Domain.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.User", b =>

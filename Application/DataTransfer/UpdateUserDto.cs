@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.DataTransfer
 {
@@ -12,6 +13,7 @@ namespace Application.DataTransfer
         public string LastName { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public IFormFile? ProfilePicture { get; set; }
         public List<int> UserUseCases { get; set; }
     }
 }

@@ -1,12 +1,13 @@
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Application.Commands.User;
 using Application.DataTransfer;
 using Application.Exceptions;
 using EFDataAccess;
 using FluentValidation;
 using Implementation.Validators.User;
-using Microsoft.EntityFrameworkCore;
+using Implementation.Extensions;
 
 namespace Implementation.Commands.User
 {
@@ -39,6 +40,11 @@ namespace Implementation.Commands.User
             user.LastName = request.LastName;
             user.Username = request.Username;
             user.Password = request.Password;
+
+            if (request.ProfilePicture != null)
+            {
+                user.ProfilePicture = request.ProfilePicture.UploadImage("UserImages");
+            }
 
             var useCaseDelete = user.UserUseCases.Where(x => !request.UserUseCases.Contains(x.IdUseCase));
             foreach (var x in useCaseDelete)

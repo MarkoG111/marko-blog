@@ -2,6 +2,13 @@ using System;
 
 namespace Implementation
 {
+    public enum RoleEnum
+    {
+        Admin = 1,
+        Author = 2,
+        User = 3
+    }
+
     public enum UseCaseEnum
     {
         EFRegisterUserCommand = 1,
@@ -35,6 +42,6 @@ namespace Implementation
         EFUpdateCategoryCommand = 24,
         EFDeleteCategoryCommand = 25,
         EFGetOneCategoryQuery = 26,
-        EFGetCategoriesQuery = 27,
+        EFGetCategoriesQuery = 27
     }
 }

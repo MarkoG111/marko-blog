@@ -41,5 +41,17 @@ namespace Application
 
             return query.Execute(data);
         }
+
+        public TResponse ExecuteQueryWithoutSearch<TResponse>(IQueryWithoutSearch<TResponse> query)
+        {
+            _logger.Log(query, _actor, null); 
+
+            if (!_actor.AllowedUseCases.Contains(query.Id))
+            {
+                throw new UnauthorizedUseCaseException(query, _actor);
+            }
+
+            return query.Execute();
+        }
     }
 }

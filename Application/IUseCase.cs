@@ -20,4 +20,9 @@ namespace Application
     {
         TResponse Execute(TSearch search);
     }
+
+    public interface IQueryWithoutSearch<TResponse> : IUseCase
+    {
+        TResponse Execute();
+    }
 }

@@ -33,7 +33,7 @@ namespace API.Core
                 {
                     case UnauthorizedUseCaseException _:
                         statusCode = StatusCodes.Status403Forbidden;
-                        response = new
+                        response = new  
                         {
                             message = "You are not allowed to execute this operation."
                         };

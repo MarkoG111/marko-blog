@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.DataTransfer;
 using EFDataAccess;
 using FluentValidation;
+using System.IO;
 
 namespace Implementation.Validators.User
 {
@@ -32,6 +33,18 @@ namespace Implementation.Validators.User
             RuleFor(x => x.UserUseCases).Must(c => c.Select(v => v).Distinct().Count() == c.Count())
                 .WithMessage("Duplicates are not allowed.");
 
+            RuleFor(x => x.ProfilePicture)
+                .Must(img =>
+                {
+                    var allowedFormats = new List<string>() { ".jpg", ".jpeg", ".png", ".gif" };
+
+                    if (img != null)
+                    {
+                        allowedFormats.Any(ext => ext.ToLower() == Path.GetExtension(img.FileName).ToLower());
+                    }
+
+                    return true;
+                }).WithMessage("File is an invalid format");
         }
 
         private bool UseCaseExist(int id)
