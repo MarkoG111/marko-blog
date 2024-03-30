@@ -42,19 +42,6 @@ namespace Implementation.Validators.User
                     .Must(UseCaseExists)
                     .WithMessage("{PropertyValue} usecase doesn't exists.");
             });
-
-            RuleFor(x => x.ProfilePicture)
-                .NotNull()
-                .WithMessage("File cannot be empty.")
-                .DependentRules(() =>
-                {
-                    RuleFor(x => x.ProfilePicture)
-                        .Must(img =>
-                        {
-                            var allowedFormats = new List<string>() { ".jpg", ".jpeg", ".png", ".gif" };
-                            return allowedFormats.Any(ext => ext.ToLower() == Path.GetExtension(img.FileName).ToLower());
-                        }).WithMessage("File is an invalid format.");
-                });
         }
 
         private bool UseCaseExists(int id)

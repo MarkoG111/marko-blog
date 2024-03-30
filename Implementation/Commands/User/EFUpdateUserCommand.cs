@@ -39,30 +39,9 @@ namespace Implementation.Commands.User
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Username = request.Username;
-            user.Password = request.Password;
-
-            if (request.ProfilePicture != null)
-            {
-                user.ProfilePicture = request.ProfilePicture.UploadImage("UserImages");
-            }
-
-            var useCaseDelete = user.UserUseCases.Where(x => !request.UserUseCases.Contains(x.IdUseCase));
-            foreach (var x in useCaseDelete)
-            {
-                x.IsActive = false;
-                x.IsDeleted = true;
-                x.DeletedAt = DateTime.Now;
-            }
-
-            var userUseCaseIds = user.UserUseCases.Select(x => x.IdUseCase);
-            var useCaseInsert = request.UserUseCases.Where(x => !userUseCaseIds.Contains(x));
-            foreach (var id in useCaseInsert)
-            {
-                user.UserUseCases.Add(new Domain.UserUseCase
-                {
-                    IdUseCase = id
-                });
-            }
+            user.Email = request.Email;
+            user.Password = EasyEncryption.SHA.ComputeSHA256Hash(request.Password);
+            user.ProfilePicture = request.ProfilePicture.UploadImage("UserImages");
 
             _context.SaveChanges();
         }

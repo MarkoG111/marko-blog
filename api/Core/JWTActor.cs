@@ -12,5 +12,6 @@ namespace API.Core
         public string LastName { get; set; }
         public string Email { get; set; }
         public string RoleName { get; set; }
+        public string ProfilePicture { get; set; }
     }
 }

@@ -42,6 +42,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace API.Core
 {
     public static class APIExtension
@@ -94,7 +97,6 @@ namespace API.Core
             services.AddTransient<CreateBlogValidator>();
             services.AddTransient<CreateCategoryValidator>();
             services.AddTransient<CreateCommentValidator>();
-            services.AddTransient<CreateUserValidator>();
 
             services.AddTransient<LikeValidator>();
 

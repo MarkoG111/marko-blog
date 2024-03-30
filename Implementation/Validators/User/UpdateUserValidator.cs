@@ -19,6 +19,7 @@ namespace Implementation.Validators.User
 
             RuleFor(x => x.FirstName).NotEmpty();
             RuleFor(x => x.LastName).NotEmpty();
+            RuleFor(x => x.Email).NotEmpty();
 
             RuleFor(x => x.Username).NotEmpty()
                 .Must((dto, name) => !context.Users.Any(g => g.Username == name && g.Id != dto.Id))
@@ -26,30 +27,6 @@ namespace Implementation.Validators.User
 
             RuleFor(x => x.Password).NotEmpty()
                 .MinimumLength(3);
-
-            RuleForEach(x => x.UserUseCases).Must(UseCaseExist)
-                .WithMessage("{PropertyValue} UseCase doesn't exist");
-
-            RuleFor(x => x.UserUseCases).Must(c => c.Select(v => v).Distinct().Count() == c.Count())
-                .WithMessage("Duplicates are not allowed.");
-
-            RuleFor(x => x.ProfilePicture)
-                .Must(img =>
-                {
-                    var allowedFormats = new List<string>() { ".jpg", ".jpeg", ".png", ".gif" };
-
-                    if (img != null)
-                    {
-                        allowedFormats.Any(ext => ext.ToLower() == Path.GetExtension(img.FileName).ToLower());
-                    }
-
-                    return true;
-                }).WithMessage("File is an invalid format");
-        }
-
-        private bool UseCaseExist(int id)
-        {
-            return Enum.IsDefined(typeof(UseCaseEnum), id);
         }
     }
 }

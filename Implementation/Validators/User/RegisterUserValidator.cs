@@ -42,31 +42,12 @@ namespace Implementation.Validators.User
                 .WithMessage("Not a valid email format.")
                 .Must(x => !context.Users.Any(user => user.Email == x))
                 .WithMessage("Email adress must be unique.");
-
-            RuleFor(x => x.ProfilePictureUrl)
-                .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                .WithMessage("Profile picture URL is not valid.");
-
-            RuleFor(x => x.ProfilePicture)
-                .Must(file => file == null || IsImageFile(file))
-                .WithMessage("File is an invalid format.");
         }
 
         private bool DoesNotExistUsername(string username)
         {
             var usernames = _context.Users.IgnoreQueryFilters().Select(x => x.Username);
             return !usernames.Contains(username);
-        }
-
-        private bool IsImageFile(IFormFile file)
-        {
-            if (file == null)
-            {
-                return true;
-            }
-
-            var allowedFormats = new List<string>() { ".jpg", ".jpeg", ".png", ".gif" };
-            return allowedFormats.Any(ext => ext.ToLower() == Path.GetExtension(file.FileName).ToLower());
         }
     }
 }

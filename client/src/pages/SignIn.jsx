@@ -58,7 +58,11 @@ export default function SignUp() {
         const { token } = await response.json();
 
         const decodedToken = jwtDecode(token);
+
+        console.log(decodedToken);
         const userProfile = decodedToken.ActorData;
+
+        console.log(userProfile);
 
         localStorage.setItem('token', token);
 

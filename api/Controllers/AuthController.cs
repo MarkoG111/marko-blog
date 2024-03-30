@@ -8,6 +8,8 @@ using Domain;
 using System.Security.Cryptography;
 using System.Security.Claims;
 using Newtonsoft.Json;
+using API.Core;
+using Implementation;
 
 namespace API.Controllers
 {
@@ -35,19 +37,23 @@ namespace API.Controllers
                 var lastName = string.Join(" ", nameParts.Skip(1));
 
                 var generatedPassword = GenerateRandomPassword();
+                var role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User");
 
                 var newUser = new User
                 {
                     FirstName = firstName,
                     LastName = lastName,
                     Username = GenerateUsername(model.Name),
-                    Email = model.Email,
                     Password = HashPassword(generatedPassword),
+                    Email = model.Email,
+                    CreatedAt = DateTime.UtcNow,
+                    IsActive = true,
                     IdRole = 3,
                     ProfilePicture = model.GooglePhotoUrl,
-                    CreatedAt = DateTime.UtcNow,
-                    IsActive = true
+                    Role = role
                 };
+
+                newUser.AddDefaultUseCasesForRole();
 
                 _context.Users.Add(newUser);
                 await _context.SaveChangesAsync();
@@ -110,20 +116,25 @@ namespace API.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyVeryVeryVerySecretKeyThatIsVeryVeryVeryBadHidden"));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+            var actor = new JWTActor
+            {
+                Id = newUser.Id,
+                Identity = newUser.Username,
+                AllowedUseCases = newUser.UserUseCases.Select(x => x.IdUseCase),
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
+                Email = newUser.Email,
+                RoleName = newUser.Role.Name,
+                ProfilePicture = newUser.ProfilePicture
+            };
+
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString(), ClaimValueTypes.String, "asp_api_project"),
                 new Claim(JwtRegisteredClaimNames.Iss, "asp_api_project", ClaimValueTypes.String, "asp_api_project"),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, "asp_api_project"),
                 new Claim("IdUser", newUser.Id.ToString(), ClaimValueTypes.String, "asp_api_project"),
-                new Claim("ActorData", JsonConvert.SerializeObject(new {
-                    newUser.Id,
-                    newUser.FirstName,
-                    newUser.LastName,
-                    newUser.Username,
-                    newUser.Email,
-                    newUser.ProfilePicture
-                }), ClaimValueTypes.String, "asp_api_project")
+                new Claim("ActorData", JsonConvert.SerializeObject(actor), ClaimValueTypes.String, "asp_api_project")
             };
 
             var dateTimeNow = DateTime.UtcNow;

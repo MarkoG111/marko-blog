@@ -31,6 +31,7 @@ export default function OAuth() {
           googlePhotoUrl: resultsFromGoogle.user.photoURL
         })
       });
+      
       if (response.ok) {
         const { token } = await response.json();
 

@@ -25,6 +25,8 @@ namespace API
 
             Configuration.Bind(appSettings);
 
+            services.AddControllers();
+
             services.AddTransient<BlogContext>();
 
             services.LoadUseCases();
@@ -70,11 +72,6 @@ namespace API
             });
 
             services.AddTransient<IEmailSender, SMTPEmailSender>();
-
-            services.AddControllers().AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            });
         }
 
 

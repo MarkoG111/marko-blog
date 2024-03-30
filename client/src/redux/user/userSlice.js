@@ -19,12 +19,16 @@ const userSlice = createSlice({
 
       state.currentUser = {
         id: payload.Id,
-        username: payload.Username,
         firstName: payload.FirstName,
         lastName: payload.LastName,
+        username: payload.Identity,
         email: payload.Email,
-        profilePicture: payload.ProfilePicture
+        password: payload.Password,
+        profilePicture: payload.ProfilePicture,
+        allowedUseCases: payload.AllowedUseCases
       };
+
+      console.log(payload);
       
       state.loading = false;
       state.error = null;

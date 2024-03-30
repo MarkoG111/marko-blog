@@ -40,8 +40,8 @@ namespace Implementation.Commands.User
                 Username = request.Username,
                 Email = request.Email,
                 Password = request.Password,
-                ProfilePicture = request.ProfilePicture != null ? request.ProfilePicture.UploadImage("UserImages") : request.ProfilePictureUrl,
-                IdRole = 1 // User
+                ProfilePicture = "https://i0.wp.com/florrycreativecare.com/wp-content/uploads/2020/08/blank-profile-picture-mystery-man-avatar-973460.jpg?ssl=1",
+                IdRole = 1 
             };
 
             user.Password = EasyEncryption.SHA.ComputeSHA256Hash(request.Password);
