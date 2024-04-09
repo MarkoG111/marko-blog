@@ -10,7 +10,7 @@ namespace Application.DataTransfer
     public class LikeDto
     {
         public int IdUser { get; set; }
-        public int IdBlog { get; set; }
+        public int IdPost { get; set; }
         public LikeStatus Status { get; set; }
     }
 }

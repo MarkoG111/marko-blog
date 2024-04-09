@@ -7,7 +7,7 @@ using Application.DataTransfer;
 
 namespace Application.Commands.Like
 {
-    public interface ILikeBlogCommand : ICommand<LikeDto>
+    public interface ILikePostCommand : ICommand<LikeDto>
     {
         
     }

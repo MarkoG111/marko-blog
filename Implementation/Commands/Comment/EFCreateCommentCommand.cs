@@ -37,7 +37,7 @@ namespace Implementation.Commands.Comment
             var comment = new Domain.Comment
             {
                 CommentText = request.Text,
-                IdBlog = request.IdBlog,
+                IdPost = request.IdPost,
                 IdParent = request.IdParent,
                 IdUser = request.IdUser
             };

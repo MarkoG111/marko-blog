@@ -4,6 +4,7 @@ using Application.Commands.User;
 using Application.DataTransfer;
 using Application.Queries.User;
 using Application.Searches;
+using Implementation.Extensions;
 
 namespace API.Controllers
 {
@@ -16,6 +17,14 @@ namespace API.Controllers
         public UsersController(UseCaseExecutor executor)
         {
             _executor = executor;
+        }
+
+        [HttpGet("images/{imageName}")]
+        public IActionResult GetImage(string imageName)
+        {
+            var imagePath = Path.Combine("wwwroot", "UserImages", imageName);
+            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            return File(imageBytes, "image/jpeg");
         }
 
         [HttpGet]
@@ -38,11 +47,19 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] UpdateUserDto dto, [FromServices] IUpdateUserCommand command)
+        public IActionResult Put(int id, [FromForm] UpdateUserDto dto, [FromServices] IUpdateUserCommand command, [FromServices] IGetUserQuery getUserQuery)
         {
             dto.Id = id;
             _executor.ExecuteCommand(command, dto);
-            return NoContent();
+
+            var updatedUser = _executor.ExecuteQuery(getUserQuery, id);
+
+            if (updatedUser == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedUser);
         }
 
         [HttpDelete("{id}")]

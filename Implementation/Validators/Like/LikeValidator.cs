@@ -12,7 +12,7 @@ namespace Implementation.Validators.Like
     {
         public LikeValidator()
         {
-            RuleFor(x => x.IdBlog).NotEmpty();
+            RuleFor(x => x.IdPost).NotEmpty();
             RuleFor(x => x.IdUser).NotEmpty();
             RuleFor(x => x.Status).NotEmpty()
                 .Must(y => Enum.IsDefined(typeof(LikeStatus), y))

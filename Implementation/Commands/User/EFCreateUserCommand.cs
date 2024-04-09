@@ -37,7 +37,6 @@ namespace Implementation.Commands.User
                 Username = request.Username,
                 Email = request.Email,
                 Password = request.Password,
-                ProfilePicture = request.ProfilePicture.UploadImage("UserImages"),
             };
 
             int idUser = user.Id;

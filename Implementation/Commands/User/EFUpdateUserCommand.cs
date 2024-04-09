@@ -6,6 +6,7 @@ using Application.DataTransfer;
 using Application.Exceptions;
 using EFDataAccess;
 using FluentValidation;
+using Implementation.Extensions;
 using Implementation.Validators.User;
 using Implementation.Extensions;
 
@@ -40,8 +41,16 @@ namespace Implementation.Commands.User
             user.LastName = request.LastName;
             user.Username = request.Username;
             user.Email = request.Email;
-            user.Password = EasyEncryption.SHA.ComputeSHA256Hash(request.Password);
-            user.ProfilePicture = request.ProfilePicture.UploadImage("UserImages");
+
+            if (!string.IsNullOrEmpty(request.Password) || !string.IsNullOrWhiteSpace(request.Password))
+            {
+                user.Password = EasyEncryption.SHA.ComputeSHA256Hash(request.Password);
+            }
+
+            if (request.Image != null)
+            {
+                user.ProfilePicture = request.Image.UploadImage("UserImages");
+            }
 
             _context.SaveChanges();
         }

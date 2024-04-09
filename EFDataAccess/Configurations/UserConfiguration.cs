@@ -21,7 +21,7 @@ namespace EFDataAccess.Configurations
             builder.HasIndex(x => x.Email).IsUnique();
             builder.HasIndex(x => x.Username).IsUnique();
 
-            builder.HasMany(x => x.Blogs)
+            builder.HasMany(x => x.Posts)
                    .WithOne(y => y.User)
                    .HasForeignKey(x => x.IdUser)
                    .OnDelete(DeleteBehavior.NoAction);

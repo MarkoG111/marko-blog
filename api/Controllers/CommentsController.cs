@@ -2,6 +2,7 @@ using Application;
 using Application.Commands.Comment;
 using Application.DataTransfer;
 using Application.Queries.Comment;
+using Application.Searches;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -19,8 +20,14 @@ namespace API.Controllers
             _actor = actor;
         }
 
-        [HttpGet("{id}", Name = "GetComment")]
-        public IActionResult Get(int id, [FromQuery] CommentDto dto, [FromServices] IGetCommentQuery query)
+        [HttpGet]
+        public IActionResult Get([FromServices] IGetCommentsQuery query, [FromQuery] CommentSearch search)
+        {
+            return Ok(_executor.ExecuteQuery(query, search));
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id, [FromServices] IGetCommentQuery query)
         {
             return Ok(_executor.ExecuteQuery(query, id));
         }

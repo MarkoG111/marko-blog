@@ -15,11 +15,11 @@ namespace Implementation
 
             if (user.IdRole == (int)RoleEnum.Admin)
             {
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateBlogCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateBlogCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeleteBlogCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneBlogQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetBlogsQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreatePostCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePostCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePostCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOnePostQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetPostsQuery });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateCommentCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateCommentCommand });
@@ -43,12 +43,12 @@ namespace Implementation
 
             else if (user.IdRole == (int)RoleEnum.Author)
             {
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateBlogCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalBlogCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalBlogCommand });
-                
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneBlogQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetBlogsQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreatePostCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalPostCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalPostCommand });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOnePostQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetPostsQuery });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCategoryQuery });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCategoriesQuery });
@@ -56,14 +56,14 @@ namespace Implementation
 
             else if (user.IdRole == (int)RoleEnum.User)
             {
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneBlogQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetBlogsQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOnePostQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetPostsQuery });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateCommentCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalCommentCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalCommentCommand });
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikeBlog });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikePost });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCategoryQuery });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCategoriesQuery });

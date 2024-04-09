@@ -15,7 +15,7 @@ namespace EFDataAccess.Configurations
         {
             builder.Property(x => x.Name).IsRequired().HasMaxLength(70);
 
-            builder.HasMany(x => x.CategoryBlogs)
+            builder.HasMany(x => x.CategoryPosts)
                    .WithOne(y => y.Category)
                    .HasForeignKey(x => x.IdCategory)
                    .OnDelete(DeleteBehavior.Restrict);

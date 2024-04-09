@@ -7,6 +7,6 @@ namespace Application.Searches
 {
     public class CategorySearch : PagedSearch
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }

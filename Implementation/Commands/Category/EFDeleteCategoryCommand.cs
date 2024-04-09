@@ -28,14 +28,14 @@ namespace Implementation.Commands.Category
         {
             _validator.ValidateAndThrow(id);
 
-            var category = _context.Categories.Include(x => x.CategoryBlogs).FirstOrDefault(x => x.Id == id);
+            var category = _context.Categories.Include(x => x.CategoryPosts).FirstOrDefault(x => x.Id == id);
 
             if (category == null)
             {
                 throw new EntityNotFoundException(id, typeof(Domain.Category));
             }
 
-            if (category.CategoryBlogs.Count > 0)
+            if (category.CategoryPosts.Count > 0)
             {
                 throw new ConflictException("Category is not empty.");
             }

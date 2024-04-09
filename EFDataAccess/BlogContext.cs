@@ -10,17 +10,17 @@ namespace EFDataAccess
   {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      modelBuilder.ApplyConfiguration(new BlogConfiguration());
+      modelBuilder.ApplyConfiguration(new PostConfiguration());
       modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-      modelBuilder.ApplyConfiguration(new BlogCategoryConfiguration());
+      modelBuilder.ApplyConfiguration(new PostCategoryConfiguration());
       modelBuilder.ApplyConfiguration(new ImageConfiguration());
       modelBuilder.ApplyConfiguration(new UserConfiguration());
       modelBuilder.ApplyConfiguration(new CommentConfiguration());
       modelBuilder.ApplyConfiguration(new LikeConfiguration());
 
-      modelBuilder.Entity<Blog>().HasQueryFilter(x => !x.IsDeleted);
+      modelBuilder.Entity<Post>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<Category>().HasQueryFilter(x => !x.IsDeleted);
-      modelBuilder.Entity<BlogCategory>().HasQueryFilter(x => !x.IsDeleted);
+      modelBuilder.Entity<PostCategory>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<Image>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<Role>().HasQueryFilter(x => !x.IsDeleted);
@@ -60,9 +60,9 @@ namespace EFDataAccess
     }
 
 
-    public DbSet<Blog> Blogs { get; set; }
+    public DbSet<Post> Posts { get; set; }
     public DbSet<Category> Categories { get; set; }
-    public DbSet<BlogCategory> BlogCategories { get; set; }
+    public DbSet<PostCategory> PostCategories { get; set; }
     public DbSet<Image> Images { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }

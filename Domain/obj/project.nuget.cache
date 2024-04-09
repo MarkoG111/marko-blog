@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "5Fql9OGBaHiVjfZy7h+bIfQsJLmBoZZMYJp88e9mnjr1QMfzxbIMQrUY6wpTGb8saUxF5JOVwr5vIMYgS9aRVw==",
+  "dgSpecHash": "kDxmARtWdvpCk9/5/UPqQHG2yZzDGabY53YKOoYHSjGcU8cKb67dxHciZYMOw/lI5Nv7HwsOW5EMgTumVaHVCA==",
   "success": true,
-  "projectFilePath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj",
+  "projectFilePath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

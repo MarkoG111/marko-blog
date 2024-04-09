@@ -21,7 +21,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] CategorySearch search, [FromServices] IGetCategoriesQuery query)
+        public IActionResult Get([FromServices] IGetCategoriesQuery query, [FromQuery] CategorySearch search)
         {
             return Ok(_executor.ExecuteQuery(query, search));
         }

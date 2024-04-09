@@ -7,7 +7,7 @@ using Domain;
 
 namespace Application.DataTransfer
 {
-    public class LikeBlogDto
+    public class LikePostDto
     {
         public int Id { get; set; }
         public LikeStatus Status { get; set; }

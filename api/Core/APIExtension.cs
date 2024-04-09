@@ -1,39 +1,35 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 using EFDataAccess;
 
 using Application;
 
-using Application.Commands.Blog;
+using Application.Commands.Post;
 using Application.Commands.Category;
 using Application.Commands.User;
 using Application.Commands.Like;
 using Application.Commands.Comment;
 
 using Application.Queries;
-using Application.Queries.Blog;
+using Application.Queries.Post;
 using Application.Queries.Category;
 using Application.Queries.User;
 using Application.Queries.Comment;
 
-using Implementation.Validators.Blog;
+using Implementation.Validators.Post;
 using Implementation.Validators.Category;
 using Implementation.Validators.User;
 using Implementation.Validators.Like;
 using Implementation.Validators.Comment;
 
-using Implementation.Commands.Blog;
+using Implementation.Commands.Post;
 using Implementation.Commands.Category;
 using Implementation.Commands.User;
 using Implementation.Commands.Comment;
 using Implementation.Commands.Like;
 
 using Implementation.Queries;
-using Implementation.Queries.Blog;
+using Implementation.Queries.Post;
 using Implementation.Queries.Category;
 using Implementation.Queries.Comment;
 using Implementation.Queries.User;
@@ -41,9 +37,6 @@ using Implementation.Queries.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Core
 {
@@ -56,11 +49,11 @@ namespace API.Core
             // Commands
             services.AddTransient<IRegisterUserCommand, EFRegisterUserCommand>();
 
-            services.AddTransient<ICreateBlogCommand, EFCreateBlogCommand>();
-            services.AddTransient<IUpdateBlogCommand, EFUpdateBlogCommand>();
-            services.AddTransient<IDeleteBlogCommand, EFDeleteBlogCommand>();
-            services.AddTransient<IUpdatePersonalBlogCommand, EFUpdatePersonalBlogCommand>();
-            services.AddTransient<IDeletePersonalBlogCommand, EFDeletePersonalBlogCommand>();
+            services.AddTransient<ICreatePostCommand, EFCreatePostCommand>();
+            services.AddTransient<IUpdatePostCommand, EFUpdatePostCommand>();
+            services.AddTransient<IDeletePostCommand, EFDeletePostCommand>();
+            services.AddTransient<IUpdatePersonalPostCommand, EFUpdatePersonalPostCommand>();
+            services.AddTransient<IDeletePersonalPostCommand, EFDeletePersonalPostCommand>();
 
             services.AddTransient<ICreateCategoryCommand, EFCreateCategoryCommand>();
             services.AddTransient<IUpdateCategoryCommand, EFUpdateCategoryCommand>();
@@ -75,16 +68,17 @@ namespace API.Core
             services.AddTransient<IUpdateUserCommand, EFUpdateUserCommand>();
             services.AddTransient<IDeleteUserCommand, EFDeleteUserCommand>();
 
-            services.AddTransient<ILikeBlogCommand, EFLikeBlogCommand>();
+            services.AddTransient<ILikePostCommand, EFLikePostCommand>();
 
             // Queries
-            services.AddTransient<IGetBlogsQuery, EFGetBlogsQuery>();
-            services.AddTransient<IGetBlogQuery, EFGetBlogQuery>();
+            services.AddTransient<IGetPostsQuery, EFGetPostsQuery>();
+            services.AddTransient<IGetPostQuery, EFGetPostQuery>();
 
             services.AddTransient<IGetCategoriesQuery, EFGetCategoriesQuery>();
             services.AddTransient<IGetCategoryQuery, EFGetCategoryQuery>();
 
             services.AddTransient<IGetCommentQuery, EFGetCommentQuery>();
+            services.AddTransient<IGetCommentsQuery, EFGetCommentsQuery>();
 
             services.AddTransient<IGetUserQuery, EFGetUserQuery>();
             services.AddTransient<IGetUsersQuery, EFGetUsersQuery>();
@@ -94,18 +88,18 @@ namespace API.Core
             // Validators
             services.AddTransient<RegisterUserValidator>();
 
-            services.AddTransient<CreateBlogValidator>();
+            services.AddTransient<CreatePostValidator>();
             services.AddTransient<CreateCategoryValidator>();
             services.AddTransient<CreateCommentValidator>();
 
             services.AddTransient<LikeValidator>();
 
-            services.AddTransient<UpdateBlogValidator>();
+            services.AddTransient<UpdatePostValidator>();
             services.AddTransient<UpdateCategoryValidator>();
             services.AddTransient<UpdateCommentValidator>();
             services.AddTransient<UpdateUserValidator>();
 
-            services.AddTransient<DeleteBlogValidator>();
+            services.AddTransient<DeletePostValidator>();
             services.AddTransient<DeleteCategoryValidator>();
             services.AddTransient<DeleteCommentValidator>();
 

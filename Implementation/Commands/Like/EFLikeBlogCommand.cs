@@ -10,32 +10,32 @@ using Implementation.Validators.Like;
 
 namespace Implementation.Commands.Like
 {
-    public class EFLikeBlogCommand : ILikeBlogCommand
+    public class EFLikePostCommand : ILikePostCommand
     {
         private readonly BlogContext _context;
         private readonly LikeValidator _validator;
 
-        public EFLikeBlogCommand(LikeValidator validator, BlogContext context)
+        public EFLikePostCommand(LikeValidator validator, BlogContext context)
         {
             _validator = validator;
             _context = context;
         }
 
-        public int Id => (int)UseCaseEnum.EFLikeBlog;
-        public string Name => UseCaseEnum.EFLikeBlog.ToString();
+        public int Id => (int)UseCaseEnum.EFLikePost;
+        public string Name => UseCaseEnum.EFLikePost.ToString();
 
         public void Execute(LikeDto request)
         {
             _validator.ValidateAndThrow(request);
 
-            var findLike = _context.Likes.Where(x => x.IdBlog == request.IdBlog && x.IdUser == request.IdUser).FirstOrDefault();
+            var findLike = _context.Likes.Where(x => x.IdPost == request.IdPost && x.IdUser == request.IdUser).FirstOrDefault();
 
             if (findLike == null)
             {
                 var like = new Domain.Like
                 {
                     IdUser = request.IdUser,
-                    IdBlog = request.IdBlog,
+                    IdPost = request.IdPost,
                     Status = request.Status
                 };
 
