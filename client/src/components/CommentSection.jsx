@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* eslint-disable react/prop-types */
 
 import { Button, Textarea } from 'flowbite-react'
@@ -5,12 +6,21 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import Comment from './Comment'
+=======
+import { Button, Textarea } from 'flowbite-react'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
 
 export default function CommentSection({ idPost }) {
   const { currentUser } = useSelector(state => state.user)
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
+<<<<<<< HEAD
   const navigate = useNavigate()
+=======
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
 
   console.log(comments);
 
@@ -27,25 +37,35 @@ export default function CommentSection({ idPost }) {
         throw new Error("Token not found")
       }
 
+<<<<<<< HEAD
       const body = JSON.stringify({
         CommentText: comment,
         IdPost: idPost,
         IdUser: currentUser.id
       })
 
+=======
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
       const response = await fetch(`/api/Comments`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
         },
+<<<<<<< HEAD
         body: body
+=======
+        body: JSON.stringify({ Text: comment, IdPost: idPost, IdUser: currentUser.id })
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
       })
 
       const data = await response.json()
       if (response.ok) {
         setComment('')
+<<<<<<< HEAD
         setComments([data, ...comments])
+=======
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
       }
     } catch (error) {
       console.log(error)
@@ -69,7 +89,11 @@ export default function CommentSection({ idPost }) {
         })
         if (response.ok) {
           const data = await response.json()
+<<<<<<< HEAD
           setComments(data.items)
+=======
+          setComments(data)
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
         }
       } catch (error) {
         console.log(error)
@@ -79,14 +103,21 @@ export default function CommentSection({ idPost }) {
     getComments()
   }, [idPost])
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
   return (
     <div className='max-w-2xl mx-auto w-full p-3'>
       {currentUser ? (
         <div className='flex items-center gap-1 my-5 text-gray-500 text-sm'>
           <p>Signed in as:</p>
+<<<<<<< HEAD
           <img src={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `api/Users/images/${currentUser.profilePicture}`} alt='' className='w-10 object-cover rounded-full' />
+=======
+          <img src={`/api/Users/images/${currentUser.profilePicture}`} alt='' className='w-10 object-cover rounded-full' />
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
           <Link to={'/dashboard?tab=profile'} className='text-cyan-600 hover:underline'>
             @{currentUser.username}
           </Link>
@@ -102,6 +133,7 @@ export default function CommentSection({ idPost }) {
           </div>
         </form>
       )}
+<<<<<<< HEAD
 
       {comments.length === 0 ? (
         <p className="text-sm my-5">No comments yet!</p>
@@ -120,6 +152,8 @@ export default function CommentSection({ idPost }) {
         </>
       )}
 
+=======
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
     </div>
   )
 }

@@ -8,7 +8,11 @@ using FluentValidation;
 
 namespace Implementation.Validators.Post
 {
+<<<<<<< HEAD
     public class CreatePostValidator : AbstractValidator<InsertBlogDto>
+=======
+    public class CreatePostValidator : AbstractValidator<InsertPostDto>
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
     {
         private readonly BlogContext _context;
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* eslint-disable react/prop-types */
 
 import { useEffect, useState } from "react"
@@ -56,3 +57,16 @@ export default function Comment({ comment, onLike, onDislike }) {
     </div>
   )
 }
+=======
+import { useEffect, useState } from "react"
+
+export default function Comment({ comment }) {
+  const [user, setUser] = useState({})
+  console.log(user);
+
+
+  return (
+    <div>Comment</div>
+  )
+}
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532

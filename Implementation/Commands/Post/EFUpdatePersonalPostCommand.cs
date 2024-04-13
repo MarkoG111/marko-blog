@@ -29,7 +29,7 @@ namespace Implementation.Commands.Post
         public int Id => (int)UseCaseEnum.EFUpdatePersonalPostCommand;
         public string Name => UseCaseEnum.EFUpdatePersonalPostCommand.ToString();
 
-        public void Execute(UpdateBlogDto request)
+        public void Execute(UpdatePostDto request)
         {
             _validator.ValidateAndThrow(request);
 

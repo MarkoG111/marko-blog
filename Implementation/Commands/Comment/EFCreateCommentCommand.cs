@@ -36,7 +36,11 @@ namespace Implementation.Commands.Comment
 
             var comment = new Domain.Comment
             {
+<<<<<<< HEAD
                 CommentText = request.CommentText,
+=======
+                CommentText = request.Text,
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
                 IdPost = request.IdPost,
                 IdParent = request.IdParent,
                 IdUser = request.IdUser

@@ -24,7 +24,7 @@ namespace Implementation.Queries.Post
 
         public ICollection<SingleCommentDto> parentComments { get; set; } = new List<SingleCommentDto>();
 
-        GetBlogDto IQuery<GetBlogDto, int>.Execute(int search)
+        GetPostDto IQuery<GetPostDto, int>.Execute(int search)
         {
             var post = _context.Posts.Find(search);
 
@@ -36,7 +36,7 @@ namespace Implementation.Queries.Post
                 .ThenInclude(c => c.Category)
                 .FirstOrDefault(a => a.Id == search);
 
-            var result = new GetBlogDto
+            var result = new GetPostDto
             {
                 Id = query.Id,
                 Title = query.Title,
@@ -64,6 +64,8 @@ namespace Implementation.Queries.Post
                     CommentText = t.CommentText,
                     Username = t.User?.Username,
                     CreatedAt = t.CreatedAt,
+                    Username = t.User.Username,
+                    IdUser = t.User.Id,
                     Children = t.ChildrenComments.Select(c => new SingleCommentDto
                     {
                         Id = c.Id,
@@ -71,10 +73,6 @@ namespace Implementation.Queries.Post
                         CommentText = c.CommentText,
                         CreatedAt = c.CreatedAt,
                         Username = t.User?.Username
-                    }).ToList()
-                }).ToList()
-            };
-
             foreach (var res in result.Comments)
             {
                 if (res.IdParent == null)

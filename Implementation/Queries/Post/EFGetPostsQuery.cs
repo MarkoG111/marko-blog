@@ -23,7 +23,11 @@ namespace Implementation.Queries.Post
         public int Id => (int)UseCaseEnum.EFGetPostsQuery;
         public string Name => UseCaseEnum.EFGetPostsQuery.ToString();
 
+<<<<<<< HEAD:Implementation/Queries/Post/EFGetPostsQuery.cs
         public PagedResponse<GetBlogDto> Execute(PostSearch search)
+=======
+        public PagedResponse<GetPostDto> Execute(PostSearch search)
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532:Implementation/Queries/Blog/EFGetPostsQuery.cs
         {
             var posts = _context.Posts.Include(x => x.Comments).Include(x => x.Likes).Include(x => x.PostCategories).ThenInclude(x => x.Category).AsQueryable();
 
@@ -54,7 +58,7 @@ namespace Implementation.Queries.Post
 
             var skipCount = search.PerPage * (search.Page - 1);
 
-            var response = new PagedResponse<GetBlogDto>
+            var response = new PagedResponse<GetPostDto>
             {
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
@@ -86,7 +90,7 @@ namespace Implementation.Queries.Post
                         Id = w.Id,
                         Status = w.Status,
                         Username = w.User.Username
-                }).ToList()
+                    }).ToList()
                 }).ToList()
             };
 

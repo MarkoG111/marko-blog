@@ -103,7 +103,11 @@ export default function CreatePost() {
 
       const insertPostId = await response.json();
       postData.PostCategories.forEach(postCategory => {
+<<<<<<< HEAD
         postCategory.idPost = insertPostId;
+=======
+        postCategory.IdPost = insertPostId;
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
       });
 
       console.log(postData);
@@ -173,4 +177,8 @@ export default function CreatePost() {
       </form>
     </div>
   )
+<<<<<<< HEAD
 }``
+=======
+}
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532

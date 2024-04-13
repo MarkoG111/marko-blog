@@ -2,7 +2,11 @@ import { Button, Spinner } from "flowbite-react"
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import CommentSection from "../components/CommentSection"
+<<<<<<< HEAD
 
+=======
+import Comment from "../components/Comment"
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
 
 export default function PostPage() {
   const { id } = useParams()
@@ -10,6 +14,11 @@ export default function PostPage() {
   const [error, setError] = useState(false)
   const [post, setPost] = useState(null)
 
+<<<<<<< HEAD
+=======
+  console.log(post)
+
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
   useEffect(() => {
     const fethcPost = async () => {
       try {
@@ -60,8 +69,32 @@ export default function PostPage() {
       <div className="p-3 max-w-2xl mx-auto w-full post-content" dangerouslySetInnerHTML={{ __html: post && post.content }}>
 
       </div>
+<<<<<<< HEAD
       
       <CommentSection idPost={post.id} />
+=======
+
+      <CommentSection idPost={post.id} />
+
+      {post.comments.length === 0 ? (
+        <p className="text-sm my-5">No comments yet!</p>
+      ) : (
+        <>
+          <div className="text-sm my-5 flex items-center gap-1">
+            <p>Comments</p>
+            <div className="border border-gray-400 py-1 px-2 rounded-sm">
+              <p>{post.comments.length}</p>
+            </div>
+          </div>
+
+          {post.comments.map(comment => (
+            <Comment key={comment.id} comment={comment} />
+          ))}
+        </>
+      )}
+
+
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
     </main>
   )
 }

@@ -6,7 +6,11 @@ using Application.DataTransfer;
 
 namespace Application.Commands.Post
 {
+<<<<<<< HEAD
     public interface IUpdatePostCommand : ICommand<UpdateBlogDto>
+=======
+    public interface IUpdatePostCommand : ICommand<UpdatePostDto>
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
     {
         
     }

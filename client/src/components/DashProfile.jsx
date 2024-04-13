@@ -32,6 +32,7 @@ export default function DashProfile() {
     };
   }, [imageFileUrl, imageFile, currentUser.profilePicture])
 
+<<<<<<< HEAD
 
   async function urlToBlob(url) {
     const response = await fetch(url);
@@ -39,6 +40,8 @@ export default function DashProfile() {
     return blob;
   }
 
+=======
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
   const handleFormSubmit = async (e) => {
     e.preventDefault()
 
@@ -54,7 +57,15 @@ export default function DashProfile() {
     if (imageFile) {
       const blobImage = await fetch(imageFileUrl).then((res) => res.blob())
       formData.append("Image", blobImage, imageFile.name)
+<<<<<<< HEAD
     } 
+=======
+    } else {
+      const response = await fetch(`api/Users/images/${currentUser.profilePicture}`)
+      const blobImage = await response.blob()
+      formData.append("Image", blobImage, currentUser.profilePicture);
+    }
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
 
     try {
       const token = localStorage.getItem("token")

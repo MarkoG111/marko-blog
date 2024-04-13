@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Application.DataTransfer
 {
-    public class BlogCategoryDto
+    public class PostCategoryDto
     {
         public int IdPost { get; set; }
         public int IdCategory { get; set; }

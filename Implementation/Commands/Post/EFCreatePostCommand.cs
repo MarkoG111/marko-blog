@@ -28,7 +28,7 @@ namespace Implementation.Commands.Post
         public int Id => (int)UseCaseEnum.EFCreatePostCommand;
         public string Name => UseCaseEnum.EFCreatePostCommand.ToString();
 
-        public void Execute(InsertBlogDto request)
+        public void Execute(InsertPostDto request)
         {
             _validator.ValidateAndThrow(request);
 

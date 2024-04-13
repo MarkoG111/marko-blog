@@ -148,9 +148,12 @@ namespace EFDataAccess.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
+<<<<<<< HEAD
                     b.Property<int?>("IdComment")
                         .HasColumnType("int");
 
+=======
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
                     b.Property<int>("IdPost")
                         .HasColumnType("int");
 
@@ -171,8 +174,11 @@ namespace EFDataAccess.Migrations
 
                     b.HasKey("Id");
 
+<<<<<<< HEAD
                     b.HasIndex("IdComment");
 
+=======
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
                     b.HasIndex("IdPost");
 
                     b.HasIndex("IdUser");
@@ -442,10 +448,13 @@ namespace EFDataAccess.Migrations
 
             modelBuilder.Entity("Domain.Like", b =>
                 {
+<<<<<<< HEAD
                     b.HasOne("Domain.Comment", "Comment")
                         .WithMany("Likes")
                         .HasForeignKey("IdComment");
 
+=======
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
                     b.HasOne("Domain.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("IdPost")
@@ -458,8 +467,11 @@ namespace EFDataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+<<<<<<< HEAD
                     b.Navigation("Comment");
 
+=======
+>>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
                     b.Navigation("Post");
 
                     b.Navigation("User");

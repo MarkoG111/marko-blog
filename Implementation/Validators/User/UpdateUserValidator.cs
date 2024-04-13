@@ -35,7 +35,7 @@ namespace Implementation.Validators.User
                      {
                          var allowedFormats = new List<string>() { ".jpg", ".jpeg", ".png", ".gif" };
 
-                         if(img != null)
+                         if (img != null)
                          {
                              allowedFormats.Any(ext => ext.ToLower() == Path.GetExtension(img.FileName).ToLower());
                          }
