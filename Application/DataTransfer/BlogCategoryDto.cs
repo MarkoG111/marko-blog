@@ -7,7 +7,7 @@ namespace Application.DataTransfer
 {
     public class BlogCategoryDto
     {
-        public int IdBlog { get; set; }
+        public int IdPost { get; set; }
         public int IdCategory { get; set; }
     }
 }

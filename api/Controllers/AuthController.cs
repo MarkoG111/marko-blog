@@ -38,6 +38,10 @@ namespace API.Controllers
 
                 var generatedPassword = GenerateRandomPassword();
                 var role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User");
+                if (role == null)
+                {
+                    return null;
+                }
 
                 var newUser = new User
                 {

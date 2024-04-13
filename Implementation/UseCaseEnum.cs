@@ -13,35 +13,37 @@ namespace Implementation
     {
         EFRegisterUserCommand = 1,
 
-        EFCreateBlogCommand = 2,
-        EFUpdateBlogCommand = 3,
-        EFDeleteBlogCommand = 4,
-        EFGetOneBlogQuery = 5,
-        EFGetBlogsQuery = 6,
-        EFUpdatePersonalBlogCommand = 7,
-        EFDeletePersonalBlogCommand = 8,
+        EFCreatePostCommand = 2,
+        EFUpdatePostCommand = 3,
+        EFDeletePostCommand = 4,
+        EFGetOnePostQuery = 5,
+        EFGetPostsQuery = 6,
+        EFUpdatePersonalPostCommand = 7,
+        EFDeletePersonalPostCommand = 8,
 
         EFCreateCommentCommand = 9,
         EFUpdateCommentCommand = 10,
         EFDeleteCommentCommand = 11,
         EFGetOneCommentQuery = 12,
+        EFGetCommentsQuery = 13,
         EFUpdatePersonalCommentCommand = 14,
         EFDeletePersonalCommentCommand = 15,
 
-        EFLikeBlog = 16,
+        EFLikePost = 16,
+        EFLikeComment = 17,
 
-        EFGetUseCaseLogQuery = 17,
+        EFGetUseCaseLogQuery = 18,
 
-        EFCreateUserCommand = 18,
-        EFUpdateUserCommand = 19,
-        EFDeleteUserCommand = 20,
-        EFGetOneUserQuery = 21,
-        EFGetUsersQuery = 22,
+        EFCreateUserCommand = 19,
+        EFUpdateUserCommand = 20,
+        EFDeleteUserCommand = 21,
+        EFGetOneUserQuery = 22,
+        EFGetUsersQuery = 23,
 
-        EFCreateCategoryCommand = 23,
-        EFUpdateCategoryCommand = 24,
-        EFDeleteCategoryCommand = 25,
-        EFGetOneCategoryQuery = 26,
-        EFGetCategoriesQuery = 27
+        EFCreateCategoryCommand = 24,
+        EFUpdateCategoryCommand = 25,
+        EFDeleteCategoryCommand = 26,
+        EFGetOneCategoryQuery = 27,
+        EFGetCategoriesQuery = 28
     }
 }

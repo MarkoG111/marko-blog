@@ -15,7 +15,7 @@ namespace EFDataAccess.Configurations
         {
             builder.Property(x => x.ImagePath).IsRequired();
 
-            builder.HasMany(x => x.Blogs)
+            builder.HasMany(x => x.Posts)
                    .WithOne(y => y.Image)
                    .HasForeignKey(x => x.IdImage)
                    .OnDelete(DeleteBehavior.Restrict);

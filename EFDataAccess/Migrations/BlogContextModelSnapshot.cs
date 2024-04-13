@@ -22,77 +22,6 @@ namespace EFDataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Blog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdImage")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUser")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdImage");
-
-                    b.HasIndex("IdUser");
-
-                    b.ToTable("Blogs");
-                });
-
-            modelBuilder.Entity("Domain.BlogCategory", b =>
-                {
-                    b.Property<int>("IdBlog")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCategory")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("IdBlog", "IdCategory");
-
-                    b.HasIndex("IdCategory");
-
-                    b.ToTable("BlogCategories");
-                });
-
             modelBuilder.Entity("Domain.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -144,10 +73,10 @@ namespace EFDataAccess.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdBlog")
+                    b.Property<int?>("IdParent")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdParent")
+                    b.Property<int>("IdPost")
                         .HasColumnType("int");
 
                     b.Property<int>("IdUser")
@@ -164,9 +93,9 @@ namespace EFDataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdBlog");
-
                     b.HasIndex("IdParent");
+
+                    b.HasIndex("IdPost");
 
                     b.HasIndex("IdUser");
 
@@ -219,7 +148,10 @@ namespace EFDataAccess.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdBlog")
+                    b.Property<int?>("IdComment")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdPost")
                         .HasColumnType("int");
 
                     b.Property<int>("IdUser")
@@ -239,11 +171,84 @@ namespace EFDataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdBlog");
+                    b.HasIndex("IdComment");
+
+                    b.HasIndex("IdPost");
 
                     b.HasIndex("IdUser");
 
                     b.ToTable("Likes");
+                });
+
+            modelBuilder.Entity("Domain.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IdImage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdUser")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdImage");
+
+                    b.HasIndex("IdUser");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("Domain.PostCategory", b =>
+                {
+                    b.Property<int>("IdPost")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdCategory")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("IdPost", "IdCategory");
+
+                    b.HasIndex("IdCategory");
+
+                    b.ToTable("PostCategories");
                 });
 
             modelBuilder.Entity("Domain.Role", b =>
@@ -409,16 +414,67 @@ namespace EFDataAccess.Migrations
                     b.ToTable("UserUseCases");
                 });
 
-            modelBuilder.Entity("Domain.Blog", b =>
+            modelBuilder.Entity("Domain.Comment", b =>
+                {
+                    b.HasOne("Domain.Comment", "ParentComment")
+                        .WithMany("ChildrenComments")
+                        .HasForeignKey("IdParent")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Domain.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("IdPost")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParentComment");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Like", b =>
+                {
+                    b.HasOne("Domain.Comment", "Comment")
+                        .WithMany("Likes")
+                        .HasForeignKey("IdComment");
+
+                    b.HasOne("Domain.Post", "Post")
+                        .WithMany("Likes")
+                        .HasForeignKey("IdPost")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("Likes")
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Post", b =>
                 {
                     b.HasOne("Domain.Image", "Image")
-                        .WithMany("Blogs")
+                        .WithMany("Posts")
                         .HasForeignKey("IdImage")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.User", "User")
-                        .WithMany("Blogs")
+                        .WithMany("Posts")
                         .HasForeignKey("IdUser")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -428,68 +484,23 @@ namespace EFDataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.BlogCategory", b =>
+            modelBuilder.Entity("Domain.PostCategory", b =>
                 {
-                    b.HasOne("Domain.Blog", "Blog")
-                        .WithMany("BlogCategories")
-                        .HasForeignKey("IdBlog")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Domain.Category", "Category")
-                        .WithMany("CategoryBlogs")
+                        .WithMany("CategoryPosts")
                         .HasForeignKey("IdCategory")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Blog");
+                    b.HasOne("Domain.Post", "Post")
+                        .WithMany("PostCategories")
+                        .HasForeignKey("IdPost")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Category");
-                });
 
-            modelBuilder.Entity("Domain.Comment", b =>
-                {
-                    b.HasOne("Domain.Blog", "Blog")
-                        .WithMany("Comments")
-                        .HasForeignKey("IdBlog")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Comment", "ParentComment")
-                        .WithMany("ChildrenComments")
-                        .HasForeignKey("IdParent")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.User", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("IdUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Blog");
-
-                    b.Navigation("ParentComment");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Like", b =>
-                {
-                    b.HasOne("Domain.Blog", "Blog")
-                        .WithMany("Likes")
-                        .HasForeignKey("IdBlog")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.User", "User")
-                        .WithMany("Likes")
-                        .HasForeignKey("IdUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Blog");
-
-                    b.Navigation("User");
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -514,28 +525,30 @@ namespace EFDataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Blog", b =>
-                {
-                    b.Navigation("BlogCategories");
-
-                    b.Navigation("Comments");
-
-                    b.Navigation("Likes");
-                });
-
             modelBuilder.Entity("Domain.Category", b =>
                 {
-                    b.Navigation("CategoryBlogs");
+                    b.Navigation("CategoryPosts");
                 });
 
             modelBuilder.Entity("Domain.Comment", b =>
                 {
                     b.Navigation("ChildrenComments");
+
+                    b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("Domain.Image", b =>
                 {
-                    b.Navigation("Blogs");
+                    b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("Domain.Post", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
+
+                    b.Navigation("PostCategories");
                 });
 
             modelBuilder.Entity("Domain.Role", b =>
@@ -545,11 +558,11 @@ namespace EFDataAccess.Migrations
 
             modelBuilder.Entity("Domain.User", b =>
                 {
-                    b.Navigation("Blogs");
-
                     b.Navigation("Comments");
 
                     b.Navigation("Likes");
+
+                    b.Navigation("Posts");
 
                     b.Navigation("UserUseCases");
                 });

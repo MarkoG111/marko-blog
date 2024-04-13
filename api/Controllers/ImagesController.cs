@@ -21,6 +21,14 @@ namespace API.Controllers
             _actor = actor;
         }
 
+        [HttpGet("images/{imageName}")]
+        public IActionResult GetImage(string imageName)
+        {
+            var imagePath = Path.Combine("wwwroot", "Images", imageName);
+            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            return File(imageBytes, "image/jpeg");
+        }
+
         [HttpPost]
         public IActionResult Post([FromForm] UploadImageDto dto)
         {
@@ -43,10 +51,9 @@ namespace API.Controllers
             };
 
             _context.Images.Add(image);
-
             _context.SaveChanges();
 
-            return StatusCode(StatusCodes.Status201Created);
+            return Ok(image);
         }
     }
 }

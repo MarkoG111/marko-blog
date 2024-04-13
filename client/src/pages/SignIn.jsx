@@ -59,10 +59,7 @@ export default function SignUp() {
 
         const decodedToken = jwtDecode(token);
 
-        console.log(decodedToken);
         const userProfile = decodedToken.ActorData;
-
-        console.log(userProfile);
 
         localStorage.setItem('token', token);
 

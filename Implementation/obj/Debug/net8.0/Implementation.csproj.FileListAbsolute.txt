@@ -18,3 +18,23 @@ C:\Users\Gacho\Desktop\My_Blog\Implementation\obj\Debug\net8.0\Implementation.dl
 C:\Users\Gacho\Desktop\My_Blog\Implementation\obj\Debug\net8.0\refint\Implementation.dll
 C:\Users\Gacho\Desktop\My_Blog\Implementation\obj\Debug\net8.0\Implementation.pdb
 C:\Users\Gacho\Desktop\My_Blog\Implementation\obj\Debug\net8.0\ref\Implementation.dll
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\bin\Debug\net8.0\Implementation.deps.json
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\bin\Debug\net8.0\Implementation.dll
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\bin\Debug\net8.0\Implementation.pdb
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\bin\Debug\net8.0\Application.dll
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\bin\Debug\net8.0\Domain.dll
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\bin\Debug\net8.0\EFDataAccess.dll
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\bin\Debug\net8.0\Domain.pdb
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\bin\Debug\net8.0\Application.pdb
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\bin\Debug\net8.0\EFDataAccess.pdb
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\obj\Debug\net8.0\Implementation.csproj.AssemblyReference.cache
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\obj\Debug\net8.0\Implementation.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\obj\Debug\net8.0\Implementation.AssemblyInfoInputs.cache
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\obj\Debug\net8.0\Implementation.AssemblyInfo.cs
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\obj\Debug\net8.0\Implementation.csproj.CoreCompileInputs.cache
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\obj\Debug\net8.0\Implementation.sourcelink.json
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\obj\Debug\net8.0\Implemen.3739F620.Up2Date
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\obj\Debug\net8.0\Implementation.dll
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\obj\Debug\net8.0\refint\Implementation.dll
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\obj\Debug\net8.0\Implementation.pdb
+c:\Users\Gacho\Desktop\My_Blog - Copy\Implementation\obj\Debug\net8.0\ref\Implementation.dll

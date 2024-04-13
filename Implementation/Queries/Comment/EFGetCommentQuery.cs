@@ -34,7 +34,7 @@ namespace Implementation.Queries.Comment
             return new CommentDto
             {
                 Id = comment.Id,
-                Comment = comment.CommentText,
+                CommentText = comment.CommentText,
                 Username = comment.User.Username,
                 CreatedAt = comment.CreatedAt,
                 IdParent = comment.IdParent

@@ -13,7 +13,6 @@ export default function Footer() {
         <li><Link to="/posts/categories/PHP">PHP</Link></li>
         <li><Link to="/posts/categories/Databases">Database Design</Link></li>
         <li><Link to="/posts/categories/MySQL">MySQL</Link></li>
-        <li><Link to="/posts/categories/SQL">Microsoft SQL Server</Link></li>
         <li><Link to="/posts/categories/C#">C#</Link></li>
         <li><Link to="/posts/categories/ASP">ASP.NET</Link></li>
         <li><Link to="/posts/categories/Laravel">Laravel</Link></li>

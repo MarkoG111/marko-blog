@@ -23,23 +23,45 @@ const userSlice = createSlice({
         lastName: payload.LastName,
         username: payload.Identity,
         email: payload.Email,
-        password: payload.Password,
+        allowedUseCases: payload.AllowedUseCases,
         profilePicture: payload.ProfilePicture,
-        allowedUseCases: payload.AllowedUseCases
+        roleName: payload.RoleName
       };
 
-      console.log(payload);
-      
       state.loading = false;
       state.error = null;
     },
     signInFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    },
+
+    updateUserSuccess: (state, action) => {
+      state.currentUser = action.payload;
+    },
+
+    updateProfilePictureSuccess: (state, action) => {
+      state.currentUser.profilePicture = action.payload;
+    },
+
+    deleteUserSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = null;
+    },
+    deleteUserFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    signoutSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = null;
     }
   }
 })
 
-export const { signInStart, signInSuccess, signInFailure } = userSlice.actions;
+export const { signInStart, signInSuccess, signInFailure, updateProfilePictureSuccess, deleteUserSuccess, deleteUserFailure, updateUserSuccess, signoutSuccess } = userSlice.actions;
 
 export default userSlice.reducer;

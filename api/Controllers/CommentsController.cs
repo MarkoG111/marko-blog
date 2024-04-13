@@ -2,6 +2,8 @@ using Application;
 using Application.Commands.Comment;
 using Application.DataTransfer;
 using Application.Queries.Comment;
+using Application.Searches;
+using Application.Commands.Like;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -19,8 +21,22 @@ namespace API.Controllers
             _actor = actor;
         }
 
-        [HttpGet("{id}", Name = "GetComment")]
-        public IActionResult Get(int id, [FromQuery] CommentDto dto, [FromServices] IGetCommentQuery query)
+        [HttpPost("like")]
+        public IActionResult Like([FromBody] LikeCommentDto request, [FromServices] ILikeCommentCommand command)
+        {
+            request.IdUser = _actor.Id;
+            _executor.ExecuteCommand(command, request);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        [HttpGet]
+        public IActionResult Get([FromServices] IGetCommentsQuery query, [FromQuery] CommentSearch search)
+        {
+            return Ok(_executor.ExecuteQuery(query, search));
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id, [FromServices] IGetCommentQuery query)
         {
             return Ok(_executor.ExecuteQuery(query, id));
         }
@@ -29,7 +45,7 @@ namespace API.Controllers
         public IActionResult Post([FromBody] InsertCommentDto dto, [FromServices] ICreateCommentCommand command)
         {
             _executor.ExecuteCommand(command, dto);
-            return StatusCode(StatusCodes.Status201Created);
+            return Ok(dto);
         }
 
         [HttpPut("{id}")]

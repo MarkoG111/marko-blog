@@ -4876,11 +4876,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\api.csproj",
+      "projectUniqueName": "C:\\Users\\Gacho\\Desktop\\My_Blog\\api\\api.csproj",
       "projectName": "api",
-      "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\api.csproj",
+      "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\api\\api.csproj",
       "packagesPath": "C:\\Users\\Gacho\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\obj\\",
+      "outputPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Gacho\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4897,8 +4897,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {
-              "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj"
+            "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj"
             },
             "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
               "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj"
@@ -4906,8 +4906,8 @@
             "c:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj": {
               "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj"
             },
-            "c:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj": {
-              "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj"
+            "C:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj": {
+              "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj"
             }
           }
         }

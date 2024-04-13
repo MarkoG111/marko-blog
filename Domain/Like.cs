@@ -8,10 +8,12 @@ namespace Domain
     public class Like : BaseEntity
     {
         public int IdUser { get; set; }
-        public int IdBlog { get; set; }
+        public int IdPost { get; set; }
+        public int? IdComment { get; set; }
         public LikeStatus Status { get; set; }
         public virtual User User { get; set; }
-        public virtual Blog Blog { get; set; }
+        public virtual Post Post { get; set; }
+        public virtual Comment Comment { get; set; }
     }
 
     public enum LikeStatus

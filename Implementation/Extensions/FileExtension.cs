@@ -15,7 +15,7 @@ namespace Implementation.Extensions
             var extension = Path.GetExtension(image.FileName);
             var newFileName = guid + extension;
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
- 
+
             var path = Path.Combine(uploadsFolder, newFileName);
 
             using (var fileStream = new FileStream(path, FileMode.Create))

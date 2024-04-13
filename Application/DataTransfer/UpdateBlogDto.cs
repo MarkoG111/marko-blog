@@ -12,6 +12,6 @@ namespace Application.DataTransfer
         public string Content { get; set; }
         public int IdImage { get; set; }
         public int IdUser { get; set; }
-        public ICollection<int> BlogCategories { get; set; } = new List<int>();
+        public ICollection<int> PostCategories { get; set; } = new List<int>();
     }
 }

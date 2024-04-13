@@ -10,7 +10,7 @@ namespace Implementation.Validators.Comment
     {
         public UpdateCommentValidator()
         {
-            RuleFor(x => x.Text).NotEmpty();
+            RuleFor(x => x.CommentText).NotEmpty();
         }
     }
 }

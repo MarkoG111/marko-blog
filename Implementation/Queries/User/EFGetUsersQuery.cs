@@ -7,6 +7,7 @@ using Application.Queries;
 using Application.Queries.User;
 using Application.Searches;
 using EFDataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace Implementation.Queries.User
 {
@@ -24,7 +25,7 @@ namespace Implementation.Queries.User
 
         public PagedResponse<UserDto> Execute(UserSearch search)
         {
-            var users = _context.Users.AsQueryable();
+            var users = _context.Users.Include(x => x.Role).AsQueryable();
 
             if (!string.IsNullOrEmpty(search.Username) || !string.IsNullOrWhiteSpace(search.Username))
             {
@@ -50,7 +51,9 @@ namespace Implementation.Queries.User
                     LastName = x.LastName,
                     Username = x.Username,
                     Email = x.Email,
-                    Password = x.Password                 
+                    ProfilePicture = x.ProfilePicture,
+                    Role = x.Role.Name,
+                    CreatedAt = x.CreatedAt
                 }).ToList()
             };
 

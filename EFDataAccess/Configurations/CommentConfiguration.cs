@@ -19,6 +19,10 @@ namespace EFDataAccess.Configurations
                 .WithOne(x => x.ParentComment)
                 .HasForeignKey(x => x.IdParent)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasMany(x => x.Likes)
+                .WithOne(y => y.Comment)
+                .HasForeignKey(x => x.IdComment);
         }
     }
 }

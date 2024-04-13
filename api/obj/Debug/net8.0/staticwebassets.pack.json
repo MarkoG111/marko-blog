@@ -1,68 +1,260 @@
 {
   "Files": [
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\27bfe790-22ca-4bab-9894-df84452ede7d.png",
-      "PackagePath": "staticwebassets\\Images\\27bfe790-22ca-4bab-9894-df84452ede7d.png"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\00ba5e87-85ac-4ddd-b699-9d6faafd2515.png",
+      "PackagePath": "staticwebassets\\Images\\00ba5e87-85ac-4ddd-b699-9d6faafd2515.png"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\04c6a4cb-6efa-4946-8408-123fd4284ecd.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\04c6a4cb-6efa-4946-8408-123fd4284ecd.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\04581076-61c7-4e3d-8877-39667b8eb96b.jpg",
+      "PackagePath": "staticwebassets\\Images\\04581076-61c7-4e3d-8877-39667b8eb96b.jpg"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\0ee227ca-c162-4f12-b8dd-aa384d49fd16.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\0ee227ca-c162-4f12-b8dd-aa384d49fd16.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\05502d2a-8ef1-44c5-b5c0-a6605cbbf185.png",
+      "PackagePath": "staticwebassets\\Images\\05502d2a-8ef1-44c5-b5c0-a6605cbbf185.png"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\0f04da86-82e6-423a-858f-85ccba364fd6.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\0f04da86-82e6-423a-858f-85ccba364fd6.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\0695d0f0-a329-4548-b0bc-dca019eeec64.png",
+      "PackagePath": "staticwebassets\\Images\\0695d0f0-a329-4548-b0bc-dca019eeec64.png"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\16049de2-e4a1-4086-8750-75e867544c63.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\16049de2-e4a1-4086-8750-75e867544c63.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\0d9f86e0-5bd4-41e2-b3a3-769f3a65dcd0.jpg",
+      "PackagePath": "staticwebassets\\Images\\0d9f86e0-5bd4-41e2-b3a3-769f3a65dcd0.jpg"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\3dd0f6dd-a29e-4517-ae68-f401d9248ac3.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\3dd0f6dd-a29e-4517-ae68-f401d9248ac3.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\0ff7bd30-af3b-4d76-a623-49f44a7e50eb.jpg",
+      "PackagePath": "staticwebassets\\Images\\0ff7bd30-af3b-4d76-a623-49f44a7e50eb.jpg"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\4e8fecdd-231e-479f-b062-e1eeebb52fe3.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\4e8fecdd-231e-479f-b062-e1eeebb52fe3.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\149aa598-5122-4de7-820b-9353866554b4.jpg",
+      "PackagePath": "staticwebassets\\Images\\149aa598-5122-4de7-820b-9353866554b4.jpg"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\5a011a95-138b-42ad-b0be-83dfbaba6e2e.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\5a011a95-138b-42ad-b0be-83dfbaba6e2e.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\17a3f317-aeef-4546-99f9-9b25b3d5182d.jpg",
+      "PackagePath": "staticwebassets\\Images\\17a3f317-aeef-4546-99f9-9b25b3d5182d.jpg"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\5becc134-4909-4244-8ad8-3aa58a2d8de3.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\5becc134-4909-4244-8ad8-3aa58a2d8de3.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\258848e5-6632-4dcd-b52f-2fd1f25e5acb.png",
+      "PackagePath": "staticwebassets\\Images\\258848e5-6632-4dcd-b52f-2fd1f25e5acb.png"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\6f46a9f6-6adf-49bb-9c56-c7f6c00e413c.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\6f46a9f6-6adf-49bb-9c56-c7f6c00e413c.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\2750ea95-933f-4a21-b580-20420d0c4770.png",
+      "PackagePath": "staticwebassets\\Images\\2750ea95-933f-4a21-b580-20420d0c4770.png"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\7658ea7f-58c9-42cd-9294-9396d1698299.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\7658ea7f-58c9-42cd-9294-9396d1698299.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\2b343a6a-7460-4d1d-b641-66b56aa6454d.jpg",
+      "PackagePath": "staticwebassets\\Images\\2b343a6a-7460-4d1d-b641-66b56aa6454d.jpg"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\8331dae4-da5c-4c34-9e96-a2819c44ed08.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\8331dae4-da5c-4c34-9e96-a2819c44ed08.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\32e40837-e2c6-43af-bc3e-f65674053cb7.jpg",
+      "PackagePath": "staticwebassets\\Images\\32e40837-e2c6-43af-bc3e-f65674053cb7.jpg"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\b02b36e4-b6b4-4ec1-b112-b5efd4f2e1bb.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\b02b36e4-b6b4-4ec1-b112-b5efd4f2e1bb.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\408561a9-3796-42bf-afed-fb32f9c849da.png",
+      "PackagePath": "staticwebassets\\Images\\408561a9-3796-42bf-afed-fb32f9c849da.png"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\cbcb8737-7f47-4038-a246-3de956af2190.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\cbcb8737-7f47-4038-a246-3de956af2190.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\428fbe66-f01f-4f62-a73c-0f58d886bba2.png",
+      "PackagePath": "staticwebassets\\Images\\428fbe66-f01f-4f62-a73c-0f58d886bba2.png"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\d90319c3-0cb2-48a6-ac33-6101f45590ce.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\d90319c3-0cb2-48a6-ac33-6101f45590ce.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\459ff642-d3aa-4756-8801-3bffcf9fc068.jpg",
+      "PackagePath": "staticwebassets\\Images\\459ff642-d3aa-4756-8801-3bffcf9fc068.jpg"
     },
     {
-      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\fa3453f6-2596-4290-af82-029d7033f9e3.jpg",
-      "PackagePath": "staticwebassets\\UserImages\\fa3453f6-2596-4290-af82-029d7033f9e3.jpg"
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\472ccb07-6b0f-4716-88d4-c7850bc250a0.png",
+      "PackagePath": "staticwebassets\\Images\\472ccb07-6b0f-4716-88d4-c7850bc250a0.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\4babc012-81fd-4fa4-a049-81acf22fd33f.jpg",
+      "PackagePath": "staticwebassets\\Images\\4babc012-81fd-4fa4-a049-81acf22fd33f.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\4f2f3cfd-3cb1-406d-a9ce-a3e2ea07e803.jpg",
+      "PackagePath": "staticwebassets\\Images\\4f2f3cfd-3cb1-406d-a9ce-a3e2ea07e803.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\50e23c47-9d6b-4b97-bc50-7b43eaad2412.jpg",
+      "PackagePath": "staticwebassets\\Images\\50e23c47-9d6b-4b97-bc50-7b43eaad2412.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\5a55aae3-bb3c-46c1-b64a-be3a4d526a84.jpg",
+      "PackagePath": "staticwebassets\\Images\\5a55aae3-bb3c-46c1-b64a-be3a4d526a84.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\5cf603a0-d4e1-4350-b711-94b2743df88f.png",
+      "PackagePath": "staticwebassets\\Images\\5cf603a0-d4e1-4350-b711-94b2743df88f.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\5dca1f5e-1c6c-45d6-9338-e82de8ab249d.jpg",
+      "PackagePath": "staticwebassets\\Images\\5dca1f5e-1c6c-45d6-9338-e82de8ab249d.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\5f72c99e-d651-499d-9bf0-f03a91cffc9f.png",
+      "PackagePath": "staticwebassets\\Images\\5f72c99e-d651-499d-9bf0-f03a91cffc9f.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\60631e2d-bd6e-4167-a944-340078e187f4.png",
+      "PackagePath": "staticwebassets\\Images\\60631e2d-bd6e-4167-a944-340078e187f4.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\63771eaa-3259-44d4-8711-b4bb4685a269.jpg",
+      "PackagePath": "staticwebassets\\Images\\63771eaa-3259-44d4-8711-b4bb4685a269.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\69a7a67f-5a98-449d-b56a-04fb7458f2e3.jpg",
+      "PackagePath": "staticwebassets\\Images\\69a7a67f-5a98-449d-b56a-04fb7458f2e3.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\6a89896a-52c6-4b9c-8a5a-55ee0cd2331f.jpg",
+      "PackagePath": "staticwebassets\\Images\\6a89896a-52c6-4b9c-8a5a-55ee0cd2331f.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\6d02b979-0937-4b06-81a2-9690acb08a6c.jpg",
+      "PackagePath": "staticwebassets\\Images\\6d02b979-0937-4b06-81a2-9690acb08a6c.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\6e221649-205c-491b-8964-aff8c116617b.png",
+      "PackagePath": "staticwebassets\\Images\\6e221649-205c-491b-8964-aff8c116617b.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\70b87060-6aae-4626-bff6-c7dab18e2699.png",
+      "PackagePath": "staticwebassets\\Images\\70b87060-6aae-4626-bff6-c7dab18e2699.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\83b50691-5e29-4ad3-9939-0a23f402f443.jpg",
+      "PackagePath": "staticwebassets\\Images\\83b50691-5e29-4ad3-9939-0a23f402f443.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\85f7dba2-c62b-4658-bd1c-b1da576329f8.jpg",
+      "PackagePath": "staticwebassets\\Images\\85f7dba2-c62b-4658-bd1c-b1da576329f8.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\8a8b980a-7923-4999-8e06-cb55bca23a49.png",
+      "PackagePath": "staticwebassets\\Images\\8a8b980a-7923-4999-8e06-cb55bca23a49.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\9719d256-f3ec-499d-9831-9935e1e065ce.png",
+      "PackagePath": "staticwebassets\\Images\\9719d256-f3ec-499d-9831-9935e1e065ce.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\9d97dbbb-275d-4a16-a7f3-b991d7e3d9a2.png",
+      "PackagePath": "staticwebassets\\Images\\9d97dbbb-275d-4a16-a7f3-b991d7e3d9a2.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\9dba3c9d-7cec-470b-9718-76332ce00357.png",
+      "PackagePath": "staticwebassets\\Images\\9dba3c9d-7cec-470b-9718-76332ce00357.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\a1fa19d8-d555-45c7-9789-7479bc5ab1a0.png",
+      "PackagePath": "staticwebassets\\Images\\a1fa19d8-d555-45c7-9789-7479bc5ab1a0.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\a2aef058-064f-41b7-a34f-175bc59fecfd.jpg",
+      "PackagePath": "staticwebassets\\Images\\a2aef058-064f-41b7-a34f-175bc59fecfd.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\a34fd4a9-6bd8-459f-bf9e-22024817c8d0.png",
+      "PackagePath": "staticwebassets\\Images\\a34fd4a9-6bd8-459f-bf9e-22024817c8d0.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\a41eae23-ffdb-4053-b0a3-44841b99a095.png",
+      "PackagePath": "staticwebassets\\Images\\a41eae23-ffdb-4053-b0a3-44841b99a095.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\a99e6aee-1d55-45f2-9072-ae6e243a9a1b.jpg",
+      "PackagePath": "staticwebassets\\Images\\a99e6aee-1d55-45f2-9072-ae6e243a9a1b.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\b424adb9-d6c6-448b-ba22-a5687f2a7049.png",
+      "PackagePath": "staticwebassets\\Images\\b424adb9-d6c6-448b-ba22-a5687f2a7049.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\b758d856-2e08-4a44-b0f6-ef132f282433.png",
+      "PackagePath": "staticwebassets\\Images\\b758d856-2e08-4a44-b0f6-ef132f282433.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\be82dd4b-5422-4e24-a7bf-b64da86782a1.jpg",
+      "PackagePath": "staticwebassets\\Images\\be82dd4b-5422-4e24-a7bf-b64da86782a1.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\cd9b9457-3fb2-4aef-a9b7-d7d8d8036dad.png",
+      "PackagePath": "staticwebassets\\Images\\cd9b9457-3fb2-4aef-a9b7-d7d8d8036dad.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\cef7b291-9f26-4039-9d1e-2e350113ede6.jpg",
+      "PackagePath": "staticwebassets\\Images\\cef7b291-9f26-4039-9d1e-2e350113ede6.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\d10cd628-dba3-45d0-9a83-c629d2713efa.png",
+      "PackagePath": "staticwebassets\\Images\\d10cd628-dba3-45d0-9a83-c629d2713efa.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\d590aaac-0392-43d9-8df6-fc1c848dbed0.png",
+      "PackagePath": "staticwebassets\\Images\\d590aaac-0392-43d9-8df6-fc1c848dbed0.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\d5fdedf7-a8a6-4412-93eb-b5d8c39bf37d.jpg",
+      "PackagePath": "staticwebassets\\Images\\d5fdedf7-a8a6-4412-93eb-b5d8c39bf37d.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\da26ef3e-14b3-4a3a-b0db-a671cecd8d80.png",
+      "PackagePath": "staticwebassets\\Images\\da26ef3e-14b3-4a3a-b0db-a671cecd8d80.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\db01a00c-0f5e-4d79-a764-273d86a71cb1.jpg",
+      "PackagePath": "staticwebassets\\Images\\db01a00c-0f5e-4d79-a764-273d86a71cb1.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\dbbc1319-ce7b-48b2-b1e5-5351ed18b63e.jpg",
+      "PackagePath": "staticwebassets\\Images\\dbbc1319-ce7b-48b2-b1e5-5351ed18b63e.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\e020d450-e7b2-4733-8f61-e6693b89c8f9.jpg",
+      "PackagePath": "staticwebassets\\Images\\e020d450-e7b2-4733-8f61-e6693b89c8f9.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\e0f27bb1-36b4-4555-9079-ea1452028982.png",
+      "PackagePath": "staticwebassets\\Images\\e0f27bb1-36b4-4555-9079-ea1452028982.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\e462be0f-639c-4e5e-885f-77799c398211.jpg",
+      "PackagePath": "staticwebassets\\Images\\e462be0f-639c-4e5e-885f-77799c398211.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\e876e34b-0ddd-4480-b44c-2df31ee1a003.png",
+      "PackagePath": "staticwebassets\\Images\\e876e34b-0ddd-4480-b44c-2df31ee1a003.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\ef234c86-a811-42fb-b0c4-f16d1b3e3c1a.png",
+      "PackagePath": "staticwebassets\\Images\\ef234c86-a811-42fb-b0c4-f16d1b3e3c1a.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\f02d06c9-344c-45fc-b647-06ba3bb2407a.jpg",
+      "PackagePath": "staticwebassets\\Images\\f02d06c9-344c-45fc-b647-06ba3bb2407a.jpg"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\f48d1470-7749-4a10-aaa1-13ac779a09b4.png",
+      "PackagePath": "staticwebassets\\Images\\f48d1470-7749-4a10-aaa1-13ac779a09b4.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\f5616055-5c31-45fb-b493-1a2c178d403f.png",
+      "PackagePath": "staticwebassets\\Images\\f5616055-5c31-45fb-b493-1a2c178d403f.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\Images\\fd862e1e-cb0b-4c5d-88c6-813c027f65a0.png",
+      "PackagePath": "staticwebassets\\Images\\fd862e1e-cb0b-4c5d-88c6-813c027f65a0.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\34105767-314d-4f8a-a17a-3d03cad67ad0.png",
+      "PackagePath": "staticwebassets\\UserImages\\34105767-314d-4f8a-a17a-3d03cad67ad0.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\6d741520-71c7-497f-96f7-2a10de8c09d2.png",
+      "PackagePath": "staticwebassets\\UserImages\\6d741520-71c7-497f-96f7-2a10de8c09d2.png"
+    },
+    {
+      "Id": "c:\\Users\\Gacho\\Desktop\\My_Blog\\api\\wwwroot\\UserImages\\a7be7d1e-6ff9-4378-9a87-8897f09301d1.png",
+      "PackagePath": "staticwebassets\\UserImages\\a7be7d1e-6ff9-4378-9a87-8897f09301d1.png"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.api.Microsoft.AspNetCore.StaticWebAssets.props",

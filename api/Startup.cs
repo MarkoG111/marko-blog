@@ -8,6 +8,7 @@ using Application.Commands.Email;
 using Implementation.Commands.Email;
 
 using Newtonsoft.Json;
+using Microsoft.Extensions.FileProviders;
 
 namespace API
 {
@@ -112,6 +113,7 @@ namespace API
 
             // Dodaje middleware komponentu GlobalExceptionHandler koja obrađuje sve izuzetke koji nisu već obrađeni i pruža odgovarajući odgovor korisniku ili aplikaciji.
             app.UseMiddleware<GlobalExceptionHandler>();
+
 
             // Dodaje middleware za definisanje krajnjih tačaka (endpoints) aplikacije, tj. mapiranje HTTP zahteva na odgovarajuće akcije u kontrolerima.
             app.UseEndpoints(endpoints =>

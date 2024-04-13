@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Gacho\\Desktop\\My_Blog - Copy\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A0B2545B-F222-46C9-A8A7-6052773A77FA}|api\\api.csproj|c:\\users\\gacho\\desktop\\my_blog - copy\\api\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0B2545B-F222-46C9-A8A7-6052773A77FA}|api\\api.csproj|solutionrelative:api\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Startup.cs",
+              "DocumentMoniker": "C:\\Users\\Gacho\\Desktop\\My_Blog - Copy\\API\\Startup.cs",
+              "RelativeDocumentMoniker": "API\\Startup.cs",
+              "ToolTip": "C:\\Users\\Gacho\\Desktop\\My_Blog - Copy\\API\\Startup.cs",
+              "RelativeToolTip": "API\\Startup.cs",
+              "ViewState": "AQIAAC8AAAAAAAAAAAAwwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-11T19:51:33.877Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

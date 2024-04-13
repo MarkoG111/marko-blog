@@ -15,7 +15,7 @@ namespace Application.DataTransfer
         public int IdImage { get; set; }
         public string Username { get; set; }
         public IEnumerable<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
-        public IEnumerable<LikeBlogDto> Likes { get; set; } = new List<LikeBlogDto>();
+        public IEnumerable<GetLikePostDto> Likes { get; set; } = new List<GetLikePostDto>();
         public IEnumerable<SingleCommentDto> Comments { get; set; } = new List<SingleCommentDto>();
     }
 }

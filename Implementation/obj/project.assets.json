@@ -2990,8 +2990,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {
-              "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj"
+            "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj"
             },
             "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
               "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj"

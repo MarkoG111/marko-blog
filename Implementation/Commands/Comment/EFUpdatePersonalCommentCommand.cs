@@ -47,7 +47,7 @@ namespace Implementation.Commands.Comment
 
             var query = _context.Comments.Where(x => x.Id == request.Id).FirstOrDefault();
 
-            comment.CommentText = request.Text;
+            comment.CommentText = request.CommentText;
 
             _context.SaveChanges();
         }

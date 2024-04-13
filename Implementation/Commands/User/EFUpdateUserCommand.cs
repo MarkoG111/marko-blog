@@ -15,11 +15,13 @@ namespace Implementation.Commands.User
     {
         private readonly BlogContext _context;
         private readonly UpdateUserValidator _validator;
+        private readonly UpdateUserWithoutImageValidator _validatorWithoutImage;
 
-        public EFUpdateUserCommand(BlogContext context, UpdateUserValidator validator)
+        public EFUpdateUserCommand(BlogContext context, UpdateUserValidator validator, UpdateUserWithoutImageValidator validatorWithoutImage)
         {
             _context = context;
             _validator = validator;
+            _validatorWithoutImage = validatorWithoutImage;
         }
 
         public int Id => (int)UseCaseEnum.EFUpdateUserCommand;
@@ -27,7 +29,14 @@ namespace Implementation.Commands.User
 
         public void Execute(UpdateUserDto request)
         {
-            _validator.ValidateAndThrow(request);
+            if (request.Image != null)
+            {
+                _validator.ValidateAndThrow(request);
+            }
+            else
+            {
+                _validatorWithoutImage.ValidateAndThrow(request);
+            }
 
             var user = _context.Users.Include(x => x.UserUseCases).FirstOrDefault(x => x.Id == request.Id);
 
@@ -40,8 +49,16 @@ namespace Implementation.Commands.User
             user.LastName = request.LastName;
             user.Username = request.Username;
             user.Email = request.Email;
-            user.Password = EasyEncryption.SHA.ComputeSHA256Hash(request.Password);
-            user.ProfilePicture = request.ProfilePicture.UploadImage("UserImages");
+
+            if (request.Image != null)
+            {
+                user.ProfilePicture = request.Image.UploadImage("UserImages");
+            }
+
+            if (!string.IsNullOrEmpty(request.Password) || !string.IsNullOrWhiteSpace(request.Password))
+            {
+                user.Password = EasyEncryption.SHA.ComputeSHA256Hash(request.Password);
+            }
 
             _context.SaveChanges();
         }

@@ -24,7 +24,7 @@ namespace Implementation.Queries.User
 
         public SingleUserDto Execute(int search)
         {
-            var user = _context.Users.Include(x => x.UserUseCases).FirstOrDefault(x => x.Id == search);
+            var user = _context.Users.Include(x => x.UserUseCases).Include(u => u.Role).FirstOrDefault(x => x.Id == search);
 
             return new SingleUserDto
             {
@@ -33,7 +33,8 @@ namespace Implementation.Queries.User
                 LastName = user.LastName,
                 Username = user.Username,
                 Email = user.Email,
-                Password = user.Password,
+                ProfilePicture = user.ProfilePicture,
+                RoleName = user.Role.Name,
                 UserUseCases = user.UserUseCases.Select(x => new UserUseCaseDto
                 {
                     IdUseCase = x.IdUseCase

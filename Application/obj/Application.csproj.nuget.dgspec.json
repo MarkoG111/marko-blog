@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {}
+    "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {
+    "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj",
+        "projectUniqueName": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj",
+        "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj",
         "packagesPath": "C:\\Users\\Gacho\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\obj\\",
+        "outputPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Gacho\\AppData\\Roaming\\NuGet\\NuGet.Config",
