@@ -72,6 +72,11 @@ namespace Implementation
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCategoryQuery });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCategoriesQuery });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFFollowCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUnfollowCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCheckFollowStatusQuery });
+
             }
 
             else if (user.IdRole == (int)RoleEnum.User)
@@ -94,6 +99,10 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikeComment });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateAuthorRequestCommand });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFFollowCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUnfollowCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCheckFollowStatusQuery });
             }
 
             user.UserUseCases = list;

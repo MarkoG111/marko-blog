@@ -48,6 +48,10 @@ namespace Implementation
 
         EFCreateAuthorRequestCommand = 29,
         EFUpdateAuthorRequestCommand = 30,
-        EFGetAuthorRequestsQuery = 31
+        EFGetAuthorRequestsQuery = 31,
+
+        EFFollowCommand = 32,
+        EFUnfollowCommand = 33,
+        EFCheckFollowStatusQuery = 34,
     }
 }

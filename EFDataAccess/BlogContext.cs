@@ -74,6 +74,5 @@ namespace EFDataAccess
     public DbSet<AuthorRequest> AuthorRequests { get; set; }
     public DbSet<Follower> Followers { get; set; }
   }
-
 }
 

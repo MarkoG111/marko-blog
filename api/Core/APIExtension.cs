@@ -10,6 +10,7 @@ using Application.Commands.User;
 using Application.Commands.Like;
 using Application.Commands.Comment;
 using Application.Commands.AuthorRequest;
+using Application.Commands.Follow;
 
 using Application.Queries;
 using Application.Queries.Post;
@@ -17,6 +18,7 @@ using Application.Queries.Category;
 using Application.Queries.User;
 using Application.Queries.Comment;
 using Application.Queries.AuthorRequest;
+using Application.Queries.Follow;
 
 using Implementation.Validators.Post;
 using Implementation.Validators.Category;
@@ -31,6 +33,7 @@ using Implementation.Commands.User;
 using Implementation.Commands.Comment;
 using Implementation.Commands.Like;
 using Implementation.Commands.AuthorRequest;
+using Implementation.Commands.Follow;
 
 using Implementation.Queries;
 using Implementation.Queries.Post;
@@ -38,6 +41,7 @@ using Implementation.Queries.Category;
 using Implementation.Queries.Comment;
 using Implementation.Queries.User;
 using Implementation.Queries.AuthorRequest;
+using Implementation.Queries.Follow;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -79,6 +83,9 @@ namespace API.Core
             services.AddTransient<ICreateAuthorRequestCommand, EFCreateAuthorRequestCommand>();
             services.AddTransient<IUpdateAuthorRequestCommand, EFUpdateAuthorRequestCommand>();
 
+            services.AddTransient<IFollowCommand, EFFollowCommand>();
+            services.AddTransient<IUnfollowCommand, EFUnfollowCommand>();
+
             // Queries
             services.AddTransient<IGetPostsQuery, EFGetPostsQuery>();
             services.AddTransient<IGetPostQuery, EFGetPostQuery>();
@@ -95,6 +102,8 @@ namespace API.Core
             services.AddTransient<IGetAuthorRequestsQuery, EFGetAuthorRequestsQuery>();
 
             services.AddTransient<IGetUseCaseLogsQuery, EFGetUseCaseLogsQuery>();
+
+            services.AddTransient<ICheckFollowStatusQuery, EFCheckFollowStatusQuery>();
 
             // Validators
             services.AddTransient<RegisterUserValidator>();

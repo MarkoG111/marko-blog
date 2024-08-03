@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { HiDocumentText, HiOutlineMail } from 'react-icons/hi'
 import { FaRegCommentDots, FaUsers } from 'react-icons/fa'
-import { RiUserFollowLine } from "react-icons/ri"
+import { RiUserFollowLine, RiUserUnfollowFill } from "react-icons/ri"
 import { FaUserPlus } from "react-icons/fa6";
 import { Button } from "flowbite-react"
 
 export default function UserPage() {
   const { id } = useParams()
   const [user, setUser] = useState(null)
+  const [isFollowing, setIsFollowing] = useState(false)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,10 +27,20 @@ export default function UserPage() {
         })
 
         const data = await repsonse.json()
-        if (!repsonse.ok) {
-          return
-        } else {
+
+        if (repsonse.ok) {
           setUser(data)
+
+          const followResponse = await fetch(`/api/Followers/check/${id}`, {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          })
+
+          const followData = await followResponse.json()
+
+          setIsFollowing(followData.isFollowing)
         }
       } catch (error) {
         console.log(error)
@@ -38,6 +49,52 @@ export default function UserPage() {
 
     fetchUser()
   }, [id])
+
+  const handleFollow = async (idFollowing) => {
+    try {
+      const token = localStorage.getItem("token")
+      if (!token) {
+        throw new Error("Token not found")
+      }
+
+      const response = await fetch(`/api/Followers`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "Application/json"
+        },
+        body: JSON.stringify({ IdFollowing: idFollowing })
+      })
+
+      if (response.ok) {
+        setIsFollowing(true)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleUnfollow = async (idFollowing) => {
+    try {
+      const token = localStorage.getItem("token")
+      if (!token) {
+        throw new Error("Token not found")
+      }
+
+      const response = await fetch(`/api/Followers/unfollow/${idFollowing}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        }
+      })
+
+      if (response.ok) {
+        setIsFollowing(false)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const latestPost = user && user.userPosts[0]
   const otherPosts = user && user.userPosts.slice(1)
@@ -59,11 +116,15 @@ export default function UserPage() {
             <RiUserFollowLine className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3 ml-4" /> <span>15 following</span>
           </div>
           <div className="flex -mt-9 gap-x-4 justify-end mr-8">
-            <Link to='/create-post' className='mr-6'>
-              <Button type="button" gradientDuoTone='purpleToPink' className="">
+            {isFollowing ? (
+              <Button type="button" gradientDuoTone='purpleToPink' className="" onClick={() => handleUnfollow(user.id)}>
+                <RiUserUnfollowFill className="h-6 w-6 text-white dark:text-gray-200 mr-4" /> Unfollow
+              </Button>
+            ) : (
+              <Button type="button" gradientDuoTone='purpleToPink' className="" onClick={() => handleFollow(user.id)}>
                 <FaUserPlus className="h-6 w-6 text-white dark:text-gray-200 mr-4" /> Follow
               </Button>
-            </Link>
+            )}
           </div>
           <div className="flex justify-center pb-5 pt-20">
             <span className="text-2xl pr-4 pt-1"><HiOutlineMail /></span>

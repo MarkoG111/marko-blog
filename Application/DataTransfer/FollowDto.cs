@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Domain
+namespace Application.DataTransfer
 {
-    public class Follower
+    public class FollowDto
     {
-        public int IdFollower { get; set; }
+        public int IdUser { get; set; }
         public int IdFollowing { get; set; }
         public DateTime FollowedAt { get; set; }
-        public virtual User FollowerUser { get; set; }
-        public virtual User FollowingUser { get; set; }
     }
 }
