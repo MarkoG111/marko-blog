@@ -2969,11 +2969,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj",
+      "projectUniqueName": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj",
       "projectName": "Implementation",
-      "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj",
+      "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj",
       "packagesPath": "C:\\Users\\Gacho\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\obj\\",
+      "outputPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Gacho\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -2993,11 +2993,11 @@
             "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {
               "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj"
             },
-            "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj"
+            "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
+              "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj"
             },
-            "C:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj": {
-              "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj"
+            "c:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj": {
+              "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj"
             }
           }
         }

@@ -17,6 +17,7 @@ namespace EFDataAccess
       modelBuilder.ApplyConfiguration(new UserConfiguration());
       modelBuilder.ApplyConfiguration(new CommentConfiguration());
       modelBuilder.ApplyConfiguration(new LikeConfiguration());
+      modelBuilder.ApplyConfiguration(new FollowerConfiguration());
 
       modelBuilder.Entity<Post>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<Category>().HasQueryFilter(x => !x.IsDeleted);
@@ -71,6 +72,7 @@ namespace EFDataAccess
     public DbSet<UserUseCase> UserUseCases { get; set; }
     public DbSet<UseCaseLog> UseCaseLogs { get; set; }
     public DbSet<AuthorRequest> AuthorRequests { get; set; }
+    public DbSet<Follower> Followers { get; set; }
   }
 
 }

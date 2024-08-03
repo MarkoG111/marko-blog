@@ -19,5 +19,7 @@ namespace Domain
         public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
         public virtual ICollection<Like> Likes { get; set; } = new HashSet<Like>();
         public virtual ICollection<UserUseCase> UserUseCases { get; set; } = new HashSet<UserUseCase>();
+        public virtual ICollection<Follower> Followers { get; set; } = new HashSet<Follower>();
+        public virtual ICollection<Follower> Followings { get; set; } = new HashSet<Follower>();
     }
 }
