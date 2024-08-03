@@ -27,4 +27,6 @@ dist-ssr
 *.dll
 bin/
 obj/
-Debug/
+**/Debug/
+**/Debug/net8.0/
+**/Debug/net8.0/*
