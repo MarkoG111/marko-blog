@@ -12,5 +12,7 @@ namespace Application.DataTransfer
         public int IdPost { get; set; }
         public int? IdParent { get; set; }
         public int IdUser { get; set; }
+        public string Username { get; set; }
+        public List<LikeCommentDto> Likes { get; set; } = new List<LikeCommentDto>();
     }
 }

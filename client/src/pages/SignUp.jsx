@@ -1,59 +1,69 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
-import { useState } from 'react';
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import OAuth from '../components/OAuth';
+import OAuth from '../components/OAuth'
 
 export default function SignUp() {
-  const [formData, setFormData] = useState({});
-  const [errorMessages, setErrorMessage] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState({})
+  const [errorMessages, setErrorMessages] = useState([])
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() })
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
-      setLoading(true);
+      setLoading(true)
 
       const res = await fetch('/api/Register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
-      });
+      })
 
-      setLoading(false);
+      setLoading(false)
 
       if (!res.ok) {
-        const data = await res.json();
+        const data = await res.json()
 
-        let validationErrors = [];
+        const fieldOrder = ['FirstName', 'LastName', 'Email', 'Username', 'Password']
+        const fieldDisplayNames = {
+          FirstName: 'First Name',
+          LastName: 'Last Name',
+          Email: 'Email',
+          Username: 'Username',
+          Password: 'Password',
+        }
+
+        let validationErrors = []
 
         if (Array.isArray(data.errors)) {
           validationErrors = data.errors.map(error => {
-            error.fieldName === 'FirstName' ? 'First Name' : (error.fieldName === 'LastName' ? 'Last Name' : error.fieldName);
-            return `${error.ErrorMessage}`;
-          });
-        } else if (typeof data.errors === 'object') {
-          validationErrors = Object.entries(data.errors).map(([fieldName]) => {
-            const fortmattedFieldName = fieldName === 'FirstName' ? 'First Name' : (fieldName === 'LastName' ? 'Last Name' : fieldName);
-            return `${fortmattedFieldName} is required.`;
-          }).flat();
-        } else {
-          validationErrors = [data.message];
+            return `${error.ErrorMessage}`
+          })
+        }
+        else if (typeof data.errors === 'object') {
+          validationErrors = Object.entries(data.errors).sort(([a], [b]) => fieldOrder.indexOf(a) - fieldOrder.indexOf(b)).map(([fieldName]) => {
+            const displayName = fieldDisplayNames[fieldName] || fieldName
+            return `${displayName} is required`
+          }).flat()
+        }
+        else {
+          validationErrors = [data.message]
         }
 
-        setErrorMessage(validationErrors);
+        setErrorMessages(validationErrors)
       } else {
-        navigate('/sign-in');
-        setErrorMessage([]);
+        navigate('/sign-in')
+        setErrorMessages([])
       }
     } catch (error) {
-      console.log(error);
-      setLoading(false);
+      console.log(error)
+      setLoading(false)
     }
   }
 

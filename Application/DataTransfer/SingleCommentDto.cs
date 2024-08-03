@@ -13,6 +13,9 @@ namespace Application.DataTransfer
         public int IdUser { get; set; }
         public string Username { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool IsDeleted { get; set; }
         public IEnumerable<SingleCommentDto> Children { get; set; } = new List<SingleCommentDto>();
+        public int LikesCount { get; set; }
+        public List<LikeCommentDto> Likes { get; set; } = new List<LikeCommentDto>();
     }
 }

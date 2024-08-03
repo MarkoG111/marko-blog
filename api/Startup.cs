@@ -94,6 +94,9 @@ namespace API
             // Dodaje middleware za autentifikaciju, koji omogućava aplikaciji da autentifikuje korisnike na osnovu pristiglih kredencijala ili tokena.
             app.UseAuthentication();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             // Dodaje middleware za obrađivanje Cross-Origin Resource Sharing (CORS) zahteva. Ovaj middleware omogućava definisanje politika CORS-a koje određuju koje origin domene su dozvoljene da pristupaju resursima na serveru.
             app.UseCors(x =>
             {
@@ -114,12 +117,12 @@ namespace API
             // Dodaje middleware komponentu GlobalExceptionHandler koja obrađuje sve izuzetke koji nisu već obrađeni i pruža odgovarajući odgovor korisniku ili aplikaciji.
             app.UseMiddleware<GlobalExceptionHandler>();
 
-
             // Dodaje middleware za definisanje krajnjih tačaka (endpoints) aplikacije, tj. mapiranje HTTP zahteva na odgovarajuće akcije u kontrolerima.
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

@@ -23,11 +23,7 @@ namespace Implementation.Queries.Post
         public int Id => (int)UseCaseEnum.EFGetPostsQuery;
         public string Name => UseCaseEnum.EFGetPostsQuery.ToString();
 
-<<<<<<< HEAD:Implementation/Queries/Post/EFGetPostsQuery.cs
-        public PagedResponse<GetBlogDto> Execute(PostSearch search)
-=======
         public PagedResponse<GetPostDto> Execute(PostSearch search)
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532:Implementation/Queries/Blog/EFGetPostsQuery.cs
         {
             var posts = _context.Posts.Include(x => x.Comments).Include(x => x.Likes).Include(x => x.PostCategories).ThenInclude(x => x.Category).AsQueryable();
 
@@ -41,22 +37,18 @@ namespace Implementation.Queries.Post
                 posts = posts.Where(x => x.Content.ToLower().Contains(search.Content.ToLower()));
             }
 
-            if (search.DateFrom != null && search.DateFrom > search.DateTo)
+            if (search.CategoryIds != null && search.CategoryIds.Any())
             {
-                posts = posts.Where(x => x.CreatedAt >= search.DateFrom);
+                posts = posts.Where(x => x.PostCategories.Any(pc => search.CategoryIds.Contains(pc.IdCategory)));
             }
 
-            if (search.DateTo != null && search.DateTo > search.DateFrom)
+            if (search.SortOrder != null)
             {
-                posts = posts.Where(x => x.CreatedAt <= search.DateTo);
-            }
-
-            if (search.IdCategory.HasValue)
-            {
-                posts = posts.Where(x => x.PostCategories.Any(x => x.IdCategory == search.IdCategory.Value));
+                posts = search.SortOrder.ToLower() == "asc" ? posts.OrderBy(x => x.CreatedAt) : posts.OrderByDescending(x => x.CreatedAt);
             }
 
             var skipCount = search.PerPage * (search.Page - 1);
+            DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);
 
             var response = new PagedResponse<GetPostDto>
             {
@@ -64,7 +56,9 @@ namespace Implementation.Queries.Post
                 ItemsPerPage = search.PerPage,
                 TotalCount = posts.Count(),
 
-                Items = posts.Skip(skipCount).Take(search.PerPage).Select(x => new GetBlogDto
+                LastMonthCount = posts.Where(x => x.CreatedAt >= thirtyDaysAgo).Count(),
+
+                Items = posts.Skip(skipCount).Take(search.PerPage).Select(x => new GetPostDto
                 {
                     Id = x.Id,
                     Title = x.Title,
@@ -89,7 +83,7 @@ namespace Implementation.Queries.Post
                     {
                         Id = w.Id,
                         Status = w.Status,
-                        Username = w.User.Username
+                        IdUser = w.IdUser
                     }).ToList()
                 }).ToList()
             };

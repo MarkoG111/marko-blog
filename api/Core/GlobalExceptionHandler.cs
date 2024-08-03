@@ -31,26 +31,40 @@ namespace API.Core
 
                 switch (ex)
                 {
+                    case AlreadyAddedException alreadyAddedException:
+                        statusCode = StatusCodes.Status400BadRequest;
+                        response = new
+                        {
+                            message = alreadyAddedException.Message
+                        };
+                        break;
+                    case UserLikeException userLikeException:
+                        statusCode = StatusCodes.Status400BadRequest;
+                        response = new
+                        {
+                            message = userLikeException.Message
+                        };
+                        break;
                     case UnauthorizedUseCaseException _:
                         statusCode = StatusCodes.Status403Forbidden;
-                        response = new  
+                        response = new
                         {
                             message = "You are not allowed to execute this operation."
                         };
                         break;
                     case EntityNotFoundException prom:
                         statusCode = StatusCodes.Status404NotFound;
-                        response = new 
+                        response = new
                         {
                             message = "Content not found"
                         };
                         break;
                     case ValidationException validationException:
                         statusCode = StatusCodes.Status422UnprocessableEntity;
-                        response = new 
+                        response = new
                         {
                             message = "Failed due to validation errors.",
-                            errors = validationException.Errors.Select(x => new 
+                            errors = validationException.Errors.Select(x => new
                             {
                                 x.PropertyName,
                                 x.ErrorMessage
@@ -59,7 +73,7 @@ namespace API.Core
                         break;
                     case ConflictException exception:
                         statusCode = StatusCodes.Status409Conflict;
-                        response = new 
+                        response = new
                         {
                             message = exception.Message.ToString()
                         };

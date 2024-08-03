@@ -6,7 +6,7 @@ using Application.DataTransfer;
 
 namespace Application.Queries.Post
 {
-    public interface IGetPostQuery : IQuery<GetBlogDto, int>
+    public interface IGetPostQuery : IQuery<GetPostDto, int>
     {
         
     }

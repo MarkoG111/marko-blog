@@ -29,7 +29,7 @@ namespace Implementation.Commands.Comment
 
         public string Name => UseCaseEnum.EFUpdatePersonalCommentCommand.ToString();
 
-        public void Execute(InsertCommentDto request)
+        public void Execute(UpdateCommentDto request)
         {
             _validator.ValidateAndThrow(request);
 

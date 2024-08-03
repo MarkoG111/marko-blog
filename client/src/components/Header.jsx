@@ -1,52 +1,63 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSearch } from 'react-icons/ai'
-import { FaMoon, FaSun } from 'react-icons/fa'
+import { FaMoon, FaSun, FaRegBell } from 'react-icons/fa'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleTheme } from '../redux/theme/themeSlice'
 import { signoutSuccess } from '../redux/user/userSlice'
+import { useState } from 'react'
 
 export default function Header() {
   const path = useLocation().pathname
-
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-
   const { theme } = useSelector((state) => state.theme)
   const { currentUser } = useSelector((state) => state.user)
+  const [headerSearchTerm, setHeaderSearchTerm] = useState('')
 
   const handleSignout = async () => {
     try {
       localStorage.removeItem("token")
       dispatch(signoutSuccess())
+      navigate('/')
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    navigate(`/posts?search=${headerSearchTerm}`)
+  }
 
   return (
     <Navbar className='border-b-2'>
-      <Link to='/' className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
-        <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>Marko&apos;s</span>
-        Blog
+      <Link to='/' className='self-center whitespace-nowrap mt-4 md:mt-0 text-2xl md:text-xl font-semibold dark:text-white mx-auto'>
+        <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>Marko&apos;s</span>Blog
       </Link>
 
-      <form>
-        <TextInput type='text' placeholder='Search...' rightIcon={AiOutlineSearch} className='hidden lg:inline' />
-
-        <Button className='w-12 h-10 lg:hidden' color='gray' pill>
-          <AiOutlineSearch />
-        </Button>
+      <form onSubmit={handleSearchSubmit}>
+        <TextInput type='text' placeholder='Search...' rightIcon={AiOutlineSearch} className='hidden lg:inline' value={headerSearchTerm} onChange={(e) => setHeaderSearchTerm(e.target.value)} />
       </form>
 
-      <div className='flex gap-2 md:order-2'>
-        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill onClick={() => dispatch(toggleTheme())}>
-          {theme === 'light' ? <FaSun /> : <FaMoon />}
+      <div className='flex gap-4 md:gap-2 md:order-2 mx-auto'>
+        {currentUser && (currentUser.roleName === 'Admin' || currentUser.roleName === 'Author') && (
+          <Link to='/create-post' className='mr-6'>
+            <Button type="button" gradientDuoTone='purpleToPink' className="w-full size-18 mt-6 md:mt-2">Create Post</Button>
+          </Link>
+        )}
+
+        <Button className='w-10 md:w-12 h-10 mt-6 md:mt-2 sm:block' color='gray' pill onClick={() => dispatch(toggleTheme())}>
+          {theme === 'light' ? <FaMoon /> : <FaSun />}
+        </Button>
+
+        <Button className='w-10 md:w-12 h-10 mt-6 md:mt-2 rounded-full' color='gray'>
+          <FaRegBell />
         </Button>
 
         {currentUser ? (
-          <Dropdown arrowIcon={false} inline label={<Avatar alt='user' img={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `api/Users/images/${currentUser.profilePicture}`} rounded />}>
+          <Dropdown arrowIcon={false} inline label={<Avatar alt='user' img={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `/api/Users/images/${currentUser.profilePicture}`} rounded className='mt-6 md:mt-2' />}>
             <Dropdown.Header>
               <span className='block text-sm mb-2'>@{currentUser.username}</span>
               <span className='block text-sm font-medium truncate'>{currentUser.email}</span>
@@ -54,20 +65,21 @@ export default function Header() {
             <Link to={'/dashboard?tab=profile'}>
               <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
+
             <Dropdown.Divider />
             <Dropdown.Item onClick={handleSignout}>Sign out</Dropdown.Item>
           </Dropdown>
         ) : (<Link to='/sign-in'>
-          <Button gradientDuoTone='purpleToBlue' pill>
+          <Button gradientDuoTone='purpleToBlue' pill className='mt-6 md:mt-2'>
             Sign In
           </Button>
         </Link>)
         }
 
-        <Navbar.Toggle />
-      </div >
+        <Navbar.Toggle className='mt-5' />
+      </div>
 
-      <Navbar.Collapse>
+      <Navbar.Collapse className='md:ml-16'>
         <Navbar.Link active={path === '/'} as={'div'}>
           <Link to='/'>
             Home
@@ -78,7 +90,12 @@ export default function Header() {
             Authors
           </Link>
         </Navbar.Link>
+        <Navbar.Link active={path === '/posts'} as={'div'}>
+          <Link to='/posts'>
+            Posts
+          </Link>
+        </Navbar.Link>
       </Navbar.Collapse>
-    </Navbar >
+    </Navbar>
   )
 }

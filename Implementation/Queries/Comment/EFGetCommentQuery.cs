@@ -24,7 +24,7 @@ namespace Implementation.Queries.Comment
 
         public CommentDto Execute(int search)
         {
-            var comment = _context.Comments.Include(x => x.User).FirstOrDefault(y => y.Id == search);
+            var comment = _context.Comments.Include(x => x.User).Include(z => z.Post).Include(n => n.Likes).FirstOrDefault(y => y.Id == search);
 
             if (comment == null)
             {
@@ -36,8 +36,14 @@ namespace Implementation.Queries.Comment
                 Id = comment.Id,
                 CommentText = comment.CommentText,
                 Username = comment.User.Username,
+                FirstName = comment.User.FirstName,
+                LastName = comment.User.LastName,
+                PostTitle = comment.Post.Title,
+                IdPost = comment.Post.Id,
+                LikesCount = comment.Likes.Count(l => l.IdComment != null),
                 CreatedAt = comment.CreatedAt,
-                IdParent = comment.IdParent
+                IdParent = comment.IdParent,
+                IsDeleted = comment.IsDeleted
             };
         }
     }

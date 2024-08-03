@@ -9,5 +9,6 @@ namespace Application.DataTransfer
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public IEnumerable<GetPostDto> Posts { get; set; }
     }
 }

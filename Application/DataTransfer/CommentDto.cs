@@ -11,7 +11,14 @@ namespace Application.DataTransfer
         public string CommentText { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Username { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PostTitle { get; set; }
+        public int IdPost { get; set; }
         public int IdUser { get; set; }
         public int? IdParent { get; set; }
+        public bool IsDeleted { get; set; }
+        public int LikesCount { get; set; }
+        public List<LikeCommentDto> Likes { get; set; } = new List<LikeCommentDto>();
     }
 }

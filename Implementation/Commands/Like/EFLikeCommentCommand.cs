@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Commands.Like;
+using Application;
+using Application.Exceptions;
 using Application.DataTransfer;
+using Application.Commands.Like;
 using EFDataAccess;
 using FluentValidation;
 using Implementation.Validators.Like;
@@ -14,11 +16,13 @@ namespace Implementation.Commands.Like
     {
         private readonly BlogContext _context;
         private readonly LikeCommentValidator _validator;
+        private readonly IApplicationActor _actor;
 
-        public EFLikeCommentCommand(LikeCommentValidator validator, BlogContext context)
+        public EFLikeCommentCommand(LikeCommentValidator validator, BlogContext context, IApplicationActor actor)
         {
             _validator = validator;
             _context = context;
+            _actor = actor;
         }
 
         public int Id => (int)UseCaseEnum.EFLikeComment;
@@ -28,9 +32,26 @@ namespace Implementation.Commands.Like
         {
             _validator.ValidateAndThrow(request);
 
-            var findLike = _context.Likes.Where(x => x.IdPost == request.IdPost && x.IdUser == request.IdUser && x.IdComment == request.IdComment).FirstOrDefault();
+            var comment = _context.Comments.FirstOrDefault(x => x.Id == request.IdComment);
 
-            if (findLike == null)
+            if (comment == null)
+            {
+                throw new EntityNotFoundException(comment.Id, typeof(Domain.Comment));
+            }
+
+            if (comment.IdUser == request.IdUser)
+            {
+                throw new UserLikeException(_actor);
+            }
+
+            var existingLike = _context.Likes.FirstOrDefault(x => x.IdPost == request.IdPost && x.IdUser == request.IdUser && x.IdComment == request.IdComment);
+
+            if (existingLike != null)
+            {
+                // If the user already liked/disliked the comment, update the status
+                existingLike.Status = request.Status;
+            }
+            else
             {
                 var like = new Domain.Like
                 {
@@ -41,13 +62,9 @@ namespace Implementation.Commands.Like
                 };
 
                 _context.Likes.Add(like);
-                _context.SaveChanges();
             }
-            else
-            {
-                findLike.Status = request.Status;
-                _context.SaveChanges();
-            }
+
+            _context.SaveChanges();
         }
     }
 }

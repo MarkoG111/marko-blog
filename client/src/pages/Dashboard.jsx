@@ -4,6 +4,10 @@ import DashSidebar from '../components/DashSidebar';
 import DashProfile from '../components/DashProfile';
 import DashPosts from '../components/DashPosts';
 import DashUsers from '../components/DashUsers';
+import RequestAuthorForm from '../components/RequestAuthorForm';
+import DashAuthorRequests from '../components/DashAuthorRequests';
+import AdminDashboard from '../components/AdminDashboard';
+import DashComments from '../components/DashComments';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -28,6 +32,10 @@ export default function Dashboard() {
       {tab == 'profile' && <DashProfile />}
       {tab == 'posts' && <DashPosts />}
       {tab == 'users' && <DashUsers />}
+      {tab == 'authorRequests' && <DashAuthorRequests />}
+      {tab == 'requestAuthorForm' && <RequestAuthorForm />}
+      {tab == 'dashboard' && < AdminDashboard />}
+      {tab == 'comments' && <DashComments />}
     </div>
   )
 }

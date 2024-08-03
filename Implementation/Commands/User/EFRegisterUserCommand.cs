@@ -41,7 +41,7 @@ namespace Implementation.Commands.User
                 Email = request.Email,
                 Password = request.Password,
                 ProfilePicture = "https://i0.wp.com/florrycreativecare.com/wp-content/uploads/2020/08/blank-profile-picture-mystery-man-avatar-973460.jpg?ssl=1",
-                IdRole = 1 
+                IdRole = 3
             };
 
             user.Password = EasyEncryption.SHA.ComputeSHA256Hash(request.Password);

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Implementation.Validators.Comment
 {
-    public class UpdateCommentValidator : AbstractValidator<InsertCommentDto>
+    public class UpdateCommentValidator : AbstractValidator<UpdateCommentDto>
     {
         public UpdateCommentValidator()
         {

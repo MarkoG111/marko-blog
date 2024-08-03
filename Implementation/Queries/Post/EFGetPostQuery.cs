@@ -23,15 +23,18 @@ namespace Implementation.Queries.Post
         public string Name => UseCaseEnum.EFGetOnePostQuery.ToString();
 
         public ICollection<SingleCommentDto> parentComments { get; set; } = new List<SingleCommentDto>();
+        public ICollection<SingleCommentDto> childrenComments { get; set; } = new List<SingleCommentDto>();
 
         GetPostDto IQuery<GetPostDto, int>.Execute(int search)
         {
             var post = _context.Posts.Find(search);
 
-            var query = _context.Posts.Include(l => l.Likes)
+            var query = _context.Posts
+                .Include(l => l.Likes)
+                .Include(up => up.User)
                 .Include(i => i.Image)
                 .Include(com => com.Comments)
-                .Include(u => u.User)
+                .ThenInclude(u => u.User)
                 .Include(bc => bc.PostCategories)
                 .ThenInclude(c => c.Category)
                 .FirstOrDefault(a => a.Id == search);
@@ -44,44 +47,61 @@ namespace Implementation.Queries.Post
                 DateCreated = query.CreatedAt,
                 ImageName = query.Image.ImagePath,
                 IdImage = query.IdImage,
-                Username = query.User.Username,
+                Username = query.User?.Username,
                 Categories = query.PostCategories.Select(x => new CategoryDto
                 {
                     Id = x.Category.Id,
                     Name = x.Category.Name
                 }).ToList(),
-
-                Likes = query.Likes.Select(z => new GetLikePostDto
+                Likes = query.Likes.Select(w => new GetLikePostDto
                 {
-                    Id = z.Id,
-                    Status = z.Status,
-                    Username = z.User.Username,
+                    Id = w.Id,
+                    Status = w.Status,
+                    IdUser = w.IdUser
                 }).ToList(),
-
                 Comments = query.Comments.Select(t => new SingleCommentDto
                 {
                     Id = t.Id,
                     CommentText = t.CommentText,
-                    Username = t.User?.Username,
                     CreatedAt = t.CreatedAt,
-                    Username = t.User.Username,
-                    IdUser = t.User.Id,
+                    IdUser = t.IdUser,
+                    IdParent = t.IdParent,
+                    Username = t.User?.Username,
+                    IsDeleted = t.IsDeleted,
+                    LikesCount = t.Likes.Count(l => l.IdComment != null),
+                    Likes = t.Likes.Select(l => new LikeCommentDto
+                    {
+                        IdComment = l.IdComment,
+                        IdUser = l.IdUser,
+                        Status = l.Status,
+                    }).ToList(),
                     Children = t.ChildrenComments.Select(c => new SingleCommentDto
                     {
                         Id = c.Id,
                         IdParent = c.IdParent,
                         CommentText = c.CommentText,
                         CreatedAt = c.CreatedAt,
-                        Username = t.User?.Username
+                        IdUser = t.IdUser,
+                        Username = c.User?.Username,
+                        IsDeleted = c.IsDeleted
+                    }).ToList()
+                }).ToList()
+            };
+
             foreach (var res in result.Comments)
             {
                 if (res.IdParent == null)
                 {
                     parentComments.Add(res);
                 }
+                else
+                {
+                    childrenComments.Add(res);
+                }
             }
 
             result.Comments = parentComments;
+            result.ChildrenComments = childrenComments;
 
             return result;
         }

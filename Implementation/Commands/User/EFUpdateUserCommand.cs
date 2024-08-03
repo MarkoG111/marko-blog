@@ -51,26 +51,15 @@ namespace Implementation.Commands.User
             user.Username = request.Username;
             user.Email = request.Email;
 
-<<<<<<< HEAD
             if (request.Image != null)
             {
                 user.ProfilePicture = request.Image.UploadImage("UserImages");
             }
 
-=======
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
             if (!string.IsNullOrEmpty(request.Password) || !string.IsNullOrWhiteSpace(request.Password))
             {
                 user.Password = EasyEncryption.SHA.ComputeSHA256Hash(request.Password);
             }
-<<<<<<< HEAD
-=======
-
-            if (request.Image != null)
-            {
-                user.ProfilePicture = request.Image.UploadImage("UserImages");
-            }
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
 
             _context.SaveChanges();
         }

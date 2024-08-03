@@ -23,8 +23,32 @@ namespace API.Controllers
         public IActionResult GetImage(string imageName)
         {
             var imagePath = Path.Combine("wwwroot", "UserImages", imageName);
+
+            if (!System.IO.File.Exists(imagePath))
+            {
+                return NotFound();
+            }
+
             var imageBytes = System.IO.File.ReadAllBytes(imagePath);
-            return File(imageBytes, "image/jpeg");
+
+            var mimeType = GetMimeType(imagePath);
+
+            return File(imageBytes, mimeType);
+        }
+
+        private string GetMimeType(string filePath)
+        {
+            var extension = Path.GetExtension(filePath).ToLowerInvariant();
+
+            return extension switch
+            {
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                ".bmp" => "image/bmp",
+                ".webp" => "image/webp",
+                _ => "application/octet-stream",
+            };
         }
 
         [HttpGet]

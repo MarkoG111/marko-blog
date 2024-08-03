@@ -22,6 +22,46 @@ namespace EFDataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.AuthorRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IdUser")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdUser");
+
+                    b.ToTable("AuthorRequests");
+                });
+
             modelBuilder.Entity("Domain.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -148,12 +188,9 @@ namespace EFDataAccess.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-<<<<<<< HEAD
                     b.Property<int?>("IdComment")
                         .HasColumnType("int");
 
-=======
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
                     b.Property<int>("IdPost")
                         .HasColumnType("int");
 
@@ -174,11 +211,8 @@ namespace EFDataAccess.Migrations
 
                     b.HasKey("Id");
 
-<<<<<<< HEAD
                     b.HasIndex("IdComment");
 
-=======
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
                     b.HasIndex("IdPost");
 
                     b.HasIndex("IdUser");
@@ -420,6 +454,17 @@ namespace EFDataAccess.Migrations
                     b.ToTable("UserUseCases");
                 });
 
+            modelBuilder.Entity("Domain.AuthorRequest", b =>
+                {
+                    b.HasOne("Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Comment", b =>
                 {
                     b.HasOne("Domain.Comment", "ParentComment")
@@ -448,13 +493,10 @@ namespace EFDataAccess.Migrations
 
             modelBuilder.Entity("Domain.Like", b =>
                 {
-<<<<<<< HEAD
                     b.HasOne("Domain.Comment", "Comment")
                         .WithMany("Likes")
                         .HasForeignKey("IdComment");
 
-=======
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
                     b.HasOne("Domain.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("IdPost")
@@ -467,11 +509,8 @@ namespace EFDataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-<<<<<<< HEAD
                     b.Navigation("Comment");
 
-=======
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
                     b.Navigation("Post");
 
                     b.Navigation("User");

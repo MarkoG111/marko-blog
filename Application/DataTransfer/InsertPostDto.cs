@@ -11,6 +11,6 @@ namespace Application.DataTransfer
         public string Title { get; set; }
         public string Content { get; set; }
         public int IdImage { get; set; }
-        public IEnumerable<BlogCategoryDto> PostCategories { get; set; }
+        public IEnumerable<PostCategoryDto> PostCategories { get; set; }
     }
 }

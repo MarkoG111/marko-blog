@@ -31,16 +31,16 @@ namespace Implementation.Validators.User
                 .WithMessage("Email is already taken.");
 
             RuleFor(x => x.UserUseCases).Must(c => c.Select(v => v.IdUseCase).Distinct().Count() == c.Count())
-                .WithMessage("Duplicate UseCaseIds are not allowed.");
+                .WithMessage("Duplicate use case id's are not allowed.");
 
             RuleFor(x => x.UserUseCases.Count()).GreaterThan(0)
-                .WithMessage("User must contain more than 0 UseCases");
+                .WithMessage("User must contain more than 0 use cases");
 
             RuleForEach(x => x.UserUseCases).ChildRules(n =>
             {
                 n.RuleFor(x => x.IdUseCase)
                     .Must(UseCaseExists)
-                    .WithMessage("{PropertyValue} usecase doesn't exists.");
+                    .WithMessage("{PropertyValue} use case doesn't exists.");
             });
         }
 

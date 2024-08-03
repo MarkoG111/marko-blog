@@ -24,7 +24,16 @@ namespace Implementation.Queries.User
 
         public SingleUserDto Execute(int search)
         {
-            var user = _context.Users.Include(x => x.UserUseCases).Include(u => u.Role).FirstOrDefault(x => x.Id == search);
+            var user = _context.Users
+                .Include(x => x.UserUseCases)
+                .Include(u => u.Role)
+                .Include(p => p.Posts.OrderByDescending(p => p.CreatedAt))
+                    .ThenInclude(bc => bc.PostCategories)
+                    .ThenInclude(cat => cat.Category)
+                .Include(c => c.Comments)
+                    .ThenInclude(pos => pos.Post)
+                .Include(l => l.Likes)
+                .FirstOrDefault(x => x.Id == search);
 
             return new SingleUserDto
             {
@@ -38,7 +47,32 @@ namespace Implementation.Queries.User
                 UserUseCases = user.UserUseCases.Select(x => new UserUseCaseDto
                 {
                     IdUseCase = x.IdUseCase
-                })
+                }),
+                UserPosts = user.Posts.Select(p => new GetPostDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    DateCreated = p.CreatedAt,
+                    Categories = p.PostCategories.Select(y => new CategoryDto
+                    {
+                        Id = y.Category.Id,
+                        Name = y.Category.Name
+                    }).ToList()
+                }).ToList(),
+                UserComments = user.Comments.Select(c => new CommentDto
+                {
+                    Id = c.Id,
+                    CommentText = c.CommentText,
+                    PostTitle = c.Post.Title,
+                    CreatedAt = c.CreatedAt
+                }).ToList(),
+                CommentLikes = user.Likes.Select(l => new LikeCommentDto
+                {
+                    IdUser = l.IdUser,
+                    IdPost = l.IdPost,
+                    IdComment = l.IdComment,
+                    Status = l.Status
+                }).ToList()
             };
         }
     }

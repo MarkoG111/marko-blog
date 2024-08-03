@@ -11,18 +11,53 @@ export default function UpdatePost() {
   const [imageFile, setImageFile] = useState(null)
   const [imageUploadError, setImageUploadError] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
-  const [content, setContent] = useState('')
+  const [content, setEditContent] = useState('')
   const [editData, setEditData] = useState({})
 
-  const [errorMessages, setErrorMessage] = useState([])
+  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessages, setErrorMessages] = useState([])
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [showErrorsModal, setShowErrorsModal] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [showSuccessModal, setShowSucessModal] = useState(false)
 
   const { postId } = useParams()
 
   useEffect(() => {
+    if (showErrorModal) {
+      setShowErrorModal(true)
+    }
+    if (showErrorsModal) {
+      setShowErrorsModal(true)
+    }
+    if (showSuccessModal) {
+      setShowSucessModal(true)
+    }
+    const timer = setTimeout(() => {
+      setShowErrorModal(false)
+      setShowErrorsModal(false)
+      setShowSucessModal(false)
+    }, 10000)
+
+    return () => clearTimeout(timer)
+  }, [showErrorModal, showErrorsModal, showSuccessModal])
+
+  useEffect(() => {
     try {
       const fetchPost = async () => {
+        const token = localStorage.getItem("token")
+        if (!token) {
+          throw new Error("Token not found")
+        }
+
         try {
-          const response = await fetch(`/api/Posts/${postId}`);
+          const response = await fetch(`/api/Posts/${postId}`, {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          });
+
           const data = await response.json()
 
           if (!response.ok) {
@@ -40,8 +75,8 @@ export default function UpdatePost() {
     }
   }, [postId])
 
-  const handleContentChange = (value) => {
-    setContent(value);
+  const handleContentEditPostChange = (value) => {
+    setEditContent(value);
   };
 
   const handleCategoryChange = (idCategory) => {
@@ -55,10 +90,30 @@ export default function UpdatePost() {
   };
 
   useEffect(() => {
-    fetch('/api/Categories')
-      .then(response => response.json())
-      .then(data => setCategories(data.items))
-      .catch(error => console.error('Error fetching categories: ', error))
+    const fetchCategoriesForUpdatePost = async () => {
+      try {
+        const token = localStorage.getItem("token")
+        if (!token) {
+          throw new Error("Token not found")
+        }
+
+        const response = await fetch(`/api/Categories`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setCategories(data.items)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchCategoriesForUpdatePost()
   }, [])
 
   useEffect(() => {
@@ -103,10 +158,10 @@ export default function UpdatePost() {
 
     const postData = {
       Title: e.target.elements.title.value,
-      Content: editData.content ? editData.content : content,
+      Content: content ? content : editData.content,
       IdImage: imagePreview?.id ? imagePreview?.id : editData.idImage,
       PostCategories: selectedCategories
-    };
+    }
 
     try {
       const token = localStorage.getItem("token")
@@ -123,20 +178,20 @@ export default function UpdatePost() {
         body: JSON.stringify(postData)
       })
 
-      if (!response.ok) {
-        const data = await response.json();
-        let validationErrors = [];
-
-        validationErrors = data.errors.map(error => {
-          return `${error.ErrorMessage}`;
-        });
-
-        setErrorMessage(validationErrors);
+      if (response.status == 204) {
+        setShowSucessModal(true)
+        setSuccessMessage("You have successfully updated post.")
+      } else {
+        const data = await response.json()
+        if (!response.ok) {
+          const errorMessages = data.errors.map(error => error.ErrorMessage)
+          setShowErrorsModal(true)
+          setErrorMessages(errorMessages)
+        }
       }
-
-      console.log(postData);
     } catch (error) {
-      console.log(error)
+      setShowErrorModal(true)
+      setErrorMessage('Cannot update post.')
     }
   }
 
@@ -188,21 +243,35 @@ export default function UpdatePost() {
         <ReactQuill
           theme="snow"
           placeholder="Write something..."
-          id="content"
+          id="contentEdit"
           className="h-72 mb-12"
-          value={editData.content || ''}
-          onChange={handleContentChange}
+          value={content ? content : editData.content}
+          onChange={handleContentEditPostChange}
           required
         />
 
         <Button type="submit" gradientDuoTone="purpleToPink">Update post</Button>
 
-        {errorMessages && errorMessages.length > 0 && (
-          <Alert className='mt-5' color='failure'>
-            {errorMessages.map((error, index) => (
-              <div key={index}>{error}</div>
+        {showSuccessModal && (
+          <div className="success-modal show">
+            {successMessage}
+          </div>
+        )}
+
+        {showErrorModal && (
+          <div className="error-modal show">
+            {errorMessage}
+          </div>
+        )}
+
+        {showErrorsModal && (
+          <div className="error-modals show">
+            {errorMessages.map((message, index) => (
+              <div key={index} className="error-in-list">
+                {message}
+              </div>
             ))}
-          </Alert>
+          </div>
         )}
       </form>
     </div>

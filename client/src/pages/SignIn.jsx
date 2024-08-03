@@ -119,7 +119,6 @@ export default function SignUp() {
               ))}
             </Alert>
           )}
-
         </div>
       </div>
     </div>

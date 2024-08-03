@@ -1,13 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
-
 using System.Security.Claims;
 using System.Text;
-
 using EFDataAccess;
-
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Core
@@ -72,7 +68,6 @@ namespace API.Core
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-
         }
     }
 }

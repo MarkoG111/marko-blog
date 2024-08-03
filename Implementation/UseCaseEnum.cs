@@ -44,6 +44,10 @@ namespace Implementation
         EFUpdateCategoryCommand = 25,
         EFDeleteCategoryCommand = 26,
         EFGetOneCategoryQuery = 27,
-        EFGetCategoriesQuery = 28
+        EFGetCategoriesQuery = 28,
+
+        EFCreateAuthorRequestCommand = 29,
+        EFUpdateAuthorRequestCommand = 30,
+        EFGetAuthorRequestsQuery = 31
     }
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "py1roCaj8YPXOFTmk97JshAuxTr8uJ8ZSoMhlutXjtZRo3CN80yZS7Ro9SynCzAXXVhdvZaii1YWKp5FbdPk/A==",
+  "dgSpecHash": "nI7g39oG+RLV5w/0YcF29IgJGNJZg0YjCEXda3F9tBZdWWAzoTpijUiA3w6O5HAQkj7oLzxZHqJu/nzIJcRYhw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj",
+  "projectFilePath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Gacho\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
     "C:\\Users\\Gacho\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",

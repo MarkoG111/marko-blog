@@ -8,11 +8,7 @@ using FluentValidation;
 
 namespace Implementation.Validators.Post
 {
-<<<<<<< HEAD
-    public class CreatePostValidator : AbstractValidator<InsertBlogDto>
-=======
     public class CreatePostValidator : AbstractValidator<InsertPostDto>
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
     {
         private readonly BlogContext _context;
 
@@ -21,17 +17,10 @@ namespace Implementation.Validators.Post
             _context = context;
 
             RuleFor(x => x.Title).NotEmpty()
-                .WithMessage("Title is required.")
-                .MinimumLength(3)
-                .WithMessage("Title must containt more than 3 letters.");
+                .WithMessage("Title is required.");
 
-            RuleFor(x => x.Content).NotEmpty()
-                .WithMessage("Content is required.")
-                .MinimumLength(5)
-                .WithMessage("Content must contain more than 5 letters.");
-
-            RuleFor(x => x.IdImage).Must(ImageExists)
-                .WithMessage("Image with provided ID doesn't exists.");
+            RuleFor(x => x.PostCategories.Count()).GreaterThan(0)
+                .WithMessage("You must choose at least 1 category.");
 
             RuleForEach(x => x.PostCategories).ChildRules(categories =>
             {
@@ -41,11 +30,13 @@ namespace Implementation.Validators.Post
 
             RuleFor(x => x.PostCategories).Must(x => x.Select(y => y.IdCategory).Distinct().Count() == x.Count())
                 .WithMessage("Duplicate categories not allowed.");
-        }
 
-        private bool ImageExists(int id)
-        {
-            return _context.Images.Any(x => x.Id == id);
+            RuleFor(x => x.IdImage).NotEmpty()
+                .WithMessage("Image is required.");
+
+
+            RuleFor(x => x.Content).NotEmpty()
+                .WithMessage("Content is required.");
         }
 
         private bool CategoryExists(int id)

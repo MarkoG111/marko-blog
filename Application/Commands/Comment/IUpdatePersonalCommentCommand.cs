@@ -7,7 +7,7 @@ using Application.DataTransfer;
 
 namespace Application.Commands.Comment
 {
-    public interface IUpdatePersonalCommentCommand : ICommand<InsertCommentDto>
+    public interface IUpdatePersonalCommentCommand : ICommand<UpdateCommentDto>
     {
 
     }

@@ -10,7 +10,7 @@ namespace Application.DataTransfer
     {
         public int IdUser { get; set; }
         public int IdPost { get; set; }
-        public int IdComment { get; set; }
+        public int? IdComment { get; set; }
         public LikeStatus Status { get; set; }
     }
 }

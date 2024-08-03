@@ -58,8 +58,98 @@ body {
 
 .dark .post-content a {
   color: rgb(73, 149, 199);
-  
 }
+
+.success-modal {
+  position: fixed;
+  top: 50%;
+  right: 1.5%;
+  transform: translate(0%, -50%);
+  background-color: green;
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1000;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.success-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.success-modal {
+  position: fixed;
+  top: 50%;
+  right: 1.5%;
+  transform: translate(0%, -50%);
+  background-color: rgb(41, 131, 6);
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1000;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.error-modal {
+  position: fixed;
+  top: 50%;
+  right: 1.5%;
+  transform: translate(0%, -50%);
+  background-color: rgba(255, 0, 0, 0.8);
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1000;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.error-modals {
+  position: fixed;
+  top: 50%;
+  right: 1.5%;
+  transform: translate(0%, -50%);
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1000;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.error-in-list {
+  margin: 15px;
+  display: flex;
+  padding: 14px;
+  background-color: rgba(255, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 10px;
+}
+
+.error-modal.show,
+.error-modals.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mt-negative {
+  margin-top: calc(-1 * 2rem);
+}
+
+.ql-blank::before {
+  color: rgb(202, 204, 207) !important;
+}
+
+nav ul li a {
+  font-size: 14px !important;
+}
+
 
 @media (min-width: 1024px) {
   .table-container-scrollbar {

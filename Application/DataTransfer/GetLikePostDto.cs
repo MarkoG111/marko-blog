@@ -11,6 +11,6 @@ namespace Application.DataTransfer
     {
         public int Id { get; set; }
         public LikeStatus Status { get; set; }
-        public string Username { get; set; }
+        public int IdUser { get; set; }
     }
 }

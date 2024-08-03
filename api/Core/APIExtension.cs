@@ -9,30 +9,35 @@ using Application.Commands.Category;
 using Application.Commands.User;
 using Application.Commands.Like;
 using Application.Commands.Comment;
+using Application.Commands.AuthorRequest;
 
 using Application.Queries;
 using Application.Queries.Post;
 using Application.Queries.Category;
 using Application.Queries.User;
 using Application.Queries.Comment;
+using Application.Queries.AuthorRequest;
 
 using Implementation.Validators.Post;
 using Implementation.Validators.Category;
 using Implementation.Validators.User;
 using Implementation.Validators.Like;
 using Implementation.Validators.Comment;
+using Implementation.Validators.AuthorRequest;
 
 using Implementation.Commands.Post;
 using Implementation.Commands.Category;
 using Implementation.Commands.User;
 using Implementation.Commands.Comment;
 using Implementation.Commands.Like;
+using Implementation.Commands.AuthorRequest;
 
 using Implementation.Queries;
 using Implementation.Queries.Post;
 using Implementation.Queries.Category;
 using Implementation.Queries.Comment;
 using Implementation.Queries.User;
+using Implementation.Queries.AuthorRequest;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -71,6 +76,9 @@ namespace API.Core
             services.AddTransient<ILikePostCommand, EFLikePostCommand>();
             services.AddTransient<ILikeCommentCommand, EFLikeCommentCommand>();
 
+            services.AddTransient<ICreateAuthorRequestCommand, EFCreateAuthorRequestCommand>();
+            services.AddTransient<IUpdateAuthorRequestCommand, EFUpdateAuthorRequestCommand>();
+
             // Queries
             services.AddTransient<IGetPostsQuery, EFGetPostsQuery>();
             services.AddTransient<IGetPostQuery, EFGetPostQuery>();
@@ -83,6 +91,8 @@ namespace API.Core
 
             services.AddTransient<IGetUserQuery, EFGetUserQuery>();
             services.AddTransient<IGetUsersQuery, EFGetUsersQuery>();
+
+            services.AddTransient<IGetAuthorRequestsQuery, EFGetAuthorRequestsQuery>();
 
             services.AddTransient<IGetUseCaseLogsQuery, EFGetUseCaseLogsQuery>();
 
@@ -106,6 +116,8 @@ namespace API.Core
             services.AddTransient<DeletePostValidator>();
             services.AddTransient<DeleteCategoryValidator>();
             services.AddTransient<DeleteCommentValidator>();
+
+            services.AddTransient<AuthorRequestValidator>();
         }
 
         public static void AddApplicationActor(this IServiceCollection services)

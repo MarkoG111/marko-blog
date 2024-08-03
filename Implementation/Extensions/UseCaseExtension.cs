@@ -27,6 +27,9 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCommentQuery });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCommentsQuery });
 
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalCommentCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalCommentCommand });
+
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetUseCaseLogQuery });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateUserCommand });
@@ -43,6 +46,9 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeleteCategoryCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCategoryQuery });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCategoriesQuery });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateAuthorRequestCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetAuthorRequestsQuery });
             }
 
             else if (user.IdRole == (int)RoleEnum.Author)
@@ -50,14 +56,19 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreatePostCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalPostCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalPostCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOnePostQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetPostsQuery });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCommentsQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalCommentCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalCommentCommand });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikePost });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikeComment });
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOnePostQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetPostsQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateUserCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneUserQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetUsersQuery });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCategoryQuery });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCategoriesQuery });
@@ -68,17 +79,21 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOnePostQuery });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetPostsQuery });
 
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCategoryQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCategoriesQuery });
+
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateCommentCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalCommentCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalCommentCommand });
-
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCommentsQuery });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneUserQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetUsersQuery });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikePost });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikeComment });
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCategoryQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCategoriesQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateAuthorRequestCommand });
             }
 
             user.UserUseCases = list;

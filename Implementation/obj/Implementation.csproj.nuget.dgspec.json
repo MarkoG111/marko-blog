@@ -4,14 +4,14 @@
     "C:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {
+    "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj",
+        "projectUniqueName": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj",
+        "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj",
         "packagesPath": "C:\\Users\\Gacho\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\obj\\",
+        "outputPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Gacho\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,8 +28,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
-                "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj"
+              "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj"
               }
             }
           }
@@ -74,14 +74,14 @@
         }
       }
     },
-    "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
+    "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj",
+        "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\Gacho\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\obj\\",
+        "outputPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Gacho\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -134,14 +134,14 @@
         }
       }
     },
-    "c:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj": {
+    "C:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj",
+        "projectUniqueName": "C:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj",
         "projectName": "EFDataAccess",
-        "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj",
+        "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj",
         "packagesPath": "C:\\Users\\Gacho\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\obj\\",
+        "outputPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Gacho\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -158,8 +158,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
-                "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj"
+              "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj"
               }
             }
           }
@@ -244,14 +244,14 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {
-                "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj"
+              "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj": {
+                "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Application\\Application.csproj"
               },
-              "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
-                "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj"
+              "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Domain\\Domain.csproj"
               },
-              "c:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj": {
-                "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj"
+              "C:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj": {
+                "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\EFDataAccess\\EFDataAccess.csproj"
               }
             }
           }

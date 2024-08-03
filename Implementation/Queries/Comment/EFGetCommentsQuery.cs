@@ -24,42 +24,40 @@ namespace Implementation.Queries.Comment
 
         public PagedResponse<CommentDto> Execute(CommentSearch search)
         {
-            var comments = _context.Comments.Include(x => x.User).AsQueryable();
+            var comments = _context.Comments.Include(x => x.User).Include(x => x.Likes).AsQueryable();
 
             if (!string.IsNullOrEmpty(search.Username) || !string.IsNullOrWhiteSpace(search.Username))
             {
                 comments = comments.Where(c => c.User.Username.ToLower().Contains(search.Username.ToLower()));
             }
 
-<<<<<<< HEAD
             comments = comments.OrderByDescending(c => c.CreatedAt);
-=======
-            var skipCount = search.PerPage * (search.Page - 1);
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
+
+            DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);
 
             var response = new PagedResponse<CommentDto>
             {
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
                 TotalCount = comments.Count(),
-<<<<<<< HEAD
+                LastMonthCount = comments.Where(x => x.CreatedAt >= thirtyDaysAgo).Count(),
+
                 Items = comments.Select(c => new CommentDto
                 {
                     Id = c.Id,
                     CommentText = c.CommentText,
                     CreatedAt = c.CreatedAt,
                     IdParent = c.IdParent,
+                    IsDeleted = c.IsDeleted,
                     Username = c.User.Username,
-                    IdUser = c.User.Id
-=======
-                Items = comments.Skip(skipCount).Take(search.PerPage).Select(c => new CommentDto
-                {
-                    Id = c.Id,
-                    Comment = c.CommentText,
-                    CreatedAt = c.CreatedAt,
-                    Username = c.User.Username,
-                    IdParent = c.IdParent
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
+                    IdUser = c.User.Id,
+                    LikesCount = c.Likes.Count(l => l.IdComment != null),
+                    Likes = c.Likes.Select(l => new LikeCommentDto
+                    {
+                        IdComment = l.IdComment,
+                        IdUser = l.IdUser,
+                        Status = l.Status,
+                    }).ToList()
                 }).ToList()
             };
 

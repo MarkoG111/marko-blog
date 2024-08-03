@@ -26,11 +26,7 @@ namespace Implementation.Commands.Post
         public int Id => (int)UseCaseEnum.EFUpdatePostCommand;
         public string Name => UseCaseEnum.EFUpdatePostCommand.ToString();
 
-<<<<<<< HEAD
-        public void Execute(UpdateBlogDto request)
-=======
         public void Execute(UpdatePostDto request)
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
         {
             _validator.ValidateAndThrow(request);
 
@@ -46,11 +42,7 @@ namespace Implementation.Commands.Post
             post.IdImage = request.IdImage;
             post.ModifiedAt = DateTime.Now;
 
-<<<<<<< HEAD
-            // Ako postoje kategorije koje nisu prisutne u prosleđenom UpdateBlogDto objektu, one se označavaju kao neaktivne i obrisane, a za nove kategorije se dodaju nove veze između posta i kategorija.
-=======
             // Ako postoje kategorije koje nisu prisutne u prosleđenom UpdatePostDto objektu, one se označavaju kao neaktivne i obrisane, a za nove kategorije se dodaju nove veze između posta i kategorija.
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
             var categoryDelete = post.PostCategories.Where(x => !request.PostCategories.Contains(x.IdCategory));
 
             foreach (var category in categoryDelete)

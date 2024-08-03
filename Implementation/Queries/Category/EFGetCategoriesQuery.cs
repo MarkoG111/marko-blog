@@ -33,14 +33,12 @@ namespace Implementation.Queries.Category
 
             query = query.Where(x => x.IsActive == true);
 
-            var skipCount = search.PerPage * (search.Page - 1);
-
             var response = new PagedResponse<CategoryDto>
             {
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
                 TotalCount = query.Count(),
-                Items = query.Skip(skipCount).Take(search.PerPage).Select(x => new CategoryDto
+                Items = query.Select(x => new CategoryDto
                 {
                     Id = x.Id,
                     Name = x.Name
@@ -49,6 +47,5 @@ namespace Implementation.Queries.Category
 
             return response;
         }
-
     }
 }

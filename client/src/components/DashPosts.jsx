@@ -11,11 +11,43 @@ export default function DashPosts() {
   const [pageCount, setPageCount] = useState(1)
   const [showModal, setShowModal] = useState(false)
   const [postIdToDelete, setPostIdToDelete] = useState('')
+  const [postDeleted, setPostDeleted] = useState(false)
+
+  const [errorMessage, setErrorMessage] = useState('')
+  const [showErrorModal, setShowErrorModal] = useState(false)
+
+  const [successMessage, setSuccessMessage] = useState('')
+  const [showSuccessModal, setShowSucessModal] = useState(false)
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    if (showErrorModal) {
+      setShowErrorModal(true)
+    }
+    if (showSuccessModal) {
+      setShowSucessModal(true)
+    }
+    const timer = setTimeout(() => {
+      setShowSucessModal(false)
+      setShowErrorModal(false)
+    }, 10000)
+
+    return () => clearTimeout(timer)
+  }, [showSuccessModal, showErrorModal])
+
+  useEffect(() => {
+    const fetchAdminPosts = async () => {
       try {
-        const response = await fetch(`/api/Posts?page=${currentPage}`)
+        const token = localStorage.getItem("token")
+        if (!token) {
+          throw new Error("Token not found")
+        }
+
+        const response = await fetch(`/api/Posts?page=${currentPage}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+        })
         const data = await response.json()
 
         if (response.ok) {
@@ -26,8 +58,9 @@ export default function DashPosts() {
         console.log(error)
       }
     }
-    fetchPosts()
-  }, [currentPage])
+
+    fetchAdminPosts()
+  }, [currentPage, postDeleted])
 
   const onPageChange = (page) => setCurrentPage(page);
 
@@ -47,21 +80,26 @@ export default function DashPosts() {
         },
       })
 
-      const data = await response.json()
       if (!response.ok) {
-        console.log(data.message)
+        setShowErrorModal(true)
+        setErrorMessage("Delete error.")
       } else {
         setUserPosts((prev) => prev.filter((post) => post.id !== postIdToDelete))
+        setShowSucessModal(true)
+        setSuccessMessage("You have successfully deleted post.")
+        setPostDeleted(!postDeleted)
       }
     } catch (error) {
-      console.log(error);
+      setShowErrorModal(true)
+      setErrorMessage("Delete error.")
     }
   }
+
 
   return <div className="table-container-scrollbar table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
     {currentUser.roleName === 'Admin' && userPosts.length > 0 ? (
       <>
-        <Table hoverable className="shadow-md">
+        <Table hoverable className="shadow-md my-8">
           <Table.Head>
             <Table.HeadCell>Date updated</Table.HeadCell>
             <Table.HeadCell>Post image</Table.HeadCell>
@@ -79,7 +117,7 @@ export default function DashPosts() {
                 <Table.Cell>{new Date(post.dateCreated).toLocaleDateString()}</Table.Cell>
                 <Table.Cell>
                   <Link to={`/post/${post.id}`}>
-                    <img src={`api/Images/images/${post.imageName}`} alt={post.title} className="w-20 h-10 object-cover bg-gray-500" />
+                    <img src={`api/Images/images/${post.imageName}`} alt={post.title} className="w-20 h-10 object-contain bg-gray-500" />
                   </Link>
                 </Table.Cell>
                 <Table.Cell>
@@ -89,14 +127,14 @@ export default function DashPosts() {
                 </Table.Cell>
                 <Table.Cell>
                   {post.categories.map((category, index) => (
-                    <span key={category.id}>{category.name} {index !== post.categories.length - 1 && ','} </span>
+                    <span key={category.id}>{category.name} {index !== post.categories.length - 1 && ', '} </span>
                   ))}
                 </Table.Cell>
                 <Table.Cell>
                   <span onClick={() => { setShowModal(true); setPostIdToDelete(post.id) }} className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span>
                 </Table.Cell>
                 <Table.Cell>
-                  <Link to={`/update-post/${post.id}`} className="text-teal-500">
+                  <Link to={`/update-post/${post.id}`} className="text-teal-500 hover:underline">
                     <span>Edit</span>
                   </Link>
                 </Table.Cell>
@@ -109,10 +147,23 @@ export default function DashPosts() {
           currentPage={currentPage}
           onPageChange={onPageChange}
           totalPages={pageCount}
+          className="pb-6"
         />
       </>
     ) : (<p>You have no posts</p>)
     }
+
+    {showSuccessModal && (
+      <div className="success-modal show">
+        {successMessage}
+      </div>
+    )}
+
+    {showErrorModal && (
+      <div className="error-modal show">
+        {errorMessage}
+      </div>
+    )}
 
     <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
       <Modal.Header />

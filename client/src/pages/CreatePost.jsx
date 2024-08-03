@@ -1,4 +1,4 @@
-import { Alert, Button, Checkbox, FileInput, TextInput } from "flowbite-react";
+import { Button, Checkbox, FileInput, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -8,11 +8,35 @@ export default function CreatePost() {
   const [categories, setCategories] = useState([])
 
   const [imageFile, setImageFile] = useState(null)
-  const [imageUploadError, setImageUploadError] = useState(null)
   const [imagePreview, setImagePreview] = useState(null);
   const [content, setContent] = useState('')
 
-  const [errorMessages, setErrorMessage] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessages, setErrorMessages] = useState([])
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [showErrorsModal, setShowErrorsModal] = useState(false)
+
+  const [successMessage, setSuccessMessage] = useState('')
+  const [showSuccessModal, setShowSucessModal] = useState(false)
+
+  useEffect(() => {
+    if (showErrorModal) {
+      setShowErrorModal(true)
+    }
+    if (showErrorsModal) {
+      setShowErrorsModal(true)
+    }
+    if (showSuccessModal) {
+      setShowSucessModal(true)
+    }
+    const timer = setTimeout(() => {
+      setShowErrorModal(false)
+      setShowErrorsModal(false)
+      setShowSucessModal(false)
+    }, 10000)
+
+    return () => clearTimeout(timer)
+  }, [showErrorModal, showErrorsModal, showSuccessModal])
 
   const handleContentChange = (value) => {
     setContent(value);
@@ -29,15 +53,36 @@ export default function CreatePost() {
   };
 
   useEffect(() => {
-    fetch('/api/Categories')
-      .then(response => response.json())
-      .then(data => setCategories(data.items))
-      .catch(error => console.error('Error fetching categories: ', error))
+    const fetchCategoriesForCreatePost = async () => {
+      try {
+        const token = localStorage.getItem("token")
+        if (!token) {
+          throw new Error("Token not found")
+        }
+
+        const response = await fetch(`/api/Categories`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setCategories(data.items)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchCategoriesForCreatePost()
   }, [])
 
   const handleUploadImage = async () => {
     if (!imageFile) {
-      setImageUploadError("Please select an image")
+      setShowErrorModal(true)
+      setErrorMessage("You must choose image.")
       return
     }
 
@@ -56,12 +101,18 @@ export default function CreatePost() {
           "Authorization": `Bearer ${token}`
         },
         body: formData
-      });
+      })
 
-      const imageUrl = await response.json()
-      setImagePreview(imageUrl)
+      if (response.ok) {
+        const imageUrl = await response.json()
+        setImagePreview(imageUrl)
+      } else {
+        setShowErrorModal(true)
+        setErrorMessage("You must choose image.")
+      }
     } catch (error) {
-      setImageUploadError("Image upload failed")
+      setShowErrorModal(true)
+      setErrorMessage("Error processing image.")
     }
   }
 
@@ -71,9 +122,9 @@ export default function CreatePost() {
     const postData = {
       Title: e.target.elements.title.value,
       Content: content,
-      IdImage: imagePreview.id,
+      IdImage: imagePreview?.id,
       PostCategories: selectedCategories.map(IdCategory => ({ IdPost: 0, IdCategory: IdCategory }))
-    };
+    }
 
     try {
       const token = localStorage.getItem("token")
@@ -92,25 +143,26 @@ export default function CreatePost() {
 
       if (!response.ok) {
         const data = await response.json();
-        let validationErrors = [];
+        const errorMessages = data.errors.map(error => error.ErrorMessage)
+        setShowErrorsModal(true)
+        setErrorMessages(errorMessages)
+      } else {
+        const insertPostId = await response.json()
 
-        validationErrors = data.errors.map(error => {
-          return `${error.ErrorMessage}`;
-        });
+        postData.PostCategories.forEach(postCategory => {
+          postCategory.idPost = insertPostId
+        })
 
-        setErrorMessage(validationErrors);
+        setShowSucessModal(true)
+        setSuccessMessage("You have successfully added a post.")
+
+        setContent('')
+        setSelectedCategories([])
+        setImageFile(null)
+        setImagePreview(null)
+        e.target.elements.title.value = ''
+        e.target.elements.fileInput.value = ''
       }
-
-      const insertPostId = await response.json();
-      postData.PostCategories.forEach(postCategory => {
-<<<<<<< HEAD
-        postCategory.idPost = insertPostId;
-=======
-        postCategory.IdPost = insertPostId;
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532
-      });
-
-      console.log(postData);
     } catch (error) {
       console.log(error)
     }
@@ -118,7 +170,7 @@ export default function CreatePost() {
 
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
-      <h1 className="text-center text-3xl my-7 font-semibold">Create a post</h1>
+      <h1 className="text-center text-3xl my-7 font-semibold">Create Post</h1>
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
@@ -139,7 +191,7 @@ export default function CreatePost() {
         </div>
 
         <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3 mb-6 flex-wrap rounded-xl">
-          <FileInput type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} />
+          <FileInput type="file" id="fileInput" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} />
           <Button type="button" gradientDuoTone="purpleToBlue" size="sm" outline onClick={handleUploadImage}>Upload Image</Button>
 
           {imagePreview && (
@@ -148,12 +200,6 @@ export default function CreatePost() {
             </div>
           )}
         </div>
-
-        {imageUploadError && (
-          <Alert color="failure">
-            {imageUploadError}
-          </Alert>
-        )}
 
         <ReactQuill
           theme="snow"
@@ -165,20 +211,30 @@ export default function CreatePost() {
           required
         />
 
-        <Button type="submit" gradientDuoTone="purpleToPink">Publish</Button>
+        <Button type="submit" gradientDuoTone="purpleToPink" className="mt-4">Publish</Button>
 
-        {errorMessages && errorMessages.length > 0 && (
-          <Alert className='mt-5' color='failure'>
-            {errorMessages.map((error, index) => (
-              <div key={index}>{error}</div>
+        {showSuccessModal && (
+          <div className="success-modal show">
+            {successMessage}
+          </div>
+        )}
+
+        {showErrorModal && (
+          <div className="error-modal show">
+            {errorMessage}
+          </div>
+        )}
+
+        {showErrorsModal && (
+          <div className="error-modals show">
+            {errorMessages.map((message, index) => (
+              <div key={index} className="error-in-list">
+                {message}
+              </div>
             ))}
-          </Alert>
+          </div>
         )}
       </form>
     </div>
   )
-<<<<<<< HEAD
-}``
-=======
 }
->>>>>>> 302b558e8d1e73a251f80e54cd26e042048d1532

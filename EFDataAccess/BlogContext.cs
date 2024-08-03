@@ -24,9 +24,10 @@ namespace EFDataAccess
       modelBuilder.Entity<Image>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<Role>().HasQueryFilter(x => !x.IsDeleted);
-      modelBuilder.Entity<Comment>().HasQueryFilter(x => !x.IsDeleted);
+      // modelBuilder.Entity<Comment>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<Like>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<UserUseCase>().HasQueryFilter(x => !x.IsDeleted);
+      modelBuilder.Entity<AuthorRequest>().HasQueryFilter(x => !x.IsDeleted);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -59,7 +60,6 @@ namespace EFDataAccess
       return base.SaveChanges();
     }
 
-
     public DbSet<Post> Posts { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<PostCategory> PostCategories { get; set; }
@@ -70,6 +70,7 @@ namespace EFDataAccess
     public DbSet<Like> Likes { get; set; }
     public DbSet<UserUseCase> UserUseCases { get; set; }
     public DbSet<UseCaseLog> UseCaseLogs { get; set; }
+    public DbSet<AuthorRequest> AuthorRequests { get; set; }
   }
 
 }

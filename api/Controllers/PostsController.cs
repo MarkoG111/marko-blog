@@ -26,13 +26,13 @@ namespace API.Controllers
         {
             request.IdUser = _actor.Id;
             _executor.ExecuteCommand(command, request);
-            return StatusCode(StatusCodes.Status201Created);
+            return Ok(request);
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] PostSearch dto, [FromServices] IGetPostsQuery query)
+        public IActionResult Get([FromQuery] PostSearch search, [FromServices] IGetPostsQuery query)
         {
-            return Ok(_executor.ExecuteQuery(query, dto));
+            return Ok(_executor.ExecuteQuery(query, search));
         }
 
         [HttpGet("{id}")]
@@ -42,14 +42,14 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] InsertBlogDto dto, [FromServices] ICreatePostCommand command)
+        public IActionResult Post([FromBody] InsertPostDto dto, [FromServices] ICreatePostCommand command)
         {
             _executor.ExecuteCommand(command, dto);
             return Ok(dto.Id);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] UpdateBlogDto dto, [FromServices] IUpdatePostCommand command)
+        public IActionResult Put(int id, [FromBody] UpdatePostDto dto, [FromServices] IUpdatePostCommand command)
         {
             dto.Id = id;
             _executor.ExecuteCommand(command, dto);

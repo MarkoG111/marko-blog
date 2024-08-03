@@ -31,19 +31,22 @@ namespace Implementation.Queries.User
             {
                 users = users.Where(x => x.Username.ToLower().Contains(search.Username.ToLower()));
             }
-            
+
             if (!string.IsNullOrEmpty(search.Email) || !string.IsNullOrWhiteSpace(search.Email))
             {
                 users = users.Where(x => x.Email.ToLower().Contains(search.Email.ToLower()));
             }
 
             var skipCount = search.PerPage * (search.Page - 1);
+            DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);
 
             var response = new PagedResponse<UserDto>
             {
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
                 TotalCount = users.Count(),
+                LastMonthCount = users.Where(x => x.CreatedAt >= thirtyDaysAgo).Count(),
+
                 Items = users.Skip(skipCount).Take(search.PerPage).Select(x => new UserDto
                 {
                     Id = x.Id,

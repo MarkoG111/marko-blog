@@ -19,29 +19,15 @@ namespace Implementation.Validators.User
         {
             _context = context;
 
-            RuleFor(x => x.FirstName).NotEmpty()
-                .WithMessage("First name is required.");
+            RuleFor(x => x.FirstName).NotEmpty().WithMessage("First name is required.").MinimumLength(2).WithMessage("Minimum length for first name is 2 characters.");
 
-            RuleFor(x => x.LastName).NotEmpty()
-                .WithMessage("Last name is required.");
+            RuleFor(x => x.LastName).NotEmpty().WithMessage("Last name is required.").MinimumLength(2).WithMessage("Minimum length for last name is 2 characters.");
 
-            RuleFor(x => x.Password).NotEmpty()
-                .MinimumLength(3)
-                .WithMessage("Password must be with at least 3 characters and not empty.");
+            RuleFor(x => x.Username).NotEmpty().WithMessage("Username is required.").MinimumLength(2).WithMessage("Minimum length for username is 2 characters.").Must(DoesNotExistUsername).WithMessage("Username must be unique.");
 
-            RuleFor(x => x.Username).NotEmpty()
-                .WithMessage("Username is required.")
-                .MinimumLength(4)
-                .WithMessage("Minimum length for username is 4 characters.")
-                .Must(DoesNotExistUsername)
-                .WithMessage("Username must be unique.");
+            RuleFor(x => x.Email).NotEmpty().WithMessage("Email is required.").EmailAddress().WithMessage("Not a valid email format.").Must(x => !context.Users.Any(user => user.Email == x)).WithMessage("Email address must be unique.");
 
-            RuleFor(x => x.Email).NotEmpty()
-                .WithMessage("Email is required.")
-                .EmailAddress()
-                .WithMessage("Not a valid email format.")
-                .Must(x => !context.Users.Any(user => user.Email == x))
-                .WithMessage("Email adress must be unique.");
+            RuleFor(x => x.Password).NotEmpty().MinimumLength(3).WithMessage("Minimum length for password is 3 characters.");
         }
 
         private bool DoesNotExistUsername(string username)

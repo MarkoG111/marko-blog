@@ -24,9 +24,8 @@ namespace API.Controllers
         [HttpPost("like")]
         public IActionResult Like([FromBody] LikeCommentDto request, [FromServices] ILikeCommentCommand command)
         {
-            request.IdUser = _actor.Id;
             _executor.ExecuteCommand(command, request);
-            return StatusCode(StatusCodes.Status201Created);
+            return Ok(request);
         }
 
         [HttpGet]
@@ -49,7 +48,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] InsertCommentDto dto, [FromServices] IUpdatePersonalCommentCommand command)
+        public IActionResult Put(int id, [FromBody] UpdateCommentDto dto, [FromServices] IUpdatePersonalCommentCommand command)
         {
             dto.Id = id;
             dto.IdUser = _actor.Id;
@@ -64,11 +63,11 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("user/{id}")]
+        [HttpDelete("comment/{id}")]
         public IActionResult DeletePersonalComment(int id, [FromServices] IDeletePersonalCommentCommand command)
         {
             _executor.ExecuteCommand(command, id);
-            return NoContent();
+            return Ok(id);
         }
     }
 }

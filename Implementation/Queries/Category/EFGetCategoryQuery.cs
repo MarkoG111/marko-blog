@@ -6,6 +6,7 @@ using Application.DataTransfer;
 using Application.Exceptions;
 using Application.Queries.Category;
 using EFDataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace Implementation.Queries.Category
 {
@@ -24,7 +25,15 @@ namespace Implementation.Queries.Category
 
         public CategoryDto Execute(int search)
         {
-            var category = _context.Categories.Find(search);
+            var category = _context.Categories
+                         .Include(x => x.CategoryPosts)
+                         .ThenInclude(x => x.Post)
+                         .ThenInclude(x => x.PostCategories)
+                         .ThenInclude(x => x.Category)
+                         .Include(x => x.CategoryPosts)
+                         .ThenInclude(x => x.Post)
+                         .ThenInclude(x => x.User)
+                         .FirstOrDefault(x => x.Id == search);
 
             if (category == null)
             {
@@ -34,7 +43,22 @@ namespace Implementation.Queries.Category
             return new CategoryDto
             {
                 Id = category.Id,
-                Name = category.Name
+                Name = category.Name,
+                Posts = category.CategoryPosts.Select(x => new GetPostDto
+                {
+                    Id = x.Post.Id,
+                    Title = x.Post.Title,
+                    Content = x.Post.Content,
+                    DateCreated = x.Post.CreatedAt,
+                    FirstName = x.Post.User.FirstName,
+                    LastName = x.Post.User.LastName,
+                    ProfilePicture = x.Post.User.ProfilePicture,
+                    Categories = x.Post.PostCategories.Select(y => new CategoryDto
+                    {
+                        Id = y.Category.Id,
+                        Name = y.Category.Name
+                    }).ToList()
+                }).ToList()
             };
         }
     }

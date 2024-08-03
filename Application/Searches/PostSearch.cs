@@ -9,8 +9,9 @@ namespace Application.Searches
     {
         public string? Title { get; set; }
         public string? Content { get; set; }
-        public DateTime DateFrom { get; set; }
-        public DateTime DateTo { get; set; }
-        public int? IdCategory { get; set; }
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
+        public List<int>? CategoryIds { get; set; }
+        public string SortOrder { get; set; } = "desc";
     }
 }
