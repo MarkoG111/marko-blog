@@ -14,6 +14,8 @@ namespace Application.DataTransfer
         public string Email { get; set; }
         public string ProfilePicture { get; set; }
         public string RoleName { get; set; }
+        public int FollowersCount { get; set; }
+        public int FollowingCount { get; set; }
         public IEnumerable<UserUseCaseDto> UserUseCases { get; set; }
         public IEnumerable<LikeCommentDto> CommentLikes { get; set; }
         public IEnumerable<GetPostDto> UserPosts { get; set; }

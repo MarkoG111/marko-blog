@@ -22,7 +22,7 @@ namespace Implementation.Queries.User
         public int Id => (int)UseCaseEnum.EFGetOneUserQuery;
         public string Name => UseCaseEnum.EFGetOneUserQuery.ToString();
 
-        public SingleUserDto Execute(int search)
+        public SingleUserDto Execute(int idUser)
         {
             var user = _context.Users
                 .Include(x => x.UserUseCases)
@@ -33,7 +33,15 @@ namespace Implementation.Queries.User
                 .Include(c => c.Comments)
                     .ThenInclude(pos => pos.Post)
                 .Include(l => l.Likes)
-                .FirstOrDefault(x => x.Id == search);
+                .FirstOrDefault(x => x.Id == idUser);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var followersCount = _context.Followers.Count(f => f.IdFollowing == idUser);
+            var followingCount = _context.Followers.Count(f => f.IdFollower == idUser);
 
             return new SingleUserDto
             {
@@ -72,7 +80,9 @@ namespace Implementation.Queries.User
                     IdPost = l.IdPost,
                     IdComment = l.IdComment,
                     Status = l.Status
-                }).ToList()
+                }).ToList(),
+                FollowersCount = followersCount,
+                FollowingCount = followingCount,
             };
         }
     }

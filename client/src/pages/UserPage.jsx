@@ -112,8 +112,8 @@ export default function UserPage() {
           <h1 className="text-3xl p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">{user && user.firstName} {user && user.lastName}</h1>
 
           <div className="flex -mt-28 gap-x-2 ml-6">
-            <FaUsers className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3" /> <span>23 followers</span>
-            <RiUserFollowLine className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3 ml-4" /> <span>15 following</span>
+            <FaUsers className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3" /> <span>{user && user.followersCount} followers</span>
+            <RiUserFollowLine className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3 ml-4" /> <span>{user && user.followingCount} following</span>
           </div>
           <div className="flex -mt-9 gap-x-4 justify-end mr-8">
             {isFollowing ? (
