@@ -29,13 +29,13 @@ export default function Dashboard() {
         <DashSidebar />
       </div>
 
+      {tab == 'dashboard' && < AdminDashboard />}
       {tab == 'profile' && <DashProfile />}
-      {tab == 'posts' && <DashPosts />}
+      {tab == 'comments' && <DashComments />}
       {tab == 'users' && <DashUsers />}
+      {tab == 'posts' && <DashPosts />}
       {tab == 'authorRequests' && <DashAuthorRequests />}
       {tab == 'requestAuthorForm' && <RequestAuthorForm />}
-      {tab == 'dashboard' && < AdminDashboard />}
-      {tab == 'comments' && <DashComments />}
     </div>
   )
 }

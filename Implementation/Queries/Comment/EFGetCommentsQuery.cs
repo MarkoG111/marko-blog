@@ -24,7 +24,7 @@ namespace Implementation.Queries.Comment
 
         public PagedResponse<CommentDto> Execute(CommentSearch search)
         {
-            var comments = _context.Comments.Include(x => x.User).Include(x => x.Likes).AsQueryable();
+            var comments = _context.Comments.Include(x => x.User).Include(x => x.Likes).Include(x => x.Post).AsQueryable();
 
             if (!string.IsNullOrEmpty(search.Username) || !string.IsNullOrWhiteSpace(search.Username))
             {
@@ -33,6 +33,7 @@ namespace Implementation.Queries.Comment
 
             comments = comments.OrderByDescending(c => c.CreatedAt);
 
+            var skipCount = search.PerPage * (search.Page - 1);
             DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);
 
             var response = new PagedResponse<CommentDto>
@@ -42,7 +43,8 @@ namespace Implementation.Queries.Comment
                 TotalCount = comments.Count(),
                 LastMonthCount = comments.Where(x => x.CreatedAt >= thirtyDaysAgo).Count(),
 
-                Items = comments.Select(c => new CommentDto
+
+                Items = comments.Skip(skipCount).Take(search.PerPage).Select(c => new CommentDto
                 {
                     Id = c.Id,
                     CommentText = c.CommentText,
@@ -50,6 +52,8 @@ namespace Implementation.Queries.Comment
                     IdParent = c.IdParent,
                     IsDeleted = c.IsDeleted,
                     Username = c.User.Username,
+                    PostTitle = c.Post.Title,
+                    IdPost = c.Post.Id,
                     IdUser = c.User.Id,
                     LikesCount = c.Likes.Count(l => l.IdComment != null),
                     Likes = c.Likes.Select(l => new LikeCommentDto

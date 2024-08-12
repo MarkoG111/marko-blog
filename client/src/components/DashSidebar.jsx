@@ -93,17 +93,17 @@ export default function DashSidebar() {
           )}
 
           {currentUser.roleName === 'Admin' && (
-            <Link to='/dashboard?tab=authorRequests'>
-              <Sidebar.Item active={tab === 'authorRequests'} icon={HiOutlineUserAdd} as='div'>
-                Author Requests
+            <Link to='/dashboard?tab=posts'>
+              <Sidebar.Item active={tab === 'posts'} icon={HiDocumentText} as='div'>
+                Posts
               </Sidebar.Item>
             </Link>
           )}
 
           {currentUser.roleName === 'Admin' && (
-            <Link to='/dashboard?tab=posts'>
-              <Sidebar.Item active={tab === 'posts'} icon={HiDocumentText} as='div'>
-                Posts
+            <Link to='/dashboard?tab=authorRequests'>
+              <Sidebar.Item active={tab === 'authorRequests'} icon={HiOutlineUserAdd} as='div'>
+                Author Requests
               </Sidebar.Item>
             </Link>
           )}
