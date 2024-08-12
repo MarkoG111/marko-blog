@@ -2969,11 +2969,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj",
+      "projectUniqueName": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj",
       "projectName": "Implementation",
-      "projectPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj",
+      "projectPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\Implementation.csproj",
       "packagesPath": "C:\\Users\\Gacho\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\obj\\",
+      "outputPath": "C:\\Users\\Gacho\\Desktop\\My_Blog\\Implementation\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Gacho\\AppData\\Roaming\\NuGet\\NuGet.Config",
