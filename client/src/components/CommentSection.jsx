@@ -310,7 +310,7 @@ export default function CommentSection({ idPost }) {
       if (isAlreadyDisliked || isAlreadyDislikedChild) {
         return
       }
-
+      
       const body = JSON.stringify({
         IdUser: currentUser.id,
         IdPost: idPost,
@@ -461,10 +461,9 @@ export default function CommentSection({ idPost }) {
       const token = localStorage.getItem("token")
       if (!token) {
         setShowErrorModal(true)
-        setErrorMessage("You must be logged in to like a post.")
+        setErrorMessage("You must be logged in to dislike a post.")
         return
       }
-
 
       const isAlreadyDisliked = checkIfAlreadyVotedOnPost(post, idPost, currentUser.id, 2)
 

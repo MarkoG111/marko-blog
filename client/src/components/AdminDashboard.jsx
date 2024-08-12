@@ -15,8 +15,6 @@ export default function AdminDashboard() {
   const [lastMonthUsers, setLastMonthUsers] = useState(0)
   const [lastMonthComments, setLastMonthComments] = useState(0)
   const [lastMonthPosts, setLastMonthPosts] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [pageCount, setPageCount] = useState(1)
 
   const { currentUser } = useSelector((state) => state.user)
 
@@ -28,7 +26,7 @@ export default function AdminDashboard() {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/api/Users?page=${currentPage}`, {
+        const response = await fetch(`/api/Users`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -38,15 +36,15 @@ export default function AdminDashboard() {
         const data = await response.json()
 
         if (response.ok) {
-          setUsers(data.items)
+          setUsers(data.items.slice(0, 5))
           setTotalUsers(data.totalCount)
           setLastMonthUsers(data.lastMonthCount)
-          setPageCount(data.pageCount)
         }
       } catch (error) {
         console.log(error)
       }
     }
+
     const fetchComments = async () => {
       try {
         const token = localStorage.getItem("token")
@@ -54,7 +52,7 @@ export default function AdminDashboard() {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/api/Comments?page=${currentPage}`, {
+        const response = await fetch(`/api/Comments`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -64,15 +62,15 @@ export default function AdminDashboard() {
         const data = await response.json()
 
         if (response.ok) {
-          setComments(data.items)
+          setComments(data.items.slice(0, 5))
           setTotalComments(data.totalCount)
           setLastMonthComments(data.lastMonthCount)
-          setPageCount(data.pageCount)
         }
       } catch (error) {
         console.log(error)
       }
     }
+
     const fetchPosts = async () => {
       try {
         const token = localStorage.getItem("token")
@@ -80,7 +78,7 @@ export default function AdminDashboard() {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/api/Posts?page=${currentPage}`, {
+        const response = await fetch(`/api/Posts`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -90,10 +88,9 @@ export default function AdminDashboard() {
         const data = await response.json()
 
         if (response.ok) {
-          setPosts(data.items)
+          setPosts(data.items.slice(0, 5))
           setTotalPosts(data.totalCount)
           setLastMonthPosts(data.lastMonthCount)
-          setPageCount(data.pageCount)
         }
       } catch (error) {
         console.log(error)

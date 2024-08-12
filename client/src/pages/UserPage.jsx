@@ -10,20 +10,13 @@ export default function UserPage() {
   const { id } = useParams()
   const [user, setUser] = useState(null)
   const [isFollowing, setIsFollowing] = useState(false)
+  const [followClicked, setFollowClicked] = useState(false)
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("token")
-        if (!token) {
-          throw new Error("Token not found")
-        }
-
         const repsonse = await fetch(`/api/Users/${id}`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
+          method: "GET"
         })
 
         const data = await repsonse.json()
@@ -31,16 +24,23 @@ export default function UserPage() {
         if (repsonse.ok) {
           setUser(data)
 
-          const followResponse = await fetch(`/api/Followers/check/${id}`, {
-            method: "GET",
-            headers: {
-              "Authorization": `Bearer ${token}`
+          if (followClicked) {
+            const token = localStorage.getItem("token")
+            if (!token) {
+              throw new Error("Token not found")
             }
-          })
 
-          const followData = await followResponse.json()
+            const followResponse = await fetch(`/api/Followers/check/${id}`, {
+              method: "GET",
+              headers: {
+                "Authorization": `Bearer ${token}`
+              }
+            })
 
-          setIsFollowing(followData.isFollowing)
+            const followData = await followResponse.json()
+
+            setIsFollowing(followData.isFollowing)
+          }
         }
       } catch (error) {
         console.log(error)
@@ -48,7 +48,7 @@ export default function UserPage() {
     }
 
     fetchUser()
-  }, [id])
+  }, [id, followClicked])
 
   const handleFollow = async (idFollowing) => {
     try {
@@ -67,6 +67,7 @@ export default function UserPage() {
       })
 
       if (response.ok) {
+        setFollowClicked(true)
         setIsFollowing(true)
       }
     } catch (error) {
@@ -112,7 +113,7 @@ export default function UserPage() {
           <h1 className="text-3xl p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">{user && user.firstName} {user && user.lastName}</h1>
 
           <div className="flex -mt-28 gap-x-2 ml-6">
-            <FaUsers className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3" /> <span>{user && user.followersCount} followers</span>
+            <FaUsers className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3" /> <span>{user && user.followersCount} {user && user.followersCount == 1 ? 'follower' : 'followers'}</span>
             <RiUserFollowLine className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3 ml-4" /> <span>{user && user.followingCount} following</span>
           </div>
           <div className="flex -mt-9 gap-x-4 justify-end mr-8">

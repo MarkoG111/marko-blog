@@ -10,20 +10,14 @@ export default function UserCommentPage() {
 
   useEffect(() => {
     const fetchComment = async () => {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        throw new Error("Token not found.")
-      }
-
       const response = await fetch(`/api/Comments/${id}`, {
-        method: "GET",
-        headers: { "Authorization": `Bearer ${token}` }
+        method: "GET"
       })
 
       if (response.ok) {
         const data = await response.json()
         setComment(data)
-        console.log(data);
+
         if (data.idParent != null) {
           fetchParentComment(data.idParent);
         }
@@ -31,14 +25,8 @@ export default function UserCommentPage() {
     }
 
     const fetchParentComment = async (idParent) => {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        throw new Error("Token not found.")
-      }
-
       const response = await fetch(`/api/Comments/${idParent}`, {
-        method: "GET",
-        headers: { "Authorization": `Bearer ${token}` }
+        method: "GET"
       })
 
       if (response.ok) {
