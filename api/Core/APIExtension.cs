@@ -11,6 +11,7 @@ using Application.Commands.Like;
 using Application.Commands.Comment;
 using Application.Commands.AuthorRequest;
 using Application.Commands.Follow;
+using Application.Commands.Notification;
 
 using Application.Queries;
 using Application.Queries.Post;
@@ -19,6 +20,7 @@ using Application.Queries.User;
 using Application.Queries.Comment;
 using Application.Queries.AuthorRequest;
 using Application.Queries.Follow;
+using Application.Queries.Notification;
 
 using Implementation.Validators.Post;
 using Implementation.Validators.Category;
@@ -34,6 +36,7 @@ using Implementation.Commands.Comment;
 using Implementation.Commands.Like;
 using Implementation.Commands.AuthorRequest;
 using Implementation.Commands.Follow;
+using Implementation.Commands.Notification;
 
 using Implementation.Queries;
 using Implementation.Queries.Post;
@@ -42,6 +45,7 @@ using Implementation.Queries.Comment;
 using Implementation.Queries.User;
 using Implementation.Queries.AuthorRequest;
 using Implementation.Queries.Follow;
+using Implementation.Queries.Notification;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -54,6 +58,8 @@ namespace API.Core
         public static void LoadUseCases(this IServiceCollection services)
         {
             services.AddTransient<UseCaseExecutor>();
+
+            services.AddTransient<INotificationHubService, SignalRNotificationHub>();
 
             // Commands
             services.AddTransient<IRegisterUserCommand, EFRegisterUserCommand>();
@@ -86,6 +92,9 @@ namespace API.Core
             services.AddTransient<IFollowCommand, EFFollowCommand>();
             services.AddTransient<IUnfollowCommand, EFUnfollowCommand>();
 
+            services.AddTransient<ICreateNotificationCommand, EFCreateNotificationCommand>();
+            services.AddTransient<IMarkAllNotificationsAsReadCommand, EFMarkAllNotificationsAsReadCommand>();
+
             // Queries
             services.AddTransient<IGetPostsQuery, EFGetPostsQuery>();
             services.AddTransient<IGetPostQuery, EFGetPostQuery>();
@@ -104,6 +113,8 @@ namespace API.Core
             services.AddTransient<IGetUseCaseLogsQuery, EFGetUseCaseLogsQuery>();
 
             services.AddTransient<ICheckFollowStatusQuery, EFCheckFollowStatusQuery>();
+
+            services.AddTransient<IGetNotificationsQuery, EFGetNotificationsQuery>();
 
             // Validators
             services.AddTransient<RegisterUserValidator>();

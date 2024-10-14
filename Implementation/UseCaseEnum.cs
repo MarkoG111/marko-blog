@@ -53,5 +53,10 @@ namespace Implementation
         EFFollowCommand = 32,
         EFUnfollowCommand = 33,
         EFCheckFollowStatusQuery = 34,
+
+        EFCreateNotificationCommand = 35,
+        EFGetNotificationsQuery = 36,
+
+        EFMarkAllNotificationsAsReadCommand = 37,
     }
 }

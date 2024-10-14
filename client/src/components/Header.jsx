@@ -6,7 +6,9 @@ import { FaMoon, FaSun, FaRegBell } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleTheme } from '../redux/theme/themeSlice'
 import { signoutSuccess } from '../redux/user/userSlice'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+
+import { NotificationsContext } from '../contexts/NotificationsContext'
 
 export default function Header() {
   const path = useLocation().pathname
@@ -15,6 +17,8 @@ export default function Header() {
   const { theme } = useSelector((state) => state.theme)
   const { currentUser } = useSelector((state) => state.user)
   const [headerSearchTerm, setHeaderSearchTerm] = useState('')
+
+  const { notifications, hasNewNotifications } = useContext(NotificationsContext)
 
   const handleSignout = async () => {
     try {
@@ -52,9 +56,14 @@ export default function Header() {
           {theme === 'light' ? <FaMoon /> : <FaSun />}
         </Button>
 
-        <Button className='w-10 md:w-12 h-10 mt-6 md:mt-2 rounded-full' color='gray'>
-          <FaRegBell />
-        </Button>
+        <Link to='/notifications'>
+          <Button className='w-10 md:w-12 h-10 mt-6 md:mt-2 rounded-full' color='gray'>
+            <FaRegBell />
+            {notifications.length > 0 && hasNewNotifications && (
+              <span className='absolute bottom-5 left-6 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full'>{notifications.filter((n) => !n.isRead).length}</span>
+            )}
+          </Button>
+        </Link>
 
         {currentUser ? (
           <Dropdown arrowIcon={false} inline label={<Avatar alt='user' img={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `/api/Users/images/${currentUser.profilePicture}`} rounded className='mt-6 md:mt-2' />}>

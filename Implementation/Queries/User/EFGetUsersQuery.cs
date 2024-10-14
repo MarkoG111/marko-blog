@@ -27,6 +27,10 @@ namespace Implementation.Queries.User
         {
             var users = _context.Users.Include(x => x.Role).AsQueryable();
 
+            if (search.OnlyAuthors) {
+                users = users.Where(x => x.Role.Name == "Author");
+            }
+
             if (!string.IsNullOrEmpty(search.Username) || !string.IsNullOrWhiteSpace(search.Username))
             {
                 users = users.Where(x => x.Username.ToLower().Contains(search.Username.ToLower()));

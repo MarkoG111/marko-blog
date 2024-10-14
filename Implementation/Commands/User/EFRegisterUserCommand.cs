@@ -28,7 +28,7 @@ namespace Implementation.Commands.User
 
         public int Id => (int)UseCaseEnum.EFRegisterUserCommand;
         public string Name => UseCaseEnum.EFRegisterUserCommand.ToString();
-
+        
         public void Execute(RegisterUserDto request)
         {
             _validator.ValidateAndThrow(request);

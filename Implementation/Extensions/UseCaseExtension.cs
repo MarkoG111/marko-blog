@@ -49,6 +49,10 @@ namespace Implementation
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateAuthorRequestCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetAuthorRequestsQuery });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetNotificationsQuery });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand });
             }
 
             else if (user.IdRole == (int)RoleEnum.Author)
@@ -77,6 +81,10 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUnfollowCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCheckFollowStatusQuery });
 
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateNotificationCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetNotificationsQuery });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand });
             }
 
             else if (user.IdRole == (int)RoleEnum.User)
@@ -92,6 +100,7 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalCommentCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCommentsQuery });
 
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateUserCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneUserQuery });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetUsersQuery });
 
@@ -103,6 +112,11 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFFollowCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUnfollowCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCheckFollowStatusQuery });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateNotificationCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetNotificationsQuery });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand });
             }
 
             user.UserUseCases = list;

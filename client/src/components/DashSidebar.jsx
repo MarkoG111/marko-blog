@@ -69,9 +69,34 @@ export default function DashSidebar() {
           )}
 
           {currentUser.roleName === 'Author' && (
-            <Link to='/dashboard?tab=authorPosts'>
-              <Sidebar.Item active={tab === 'authorPosts'} icon={HiDocumentText} as='div'>
-                My Posts
+            <Link to='/'>
+              <Sidebar.Item active={tab === ''} as='div'>
+                <div className='flex justify-between'>
+                  <span>My Posts</span>
+                  <span className="w-8 h-8 pt-2 text-center rounded-full dark:bg-teal-500 bg-gray-500 text-white text-xs font-bold">5</span>
+                </div>
+              </Sidebar.Item>
+            </Link>
+          )}
+
+          {currentUser.roleName === 'Author' && (
+            <Link to='/'>
+              <Sidebar.Item active={tab === ''} as='div'>
+                <div className='flex justify-between'>
+                  <span>Followers</span>
+                  <span className="w-8 h-8 pt-2 text-center rounded-full dark:bg-teal-500 bg-gray-500 text-white text-xs font-bold">1</span>
+                </div>
+              </Sidebar.Item>
+            </Link>
+          )}
+
+          {currentUser.roleName === 'Author' && (
+            <Link to='/'>
+              <Sidebar.Item active={tab === ''} as='div'>
+                <div className='flex justify-between'>
+                  <span>Following Users</span>
+                  <span className="w-8 h-8 pt-2 text-center rounded-full dark:bg-teal-500 bg-gray-500 text-white text-xs font-bold">12</span>
+                </div>
               </Sidebar.Item>
             </Link>
           )}

@@ -28,6 +28,8 @@ namespace API
 
             services.AddControllers();
 
+            services.AddSignalR();
+
             services.AddTransient<BlogContext>();
 
             services.LoadUseCases();
@@ -100,10 +102,12 @@ namespace API
             // Dodaje middleware za obrađivanje Cross-Origin Resource Sharing (CORS) zahteva. Ovaj middleware omogućava definisanje politika CORS-a koje određuju koje origin domene su dozvoljene da pristupaju resursima na serveru.
             app.UseCors(x =>
             {
-                x.AllowAnyOrigin();
                 x.AllowAnyMethod();
                 x.AllowAnyHeader();
+                x.AllowCredentials();
+                x.AllowAnyMethod();
             });
+
 
             // Dodaje middleware za podršku Swagger-u, koji generiše dokumentaciju API-ja na osnovu definicija ruta i kontrolera u aplikaciji.
             app.UseSwagger();
@@ -121,6 +125,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<NotificationHub>("/notificationsHub");
             });
 
         }

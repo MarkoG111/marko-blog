@@ -12,7 +12,8 @@ export default function Authors() {
       try {
         const queryParams = new URLSearchParams({
           page: currentPage,
-          perPage: 5,
+          perPage: 3,
+          onlyAuthors: true
         })
 
         const response = await fetch(`/api/Users?${queryParams}`, {
@@ -22,6 +23,7 @@ export default function Authors() {
         if (response.ok) {
           const data = await response.json()
           const authors = data.items.filter((author) => author.role == 'Author')
+          
           setAuthors(authors)
           setPageCount(data.pageCount)
         }

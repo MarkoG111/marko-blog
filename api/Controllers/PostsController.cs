@@ -5,6 +5,8 @@ using Application.Commands.Post;
 using Application.Queries.Post;
 using Application.Searches;
 using Application.Commands.Like;
+using Microsoft.AspNetCore.SignalR;
+using API.Core;
 
 namespace API.Controllers
 {

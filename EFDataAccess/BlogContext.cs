@@ -18,6 +18,7 @@ namespace EFDataAccess
       modelBuilder.ApplyConfiguration(new CommentConfiguration());
       modelBuilder.ApplyConfiguration(new LikeConfiguration());
       modelBuilder.ApplyConfiguration(new FollowerConfiguration());
+      modelBuilder.ApplyConfiguration(new NotificationConfiguration());
 
       modelBuilder.Entity<Post>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<Category>().HasQueryFilter(x => !x.IsDeleted);
@@ -29,6 +30,7 @@ namespace EFDataAccess
       modelBuilder.Entity<Like>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<UserUseCase>().HasQueryFilter(x => !x.IsDeleted);
       modelBuilder.Entity<AuthorRequest>().HasQueryFilter(x => !x.IsDeleted);
+      modelBuilder.Entity<Notification>().HasQueryFilter(x => !x.IsDeleted);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -73,6 +75,7 @@ namespace EFDataAccess
     public DbSet<UseCaseLog> UseCaseLogs { get; set; }
     public DbSet<AuthorRequest> AuthorRequests { get; set; }
     public DbSet<Follower> Followers { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
   }
 }
 

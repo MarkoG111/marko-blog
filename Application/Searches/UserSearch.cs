@@ -9,5 +9,6 @@ namespace Application.Searches
     {
         public string? Username { get; set; }
         public string? Email { get; set; }
+        public bool OnlyAuthors { get; set; }
     }
 }

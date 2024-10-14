@@ -10,7 +10,6 @@ export default function UserPage() {
   const { id } = useParams()
   const [user, setUser] = useState(null)
   const [isFollowing, setIsFollowing] = useState(false)
-  const [followClicked, setFollowClicked] = useState(false)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,23 +23,21 @@ export default function UserPage() {
         if (repsonse.ok) {
           setUser(data)
 
-          if (followClicked) {
-            const token = localStorage.getItem("token")
-            if (!token) {
-              throw new Error("Token not found")
-            }
-
-            const followResponse = await fetch(`/api/Followers/check/${id}`, {
-              method: "GET",
-              headers: {
-                "Authorization": `Bearer ${token}`
-              }
-            })
-
-            const followData = await followResponse.json()
-
-            setIsFollowing(followData.isFollowing)
+          const token = localStorage.getItem("token")
+          if (!token) {
+            throw new Error("Token not found")
           }
+
+          const followResponse = await fetch(`/api/Followers/check/${id}`, {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          })
+
+          const followData = await followResponse.json()
+
+          setIsFollowing(followData.isFollowing)
         }
       } catch (error) {
         console.log(error)
@@ -48,7 +45,7 @@ export default function UserPage() {
     }
 
     fetchUser()
-  }, [id, followClicked])
+  }, [id])
 
   const handleFollow = async (idFollowing) => {
     try {
@@ -67,8 +64,11 @@ export default function UserPage() {
       })
 
       if (response.ok) {
-        setFollowClicked(true)
         setIsFollowing(true)
+        setUser((prevUser) => ({
+          ...prevUser,
+          followersCount: prevUser.followersCount + 1,
+        }));
       }
     } catch (error) {
       console.log(error)
@@ -91,6 +91,10 @@ export default function UserPage() {
 
       if (response.ok) {
         setIsFollowing(false)
+        setUser((prevUser) => ({
+          ...prevUser,
+          followersCount: prevUser.followersCount - 1,
+        }));
       }
     } catch (error) {
       console.log(error)

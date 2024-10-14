@@ -306,3 +306,7 @@ c:\Users\Gacho\Desktop\My_Blog - Copy\api\obj\Debug\net8.0\refint\api.dll
 c:\Users\Gacho\Desktop\My_Blog - Copy\api\obj\Debug\net8.0\api.pdb
 c:\Users\Gacho\Desktop\My_Blog - Copy\api\obj\Debug\net8.0\api.genruntimeconfig.cache
 c:\Users\Gacho\Desktop\My_Blog - Copy\api\obj\Debug\net8.0\ref\api.dll
+c:\Users\Gacho\Desktop\My_Blog\api\bin\Debug\net8.0\Microsoft.AspNetCore.Connections.Abstractions.dll
+c:\Users\Gacho\Desktop\My_Blog\api\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Common.dll
+c:\Users\Gacho\Desktop\My_Blog\api\bin\Debug\net8.0\Microsoft.Extensions.Features.dll
+c:\Users\Gacho\Desktop\My_Blog\api\bin\Debug\net8.0\Microsoft.Extensions.Options.dll

@@ -16,32 +16,39 @@ import ScrollToTop from './components/ScrollToTop'
 import PostsPage from './pages/PostsPage'
 import CategoryPage from './pages/CategoryPage'
 import UserCommentPage from './pages/UserCommentPage'
+import NotificationsPage from './pages/NotificationsPage'
+
+import { NotificationsProvider } from './contexts/NotificationsContext'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <Header />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/authors' element={<Authors />} />
-        <Route path='/posts' element={<PostsPage />} />
-        <Route path='/sign-in' element={<SignIn />} />
-        <Route path='/sign-up' element={<SignUp />} />
-        <Route element={<PrivateRoute />}>
-          <Route path='/dashboard' element={<Dashboard />} />
-        </Route>
-        <Route element={<OnlyRolePrivateRoute />}>
-          <Route path='/create-post' element={<CreatePost />} />
-          <Route path='/update-post/:postId' element={<UpdatePost />} />
-        </Route>
+      <NotificationsProvider>
+        <ScrollToTop />
+        <Header />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/authors' element={<Authors />} />
+          <Route path='/posts' element={<PostsPage />} />
+          <Route path='/sign-in' element={<SignIn />} />
+          <Route path='/sign-up' element={<SignUp />} />
+          <Route element={<PrivateRoute />}>
+            <Route path='/dashboard' element={<Dashboard />} />
+          </Route>
+          <Route element={<OnlyRolePrivateRoute />}>
+            <Route path='/create-post' element={<CreatePost />} />
+            <Route path='/update-post/:postId' element={<UpdatePost />} />
+          </Route>
 
-        <Route path='/post/:id' element={<PostPage />} />
-        <Route path='/user/:id' element={<UserPage />} />
-        <Route path='/category/:id' element={<CategoryPage />} />
-        <Route path='/comment/:id' element={<UserCommentPage />} />
-      </Routes>
-      <Footer />
+          <Route path='/notifications' element={<NotificationsPage />} />
+
+          <Route path='/post/:id' element={<PostPage />} />
+          <Route path='/user/:id' element={<UserPage />} />
+          <Route path='/category/:id' element={<CategoryPage />} />
+          <Route path='/comment/:id' element={<UserCommentPage />} />
+        </Routes>
+        <Footer />
+      </NotificationsProvider>
     </BrowserRouter>
   )
 }

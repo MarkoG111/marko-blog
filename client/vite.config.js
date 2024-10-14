@@ -9,6 +9,11 @@ export default defineConfig({
         target: 'http://localhost:5207',
         secure: false,
       },
+      '/notificationsHub': {
+        target: 'http://localhost:5207',
+        secure: false,
+        ws: true, // Enable WebSocket proxying
+      },
     },
   },
 

@@ -17,12 +17,15 @@ namespace Implementation.Commands.Post
         private readonly BlogContext _context;
         private readonly IApplicationActor _actor;
         private readonly CreatePostValidator _validator;
+        private readonly INotificationHubService _notificationService;
 
-        public EFCreatePostCommand(CreatePostValidator validator, IApplicationActor actor, BlogContext context)
+
+        public EFCreatePostCommand(CreatePostValidator validator, IApplicationActor actor, BlogContext context, INotificationHubService notificationService)
         {
             _validator = validator;
             _actor = actor;
             _context = context;
+            _notificationService = notificationService;
         }
 
         public int Id => (int)UseCaseEnum.EFCreatePostCommand;
@@ -52,6 +55,25 @@ namespace Implementation.Commands.Post
             _context.SaveChanges();
 
             request.Id = post.Id;
+
+            var followers = _context.Followers.Where(f => f.IdFollowing == post.IdUser).Select(f => f.IdFollower).ToList();
+
+            foreach (var idFollower in followers)
+            {
+                var notification = new Domain.Notification
+                {
+                    IdUser = idFollower,
+                    FromIdUser = post.IdUser,
+                    Type = NotificationType.Post,
+                    Content = $"{_actor.Identity} has published a new post: ${post.Title}.",
+                    IsRead = false
+                };
+
+                _context.Notifications.Add(notification);
+                _notificationService.SendNotificationToUser(idFollower, $"{_actor.Identity} has published a new post: {post.Title}.");
+            }
+
+            _context.SaveChanges();
         }
     }
 }
