@@ -65,12 +65,12 @@ namespace Implementation.Commands.Post
                     IdUser = idFollower,
                     FromIdUser = post.IdUser,
                     Type = NotificationType.Post,
-                    Content = $"{_actor.Identity} has published a new post: ${post.Title}.",
+                    Content = $"{_actor.Identity} has published a new post: {post.Title}",
                     IsRead = false
                 };
 
                 _context.Notifications.Add(notification);
-                _notificationService.SendNotificationToUser(idFollower, $"{_actor.Identity} has published a new post: {post.Title}.");
+                _notificationService.SendNotificationToUser(idFollower, $"{_actor.Identity} has published a new post: {post.Title}");
             }
 
             _context.SaveChanges();

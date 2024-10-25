@@ -41,6 +41,10 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikePost });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikeComment });
 
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFFollowCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUnfollowCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCheckFollowStatusQuery });
+
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateCategoryCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateCategoryCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeleteCategoryCommand });

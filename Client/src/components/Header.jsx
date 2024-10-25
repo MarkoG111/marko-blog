@@ -18,7 +18,10 @@ export default function Header() {
   const { currentUser } = useSelector((state) => state.user)
   const [headerSearchTerm, setHeaderSearchTerm] = useState('')
 
-  const { notifications, hasNewNotifications } = useContext(NotificationsContext)
+  const { notifications, hasNewNotifications, markAllAsRead } = useContext(NotificationsContext)
+
+  const unreadNotificationCount = notifications.filter((n) => !n.isRead).length
+  const isAuthor = currentUser && currentUser.roleName === 'Author'
 
   const handleSignout = async () => {
     try {
@@ -35,16 +38,23 @@ export default function Header() {
     navigate(`/posts?search=${headerSearchTerm}`)
   }
 
+  const handleNotificationsClick = () => {
+    markAllAsRead()
+  }
+
   return (
     <Navbar className='border-b-2'>
+      {/* Logo */}
       <Link to='/' className='self-center whitespace-nowrap mt-4 md:mt-0 text-2xl md:text-xl font-semibold dark:text-white mx-auto'>
         <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>Marko&apos;s</span>Blog
       </Link>
 
+      {/* Search Form */}
       <form onSubmit={handleSearchSubmit}>
         <TextInput type='text' placeholder='Search...' rightIcon={AiOutlineSearch} className='hidden lg:inline' value={headerSearchTerm} onChange={(e) => setHeaderSearchTerm(e.target.value)} />
       </form>
 
+      {/* Right Side Controls */}
       <div className='flex gap-4 md:gap-2 md:order-2 mx-auto'>
         {currentUser && (currentUser.roleName === 'Admin' || currentUser.roleName === 'Author') && (
           <Link to='/create-post' className='mr-6'>
@@ -52,19 +62,24 @@ export default function Header() {
           </Link>
         )}
 
+        {/* Theme Toggle Button */}
         <Button className='w-10 md:w-12 h-10 mt-6 md:mt-2 sm:block' color='gray' pill onClick={() => dispatch(toggleTheme())}>
           {theme === 'light' ? <FaMoon /> : <FaSun />}
         </Button>
 
-        <Link to='/notifications'>
-          <Button className='w-10 md:w-12 h-10 mt-6 md:mt-2 rounded-full' color='gray'>
-            <FaRegBell />
-            {notifications.length > 0 && hasNewNotifications && (
-              <span className='absolute bottom-5 left-6 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full'>{notifications.filter((n) => !n.isRead).length}</span>
-            )}
-          </Button>
-        </Link>
+        {/* Notifications Button */}
+        {isAuthor && (
+          <Link to='/notifications'>
+            <Button className='w-10 md:w-12 h-10 mt-6 md:mt-2 rounded-full' color='gray' onClick={handleNotificationsClick}>
+              <FaRegBell />
+              {notifications.length > 0 && hasNewNotifications && (
+                <span className='absolute bottom-5 left-6 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full'>{unreadNotificationCount}</span>
+              )}
+            </Button>
+          </Link>
+        )}
 
+        {/* User Avatar or Sign In Button */}
         {currentUser ? (
           <Dropdown arrowIcon={false} inline label={<Avatar alt='user' img={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `/api/Users/images/${currentUser.profilePicture}`} rounded className='mt-6 md:mt-2' />}>
             <Dropdown.Header>
@@ -85,9 +100,11 @@ export default function Header() {
         </Link>)
         }
 
+        {/* Navbar Toggle for Mobile */}
         <Navbar.Toggle className='mt-5' />
       </div>
 
+      {/* Navbar Links */}
       <Navbar.Collapse className='md:ml-16'>
         <Navbar.Link active={path === '/'} as={'div'}>
           <Link to='/'>

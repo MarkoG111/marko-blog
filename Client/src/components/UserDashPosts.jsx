@@ -19,9 +19,6 @@ export default function UserDashPosts() {
   const [successMessage, setSuccessMessage] = useState('')
   const [showSuccessModal, setShowSucessModal] = useState(false)
 
-  console.log(userPosts);
-  
-
   useEffect(() => {
     if (showErrorModal) {
       setShowErrorModal(true)

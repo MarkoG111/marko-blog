@@ -4,10 +4,12 @@ import storage from 'redux-persist/lib/storage'
 
 import themeReducer from './theme/themeSlice'
 import userReducer from './user/userSlice'
+import notificationsReducer from './notificationsSlice'
 
 const rootReducer = combineReducers({
   theme: themeReducer,
-  user: userReducer
+  user: userReducer,
+  notifications: notificationsReducer
 })
 
 const persistConfig = {

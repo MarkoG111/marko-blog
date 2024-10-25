@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
 import * as signalR from '@microsoft/signalr'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setUnreadCount } from "../redux/notificationsSlice";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([])
   const [hasNewNotifications, setHasNewNotifications] = useState(false)
   const { currentUser } = useSelector((state) => state.user)
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -31,29 +34,8 @@ export default function Notifications() {
 
           const unreadCount = data.items.filter((n) => !n.isRead).length
           setHasNewNotifications(unreadCount > 0)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
 
-    const markAllAsRead = async () => {
-      try {
-        const token = localStorage.getItem("token")
-        if (!token) {
-          throw new Error("Token not found")
-        }
-
-        const response = await fetch(`/api/Notifications/mark-all-as-read`, {
-          method: "PATCH",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-          }
-        })
-
-        if (response.ok) {
-          setNotifications((prevNotifications) => prevNotifications.map((notification) => ({ ...notification, isRead: true })))
+          dispatch(setUnreadCount(unreadCount))
         }
       } catch (error) {
         console.log(error)
@@ -75,23 +57,25 @@ export default function Notifications() {
           setNotifications((prevNotification) => [notification, ...prevNotification])
 
           setHasNewNotifications(true)
+          dispatch(setUnreadCount((prevCount) => prevCount + 1))
         })
 
         connection.on("NotificationsMarkedAsRead", () => {
-          setNotifications((prev) =>
-            prev.map((notification) => ({ ...notification, isRead: true })))
+          setNotifications((prev) => prev.map((notification) => ({ ...notification, isRead: true })))
+
+          setHasNewNotifications(false)
+          dispatch(setUnreadCount(0))
         })
       })
       .catch(error => console.error('Connection failed ', error))
 
     fetchNotifications()
 
-    markAllAsRead()
-
     return () => {
       connection.stop()
     }
-  }, [currentUser.id, setNotifications, setHasNewNotifications])
+
+  }, [currentUser.id, dispatch])
 
   console.log(notifications)
 
