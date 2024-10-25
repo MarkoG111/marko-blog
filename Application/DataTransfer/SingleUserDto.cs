@@ -16,6 +16,7 @@ namespace Application.DataTransfer
         public string RoleName { get; set; }
         public int FollowersCount { get; set; }
         public int FollowingCount { get; set; }
+        public int PostsCount { get; set; }
         public IEnumerable<UserUseCaseDto> UserUseCases { get; set; }
         public IEnumerable<LikeCommentDto> CommentLikes { get; set; }
         public IEnumerable<GetPostDto> UserPosts { get; set; }

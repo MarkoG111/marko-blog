@@ -25,15 +25,18 @@ namespace Implementation.Queries.User
         public SingleUserDto Execute(int idUser)
         {
             var user = _context.Users
-                .Include(x => x.UserUseCases)
-                .Include(u => u.Role)
-                .Include(p => p.Posts.OrderByDescending(p => p.CreatedAt))
-                    .ThenInclude(bc => bc.PostCategories)
-                    .ThenInclude(cat => cat.Category)
-                .Include(c => c.Comments)
-                    .ThenInclude(pos => pos.Post)
-                .Include(l => l.Likes)
-                .FirstOrDefault(x => x.Id == idUser);
+            .Include(x => x.UserUseCases)
+            .Include(u => u.Role)
+            .Include(p => p.Posts.OrderByDescending(p => p.CreatedAt))
+                .ThenInclude(bc => bc.PostCategories)
+                .ThenInclude(cat => cat.Category)
+            .Include(p => p.Posts)
+                .ThenInclude(i => i.Image) // Separate include for Image
+            .Include(c => c.Comments)
+                .ThenInclude(pos => pos.Post)
+                .ThenInclude(i => i.Image)
+            .Include(l => l.Likes)
+            .FirstOrDefault(x => x.Id == idUser);
 
             if (user == null)
             {
@@ -42,6 +45,7 @@ namespace Implementation.Queries.User
 
             var followersCount = _context.Followers.Count(f => f.IdFollowing == idUser);
             var followingCount = _context.Followers.Count(f => f.IdFollower == idUser);
+            var postsCount = _context.Posts.Count(p => p.IdUser == idUser);
 
             return new SingleUserDto
             {
@@ -61,6 +65,7 @@ namespace Implementation.Queries.User
                     Id = p.Id,
                     Title = p.Title,
                     DateCreated = p.CreatedAt,
+                    ImageName = p.Image.ImagePath,
                     Categories = p.PostCategories.Select(y => new CategoryDto
                     {
                         Id = y.Category.Id,
@@ -83,6 +88,7 @@ namespace Implementation.Queries.User
                 }).ToList(),
                 FollowersCount = followersCount,
                 FollowingCount = followingCount,
+                PostsCount = postsCount
             };
         }
     }

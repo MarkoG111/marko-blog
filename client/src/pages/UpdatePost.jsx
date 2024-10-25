@@ -2,6 +2,7 @@ import { Alert, Button, Checkbox, FileInput, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export default function UpdatePost() {
@@ -20,6 +21,8 @@ export default function UpdatePost() {
   const [showErrorsModal, setShowErrorsModal] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
   const [showSuccessModal, setShowSucessModal] = useState(false)
+
+  const { currentUser } = useSelector((state) => state.user)
 
   const { postId } = useParams()
 
@@ -169,7 +172,9 @@ export default function UpdatePost() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/api/Posts/${editData.id}`, {
+      const url = currentUser.id == postId ? `/api/Posts/personal/${editData.id}` : `/api/Posts/${editData.id}`
+
+      const response = await fetch(url, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,

@@ -58,5 +58,8 @@ namespace Implementation
         EFGetNotificationsQuery = 36,
 
         EFMarkAllNotificationsAsReadCommand = 37,
+        
+        EFGetFollowersQuery = 38,
+        EFGetFollowingsQuery = 39,
     }
 }

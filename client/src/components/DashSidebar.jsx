@@ -11,6 +11,8 @@ export default function DashSidebar() {
   const location = useLocation();
   const [tab, setTab] = useState('');
 
+  const [user, setUser] = useState('')
+
   const dispatch = useDispatch()
 
   const { currentUser } = useSelector(state => state.user)
@@ -23,6 +25,31 @@ export default function DashSidebar() {
       setTab(tabFromUrl);
     }
   }, [location.search]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const repsonse = await fetch(`/api/Users/${currentUser.id}`, {
+          method: "GET"
+        })
+
+        const data = await repsonse.json()
+
+        if (repsonse.ok) {
+          setUser(data)
+
+          const token = localStorage.getItem("token")
+          if (!token) {
+            throw new Error("Token not found")
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchUser()
+  }, [currentUser.id])
 
   const handleSignout = async () => {
     try {
@@ -69,33 +96,33 @@ export default function DashSidebar() {
           )}
 
           {currentUser.roleName === 'Author' && (
-            <Link to='/'>
-              <Sidebar.Item active={tab === ''} as='div'>
+            <Link to='/dashboard?tab=userPosts'>
+              <Sidebar.Item active={tab === 'userPosts'} as='div'>
                 <div className='flex justify-between'>
                   <span>My Posts</span>
-                  <span className="w-8 h-8 pt-2 text-center rounded-full dark:bg-teal-500 bg-gray-500 text-white text-xs font-bold">5</span>
+                  <span className="w-8 h-7 pt-1 text-center rounded-full dark:bg-cyan-600 bg-gray-600 text-white text-sm font-bold">{user.postsCount}</span>
                 </div>
               </Sidebar.Item>
             </Link>
           )}
 
           {currentUser.roleName === 'Author' && (
-            <Link to='/'>
-              <Sidebar.Item active={tab === ''} as='div'>
+            <Link to={'/dashboard?tab=followers'}>
+              <Sidebar.Item active={tab === 'followers'} as='div'>
                 <div className='flex justify-between'>
                   <span>Followers</span>
-                  <span className="w-8 h-8 pt-2 text-center rounded-full dark:bg-teal-500 bg-gray-500 text-white text-xs font-bold">1</span>
+                  <span className="w-8 h-7 pt-1 text-center rounded-full dark:bg-cyan-600 bg-gray-600 text-white text-sm font-bold">{user.followersCount}</span>
                 </div>
               </Sidebar.Item>
             </Link>
           )}
 
           {currentUser.roleName === 'Author' && (
-            <Link to='/'>
-              <Sidebar.Item active={tab === ''} as='div'>
+            <Link to={'/dashboard?tab=following'}>
+              <Sidebar.Item active={tab === 'following'} as='div'>
                 <div className='flex justify-between'>
                   <span>Following Users</span>
-                  <span className="w-8 h-8 pt-2 text-center rounded-full dark:bg-teal-500 bg-gray-500 text-white text-xs font-bold">12</span>
+                  <span className="w-8 h-7 pt-1 text-center rounded-full dark:bg-cyan-600 bg-gray-600 text-white text-sm font-bold">{user.followingCount}</span>
                 </div>
               </Sidebar.Item>
             </Link>

@@ -45,6 +45,9 @@ export default function UserPage() {
     }
 
     fetchUser()
+
+    console.log(user)
+    
   }, [id])
 
   const handleFollow = async (idFollowing) => {

@@ -44,5 +44,19 @@ namespace API.Controllers
             var isFollowing = _executor.ExecuteQuery(query, id);
             return Ok(new { isFollowing });
         }
+
+        [HttpGet("{id}/followers")]
+        public IActionResult GetFollowers(int id, [FromServices] IGetFollowersQuery query)
+        {
+            var followers = _executor.ExecuteQuery(query, id);
+            return Ok(followers);
+        }
+
+        [HttpGet("{id}/following")]
+        public IActionResult GetFollowing(int id, [FromServices] IGetFollowingQuery query)
+        {
+            var following = _executor.ExecuteQuery(query, id);
+            return Ok(following);
+        }
     }
 }

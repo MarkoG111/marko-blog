@@ -58,8 +58,23 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpPut("personal/{id}", Name = "UpdatePersonalPost")]
+        public IActionResult UpdatePersonalPost(int id, [FromBody] UpdatePostDto dto, [FromServices] IUpdatePersonalPostCommand command)
+        {
+            dto.Id = id;
+            _executor.ExecuteCommand(command, dto);
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id, [FromServices] IDeletePostCommand command)
+        {
+            _executor.ExecuteCommand(command, id);
+            return NoContent();
+        }
+
+        [HttpDelete("personal/{id}", Name = "DeletePersonalPost")]
+        public IActionResult DeletePersonalPost(int id, [FromServices] IDeletePersonalPostCommand command)
         {
             _executor.ExecuteCommand(command, id);
             return NoContent();

@@ -116,6 +116,9 @@ namespace API.Core
 
             services.AddTransient<IGetNotificationsQuery, EFGetNotificationsQuery>();
 
+            services.AddTransient<IGetFollowersQuery, EFGetFollowersQuery>();
+            services.AddTransient<IGetFollowingQuery, EFGetFollowingsQuery>();
+
             // Validators
             services.AddTransient<RegisterUserValidator>();
 

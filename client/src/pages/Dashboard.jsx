@@ -8,6 +8,8 @@ import RequestAuthorForm from '../components/RequestAuthorForm';
 import DashAuthorRequests from '../components/DashAuthorRequests';
 import AdminDashboard from '../components/AdminDashboard';
 import DashComments from '../components/DashComments';
+import FollowList from '../components/FollowList';
+import UserDashPosts from '../components/UserDashPosts';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -36,6 +38,9 @@ export default function Dashboard() {
       {tab == 'posts' && <DashPosts />}
       {tab == 'authorRequests' && <DashAuthorRequests />}
       {tab == 'requestAuthorForm' && <RequestAuthorForm />}
+      {tab == 'userPosts' && <UserDashPosts />}
+      {tab == 'followers' && <FollowList isFollowersTab={true} />}
+      {tab == 'following' && <FollowList isFollowersTab={false} />}
     </div>
   )
 }

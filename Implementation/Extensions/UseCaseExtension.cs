@@ -53,6 +53,9 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetNotificationsQuery });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowersQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowingsQuery });
             }
 
             else if (user.IdRole == (int)RoleEnum.Author)
@@ -85,6 +88,9 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetNotificationsQuery });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowersQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowingsQuery });
             }
 
             else if (user.IdRole == (int)RoleEnum.User)
@@ -117,6 +123,9 @@ namespace Implementation
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetNotificationsQuery });
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand });
+
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowersQuery });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowingsQuery });
             }
 
             user.UserUseCases = list;
