@@ -8,6 +8,7 @@ using Application.Queries.Notification;
 using Application.Searches;
 using EFDataAccess;
 using Microsoft.EntityFrameworkCore;
+using Domain;
 
 namespace Implementation.Queries.Notification
 {
@@ -30,6 +31,11 @@ namespace Implementation.Queries.Notification
             if (search.IdUser.HasValue)
             {
                 notifications = notifications.Where(x => x.IdUser == search.IdUser.Value);
+            }
+
+            if (search.Type.HasValue)
+            {
+                notifications = notifications.Where(x => x.Type == (NotificationType)search.Type.Value);
             }
 
             var skipCount = search.PerPage * (search.Page - 1);

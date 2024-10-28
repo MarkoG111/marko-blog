@@ -150,6 +150,9 @@ nav ul li a {
   font-size: 14px !important;
 }
 
+.notifications-container {
+  max-height: 90vh;
+}
 
 @media (min-width: 1024px) {
   .table-container-scrollbar {
