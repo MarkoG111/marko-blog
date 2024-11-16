@@ -1,129 +1,38 @@
-import { useEffect, useState } from "react"
-import * as signalR from '@microsoft/signalr'
-import { useDispatch, useSelector } from "react-redux";
-import { setUnreadCount } from "../redux/notificationsSlice";
+import { useContext, useEffect, useState } from "react"
+import { NotificationsContext } from "../contexts/NotificationsContext"
+import { timeAgo, hoverActualDate } from "../utils/timeAgo"
 
 export default function Notifications() {
-  const [notifications, setNotifications] = useState([])
-  const [hasNewNotifications, setHasNewNotifications] = useState(false)
-  const [page, setPage] = useState(1)
-  const [pageCount, setPageCount] = useState(0)
-  const [fetching, setFetching] = useState(false)
   const [type, setType] = useState(null)
+  const [firstLoad, setFirstLoad] = useState(true)
 
-  const dispatch = useDispatch()
-  const { currentUser } = useSelector((state) => state.user)
-
-  const calculatePerPage = () => {
-    const notificationHeight = 80
-    const screenHeight = window.innerHeight
-    return Math.ceil(screenHeight / notificationHeight) * 2
-  }
-
-  const fetchNotifications = async (pageNumber, type) => {
-    try {
-      setFetching(true)
-
-      const token = localStorage.getItem("token")
-      if (!token) {
-        throw new Error("Token not found")
-      }
-
-      const dynamicPerPage = calculatePerPage()
-
-      const url = new URL(`/api/Notifications`, window.location.origin)
-      url.searchParams.append("page", pageNumber)
-      url.searchParams.append("perPage", dynamicPerPage)
-
-      if (type != null) {
-        url.searchParams.append("type", type)
-      }
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
-        params: {
-          idUser: currentUser.id
-        }
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setNotifications((prev) => [...prev, ...data.items])
-
-        const unreadCount = data.items.filter((n) => !n.isRead).length
-        setHasNewNotifications(unreadCount > 0)
-        dispatch(setUnreadCount(unreadCount))
-        setPageCount(data.pageCount)
-      }
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setFetching(false)
-    }
-  }
-
-  const handleScroll = () => {
-    const scrollPosition = window.innerHeight + document.documentElement.scrollTop
-    const bottomPosition = document.documentElement.offsetHeight - 50
-
-    if (scrollPosition >= bottomPosition && page < pageCount && !fetching) {
-      setPage((prevPage) => prevPage + 1)
-    }
-  }
+  const { notifications, setNotifications, hasNewNotifications } = useContext(NotificationsContext)
 
   const handleTypeChange = (newType) => {
     setType(newType)
-    setPage(1)
-    setNotifications([])
   }
 
   useEffect(() => {
-    fetchNotifications(1, type)
-  }, [type]);
+    if (hasNewNotifications) {
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) => ({ ...notification, isNew: true })))
+    }
+  }, [hasNewNotifications, setNotifications])
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
+    if (firstLoad) {
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) => ({ ...notification, isNew: true }))
+      )
+      setFirstLoad(false)
+    } else {
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) => ({ ...notification, isNew: false }))
+      )
     }
-  }, [fetching, page, pageCount])
+  }, [firstLoad, setNotifications])
 
-  useEffect(() => {
-    const connection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5173/notificationsHub")
-      .withAutomaticReconnect()
-      .build()
-
-    connection.start()
-      .then(() => {
-        console.log('connected')
-
-        connection.on("ReceiveNotification", (notification) => {
-          console.log('Received notification:', notification);
-          setNotifications((prevNotification) => [notification, ...prevNotification])
-          setHasNewNotifications(true)
-          dispatch(setUnreadCount((prevCount) => prevCount + 1))
-        })
-
-        connection.on("NotificationsMarkedAsRead", () => {
-          setNotifications((prev) => prev.map((notification) => ({ ...notification, isRead: true })))
-          setHasNewNotifications(false)
-          dispatch(setUnreadCount(0))
-        })
-      })
-      .catch(error => console.error('Connection failed ', error))
-
-    return () => {
-      connection.stop()
-    }
-
-  }, [dispatch])
-
-  console.log(notifications)
+  const sortedNotifications = [...notifications].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-800 px-96">
@@ -140,12 +49,16 @@ export default function Notifications() {
       {/* Notifications container without overflow control */}
       <div className="notifications-container flex-1 h-full pr-6 pl-6 bg-white dark:bg-gray-800 overflow-y-auto">
         <div className="space-y-4 mt-4">
-          {notifications.map((notification) => (
-            <div key={notification.id} className={`p-4 border-b border-gray-300 dark:border-gray-400 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${notification.isRead ? "" : "border-blue-500"}`}>
-              <p className="text-gray-700 dark:text-white">{notification.content}</p>
-              <p className="text-sm text-gray-500">{new Date(notification.createdAt).toLocaleString()}</p>
-            </div>
-          ))}
+          {notifications.length == 0 ? (
+            <p>Loading notifications...</p>
+          ) : (
+            sortedNotifications.filter(notification => type ? notification.type === type : true).map((notification, index) => (
+              <div key={notification.id || index} className={`p-4 border-b rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${notification.isRead ? "border-gray-300 dark:border-gray-400" : "border-blue-500 dark:border-blue-500"} ${notification.isNew ? "border-blue-500 dark:border-blue-500" : ""}`}>
+                <p className="text-gray-700 dark:text-white">{notification.content}</p>
+                <p className="text-sm text-gray-500" title={hoverActualDate(notification.createdAt)}>{timeAgo(notification.createdAt)}</p>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

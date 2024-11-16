@@ -72,7 +72,7 @@ export default function Header() {
           <Link to='/notifications'>
             <Button className='w-10 md:w-12 h-10 mt-6 md:mt-2 rounded-full' color='gray' onClick={handleNotificationsClick}>
               <FaRegBell />
-              {notifications.length > 0 && hasNewNotifications && (
+              {hasNewNotifications && (
                 <span className='absolute bottom-5 left-6 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full'>{unreadNotificationCount}</span>
               )}
             </Button>

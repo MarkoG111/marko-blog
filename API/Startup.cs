@@ -9,6 +9,7 @@ using Implementation.Commands.Email;
 
 using Newtonsoft.Json;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.SignalR;
 
 namespace API
 {
@@ -28,7 +29,7 @@ namespace API
 
             services.AddControllers();
 
-            services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
             services.AddTransient<BlogContext>();
 
@@ -40,6 +41,8 @@ namespace API
             services.AddApplicationActor();
 
             services.AddJWT(appSettings);
+
+            services.AddSignalR();
 
             services.AddSwaggerGen(c =>
             {
@@ -91,10 +94,10 @@ namespace API
             // Dodaje middleware koji omogućava serveru da poslužuje statičke datoteke, poput HTML, CSS, JavaScript i slika.
             app.UseStaticFiles();
 
-            // Dodaje middleware za autorizaciju, koji omogućava aplikaciji da proveri da li korisnik ima odgovarajuće dozvole za pristup određenom resursu.
-            app.UseAuthorization();
             // Dodaje middleware za autentifikaciju, koji omogućava aplikaciji da autentifikuje korisnike na osnovu pristiglih kredencijala ili tokena.
             app.UseAuthentication();
+            // Dodaje middleware za autorizaciju, koji omogućava aplikaciji da proveri da li korisnik ima odgovarajuće dozvole za pristup određenom resursu.
+            app.UseAuthorization();
 
             app.UseDefaultFiles();
             app.UseStaticFiles();

@@ -191,6 +191,20 @@ namespace API.Core
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
+
+                cfg.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        // If SignalR is passed the token via query string, capture it
+                        var accessToken = context.Request.Query["access_token"];
+                        if (!string.IsNullOrEmpty(accessToken))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
         }
     }

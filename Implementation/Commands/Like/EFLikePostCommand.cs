@@ -74,7 +74,7 @@ namespace Implementation.Commands.Like
             _context.Notifications.Add(notification);
             _context.SaveChanges();
 
-            _notificationService.SendNotificationToUser(post.IdUser, $"{_actor.Identity} liked your post.");
+            _notificationService.SendNotificationToUser(post.IdUser, notification);
         }
 
     }

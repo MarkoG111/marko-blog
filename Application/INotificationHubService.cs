@@ -7,7 +7,7 @@ namespace Application
 {
     public interface INotificationHubService
     {
-        Task SendNotificationToUser(int idUser, string message);
+        Task SendNotificationToUser(int idUser, object notification);
         Task BroadcastMessage(string message);
     }
 }

@@ -46,7 +46,7 @@ namespace Implementation.Queries.Notification
                 ItemsPerPage = search.PerPage,
                 TotalCount = notifications.Count(),
 
-                Items = notifications.Skip(skipCount).Take(search.PerPage).Select(x => new GetNotificationDto
+                Items = notifications.Select(x => new GetNotificationDto
                 {
                     Id = x.Id,
                     Type = x.Type,
