@@ -1,10 +1,9 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { NotificationsContext } from "../contexts/NotificationsContext"
 import { timeAgo, hoverActualDate } from "../utils/timeAgo"
 
 export default function Notifications() {
   const [type, setType] = useState(null)
-  const [firstLoad, setFirstLoad] = useState(true)
 
   const { notifications, setNotifications, hasNewNotifications } = useContext(NotificationsContext)
 
@@ -15,24 +14,16 @@ export default function Notifications() {
   useEffect(() => {
     if (hasNewNotifications) {
       setNotifications((prevNotifications) =>
-        prevNotifications.map((notification) => ({ ...notification, isNew: true })))
+        prevNotifications.map((notification) =>
+          notification.isNew === undefined ? { ...notification, isNew: true } : notification
+        )
+      )
     }
   }, [hasNewNotifications, setNotifications])
 
-  useEffect(() => {
-    if (firstLoad) {
-      setNotifications((prevNotifications) =>
-        prevNotifications.map((notification) => ({ ...notification, isNew: true }))
-      )
-      setFirstLoad(false)
-    } else {
-      setNotifications((prevNotifications) =>
-        prevNotifications.map((notification) => ({ ...notification, isNew: false }))
-      )
-    }
-  }, [firstLoad, setNotifications])
+  const sortedNotifications = useMemo(() => [...notifications].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)), [notifications])
 
-  const sortedNotifications = [...notifications].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  const filteredNotifications = type ? sortedNotifications.filter((notification) => notification.type === type) : sortedNotifications;
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-800 px-96">
@@ -49,11 +40,17 @@ export default function Notifications() {
       {/* Notifications container without overflow control */}
       <div className="notifications-container flex-1 h-full pr-6 pl-6 bg-white dark:bg-gray-800 overflow-y-auto">
         <div className="space-y-4 mt-4">
-          {notifications.length == 0 ? (
-            <p>Loading notifications...</p>
+          {filteredNotifications.length == 0 ? (
+            <p>No notifications...</p>
           ) : (
-            sortedNotifications.filter(notification => type ? notification.type === type : true).map((notification, index) => (
-              <div key={notification.id || index} className={`p-4 border-b rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 ${notification.isRead ? "border-gray-300 dark:border-gray-400" : "border-blue-500 dark:border-blue-500"} ${notification.isNew ? "border-blue-500 dark:border-blue-500" : ""}`}>
+            filteredNotifications.map((notification) => (
+              <div key={notification.id}
+                className={`
+                  p-4 border-b rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 
+                  ${notification.isRead ? "border-gray-300 dark:border-gray-400" : "border-blue-500 dark:border-blue-500"} 
+                  ${notification.isNew ? "border-blue-500 dark:border-blue-500" : ""}`
+                }
+              >
                 <p className="text-gray-700 dark:text-white">{notification.content}</p>
                 <p className="text-sm text-gray-500" title={hoverActualDate(notification.createdAt)}>{timeAgo(notification.createdAt)}</p>
               </div>

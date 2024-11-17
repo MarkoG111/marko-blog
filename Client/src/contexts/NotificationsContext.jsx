@@ -5,6 +5,7 @@ import * as signalR from '@microsoft/signalr'
 
 export const NotificationsContext = createContext()
 
+/* eslint-disable react/prop-types */
 export const NotificationsProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([])
   const [hasNewNotifications, setHasNewNotifications] = useState(false)
@@ -56,9 +57,9 @@ export const NotificationsProvider = ({ children }) => {
 
   useEffect(() => {
     const startSignalRConnection = async () => {
-      // Check if the connection already exists and is connected
-      if (connection.current && connection.current.state === "Connected") {
-        return // Avoid creating multiple connections
+      if (connection.current) {
+        await connection.current.stop()
+        connection.current = null
       }
 
       try {
@@ -67,7 +68,7 @@ export const NotificationsProvider = ({ children }) => {
           throw new Error("Token not found")
         }
 
-        connection.current = new signalR.HubConnectionBuilder()
+        const hubConnection = new signalR.HubConnectionBuilder()
           .withUrl("/notificationsHub", {
             accessTokenFactory: () => token,
           })
@@ -75,51 +76,39 @@ export const NotificationsProvider = ({ children }) => {
           .withAutomaticReconnect([0, 2000, 10000, 30000])
           .build()
 
-        connection.current.onreconnecting(error => {
+        hubConnection.onreconnecting(error => {
           console.log("Reconnecting due to error:", error)
         })
 
-        connection.current.onreconnected(connectionId => {
+        hubConnection.onreconnected(connectionId => {
           console.log("Reconnected. New connection ID:", connectionId)
         })
 
-        connection.current.on("ReceiveNotification", notification => {
+        hubConnection.on("ReceiveNotification", (notification) => {
           console.log("Notification received:", notification);
-          dispatch(setUnreadCount(prevCount => prevCount + 1))
-          setNotifications(prev => [{ ...notification }, ...prev]);
-
-          setHasNewNotifications(true)
+          setNotifications((prev) => [notification, ...prev]);
+          updateUnreadCount([...notifications, notification]); // Ensure count updates
         })
 
-        connection.current.on("NotificationsMarkedAsRead", () => {
-          setNotifications(prev =>
-            prev.map(notification => ({ ...notification, isRead: true }))
-          )
-          dispatch(setUnreadCount(0))
-        })
+        await hubConnection.start()
+        console.log("SignalR connected")
 
-        await connection.current.start()
-        console.log("SignalR connected globally")
+        await hubConnection.invoke("JoinGroup", currentUser.id.toString())
 
-        connection.current.invoke("JoinGroup", currentUser.id.toString())
-          .catch(err => {
-            console.error("Error joining group:", err);
-            console.error(err.stack);
-          });
+        connection.current = hubConnection
       } catch (error) {
         console.error("Connection failed", error)
       }
     }
 
-    if (currentUser?.roleName === 'Author' && connection.current == null) {
+    if (currentUser?.roleName === 'Author' && currentUser?.id) {
       startSignalRConnection()
     }
 
     return () => {
       connection.current?.stop() // Clean up the connection on unmount
-      connection.current = null
     }
-  }, [currentUser, dispatch])
+  }, [currentUser, updateUnreadCount])
 
 
   const markAllAsRead = async () => {

@@ -58,6 +58,8 @@ namespace Implementation.Commands.Post
 
             var followers = _context.Followers.Where(f => f.IdFollowing == post.IdUser).Select(f => f.IdFollower).ToList();
 
+            var notifications = new List<Domain.Notification>();
+
             foreach (var idFollower in followers)
             {
                 var notification = new Domain.Notification
@@ -69,11 +71,16 @@ namespace Implementation.Commands.Post
                     IsRead = false
                 };
 
-                _context.Notifications.Add(notification);
-                _notificationService.SendNotificationToUser(idFollower, $"{_actor.Identity} has published a new post: {post.Title}");
+                notifications.Add(notification);
             }
 
+            _context.Notifications.AddRange(notifications);
             _context.SaveChanges();
+
+            foreach (var notification in notifications) 
+            {
+                _notificationService.SendNotificationToUser(notification.IdUser, notification);
+            }
         }
     }
 }

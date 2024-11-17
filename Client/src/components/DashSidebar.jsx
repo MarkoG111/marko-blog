@@ -121,7 +121,7 @@ export default function DashSidebar() {
             <Link to={'/dashboard?tab=following'}>
               <Sidebar.Item active={tab === 'following'} as='div'>
                 <div className='flex justify-between'>
-                  <span>Following Users</span>
+                  <span>Following</span>
                   <span className="w-8 h-7 pt-1 text-center rounded-full dark:bg-cyan-600 bg-gray-600 text-white text-sm font-bold">{user.followingCount}</span>
                 </div>
               </Sidebar.Item>

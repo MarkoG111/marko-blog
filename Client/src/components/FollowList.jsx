@@ -49,7 +49,7 @@ export default function FollowList({ isFollowersTab }) {
   return (
     <div className='mx-auto'>
       <h1 className='mb-4 font-bold text-xl text-center my-7'>
-        {isFollowersTab ? 'Followers' : 'Following Users'}
+        {isFollowersTab ? 'Followers' : 'Following'}
       </h1>
 
       {listUsers.length > 0 ? (
