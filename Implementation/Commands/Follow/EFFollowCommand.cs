@@ -6,6 +6,8 @@ using Application;
 using Application.Commands.Follow;
 using Application.DataTransfer;
 using EFDataAccess;
+using Domain;
+using Application;
 
 namespace Implementation.Commands.Follow
 {
@@ -13,11 +15,13 @@ namespace Implementation.Commands.Follow
     {
         private readonly BlogContext _context;
         private readonly IApplicationActor _actor;
+        private readonly INotificationHubService _notificationService;
 
-        public EFFollowCommand(BlogContext context, IApplicationActor actor)
+        public EFFollowCommand(BlogContext context, IApplicationActor actor, INotificationHubService notificationService)
         {
             _context = context;
             _actor = actor;
+            _notificationService = notificationService;
         }
 
         public int Id => (int)UseCaseEnum.EFFollowCommand;
@@ -34,8 +38,21 @@ namespace Implementation.Commands.Follow
                 FollowedAt = DateTime.Now
             };
 
+            var notification = new Domain.Notification
+            {
+                IdUser = request.IdFollowing,
+                FromIdUser = _actor.Id,
+                Type = NotificationType.Like,
+                Content = $"{_actor.Identity} started following you.",
+                IsRead = false
+            };
+
             _context.Followers.Add(follow);
+            _context.Notifications.Add(notification);
+
             _context.SaveChanges();
+
+            _notificationService.SendNotificationToUser(request.IdFollowing, notification);
         }
 
     }

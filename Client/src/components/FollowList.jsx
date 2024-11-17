@@ -1,12 +1,12 @@
-import { Pagination } from "flowbite-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
+/* eslint-disable react/prop-types */
 export default function FollowList({ isFollowersTab }) {
-  const [listUsers, setList] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageCount, setPageCount] = useState(1);
+  const [listUsers, setList] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageCount, setPageCount] = useState(1)
 
   const { currentUser } = useSelector((state) => state.user)
 
@@ -23,7 +23,7 @@ export default function FollowList({ isFollowersTab }) {
           perPage: 3,
         });
 
-        const url = isFollowersTab ? `/api/Followers/${currentUser.id}/followers?${queryParams}` : `/api/Followers/${currentUser.id}/following?${queryParams}`;
+        const url = isFollowersTab ? `/api/Followers/${currentUser.id}/followers?${queryParams}` : `/api/Followers/${currentUser.id}/following?${queryParams}`
 
         const response = await fetch(url, {
           method: "GET",
@@ -34,8 +34,8 @@ export default function FollowList({ isFollowersTab }) {
 
         if (response.ok) {
           const data = await response.json()
-          setList(data.items);
-          setPageCount(data.pageCount);
+          setList(data.items)
+          setPageCount(data.pageCount)
         }
       } catch (error) {
         console.error("Error fetching followers:", error);
@@ -43,7 +43,6 @@ export default function FollowList({ isFollowersTab }) {
     }
 
     fetchList()
-
   }, [isFollowersTab, currentPage])
 
   return (

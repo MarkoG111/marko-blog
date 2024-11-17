@@ -2,7 +2,7 @@ import { Select, TextInput, Pagination } from "flowbite-react"
 import { useEffect, useState } from "react"
 import PostCard from "../components/PostCard"
 import MultiSelectDropdown from "../components/MultiSelectDropdown"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
 export default function PostsPage() {
   const [posts, setPosts] = useState([])
