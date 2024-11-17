@@ -5,23 +5,21 @@ import MultiSelectDropdown from "../components/MultiSelectDropdown"
 import { useLocation, useNavigate } from "react-router-dom"
 
 export default function PostsPage() {
-  const [posts, setPosts] = useState({})
+  const [posts, setPosts] = useState([])
   const [categories, setCategories] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [sortOrder, setSortOrder] = useState('desc')
   const [selectedCategories, setSelectedCategories] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
-  const [initialLoad, setInitialLoad] = useState(true)
 
   const location = useLocation()
-  const navigate = useNavigate()
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search)
-    const seearch = queryParams.get('search') || ''
+    const search = queryParams.get('search') || '';
 
-    setSearchTerm(seearch)
+    setSearchTerm(search)
     setCurrentPage(1)
   }, [location.search])
 
@@ -50,17 +48,16 @@ export default function PostsPage() {
         if (response.ok) {
           setPosts(data.items)
           setPageCount(data.pageCount)
-
-          if (initialLoad) {
-            setInitialLoad(false)
-            navigate('/posts', { replace: true })
-          }
         }
       } catch (error) {
         console.log(error)
       }
     }
 
+    fetchPosts()
+  }, [currentPage, searchTerm, sortOrder, selectedCategories])
+
+  useEffect(() => {
     const fetchPostCategories = async () => {
       try {
         const response = await fetch(`/api/Categories`, {
@@ -76,9 +73,8 @@ export default function PostsPage() {
       }
     }
 
-    fetchPosts()
     fetchPostCategories()
-  }, [currentPage, searchTerm, sortOrder, selectedCategories])
+  }, [])
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value)
@@ -92,9 +88,14 @@ export default function PostsPage() {
 
   const handleCategoryChange = (selectedCategories) => {
     setSelectedCategories(selectedCategories)
+    setCurrentPage(1)
   }
 
-  const onPageChange = (page) => setCurrentPage(page)
+  const onPageChange = (page) => {
+    if (page > 0 && page <= pageCount) {
+      setCurrentPage(page)
+    }
+  }
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -102,12 +103,12 @@ export default function PostsPage() {
         <form className="flex flex-col gap-8">
           <div className="flex items-center gap-2">
             <label className="whitespace-nowrap font-semibold">Search Term:</label>
-            <TextInput placeholder="Search..." id="searchTerm" type="text" onChange={handleSearchChange} className="w-1/2" />
+            <TextInput placeholder="Search..." id="searchTerm" type="text" onChange={handleSearchChange} className="w-1/2" value={searchTerm} />
           </div>
 
           <div className="flex items-center gap-2">
             <label className="font-semibold">Sort:</label>
-            <Select id="sort" onChange={handleSortChange} className="w-1/3">
+            <Select id="sort" onChange={handleSortChange} className="w-1/3" value={sortOrder}>
               <option value='desc'>Latest</option>
               <option value='asc'>Oldest</option>
             </Select>
