@@ -35,13 +35,12 @@ namespace Implementation.Commands.AuthorRequest
 
             request.IdUser = _actor.Id;
 
-            var existingRequest = _context.AuthorRequests.FirstOrDefault(ar => ar.IdUser == _actor.Id && ar.Status == RequestStatus.Pending);
+            var existingRequest = _context.AuthorRequests.FirstOrDefault(ar => ar.IdUser == _actor.Id);
 
             if (existingRequest != null)
             {
                 throw new AlreadyAddedException(_actor);
             }
-
 
             var authorRequest = new Domain.AuthorRequest
             {
