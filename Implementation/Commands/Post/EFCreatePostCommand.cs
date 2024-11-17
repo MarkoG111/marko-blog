@@ -19,7 +19,6 @@ namespace Implementation.Commands.Post
         private readonly CreatePostValidator _validator;
         private readonly INotificationHubService _notificationService;
 
-
         public EFCreatePostCommand(CreatePostValidator validator, IApplicationActor actor, BlogContext context, INotificationHubService notificationService)
         {
             _validator = validator;
