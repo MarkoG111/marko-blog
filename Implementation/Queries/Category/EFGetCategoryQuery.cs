@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.DataTransfer;
 using Application.Exceptions;
 using Application.Queries.Category;
+using Application.Searches;
 using EFDataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +24,7 @@ namespace Implementation.Queries.Category
 
         public string Name => UseCaseEnum.EFGetOneCategoryQuery.ToString();
 
-        public CategoryDto Execute(int search)
+        public CategoryDto Execute(CategorySearch search)
         {
             var category = _context.Categories
                          .Include(x => x.CategoryPosts)
@@ -33,32 +34,41 @@ namespace Implementation.Queries.Category
                          .Include(x => x.CategoryPosts)
                          .ThenInclude(x => x.Post)
                          .ThenInclude(x => x.User)
-                         .FirstOrDefault(x => x.Id == search);
+                         .FirstOrDefault(x => x.Id == search.Id);
 
             if (category == null)
             {
-                throw new EntityNotFoundException(search, typeof(Domain.Category));
+                throw new EntityNotFoundException(search.Id, typeof(Domain.Category));
             }
+
+            var postsQuery = category.CategoryPosts.Select(x => x.Post).AsQueryable();
+
+            var totalPosts = postsQuery.Count();
+
+            var paginatedPosts = postsQuery.Skip((search.Page - 1) * search.PerPage).Take(search.PerPage).Select(post => new GetPostDto
+            {
+                Id = post.Id,
+                Title = post.Title,
+                Content = post.Content,
+                DateCreated = post.CreatedAt,
+                FirstName = post.User.FirstName,
+                LastName = post.User.LastName,
+                ProfilePicture = post.User.ProfilePicture,
+                Categories = post.PostCategories.Select(y => new CategoryDto
+                {
+                    Id = y.Category.Id,
+                    Name = y.Category.Name
+                }).ToList()
+            }).ToList();
 
             return new CategoryDto
             {
                 Id = category.Id,
                 Name = category.Name,
-                Posts = category.CategoryPosts.Select(x => new GetPostDto
-                {
-                    Id = x.Post.Id,
-                    Title = x.Post.Title,
-                    Content = x.Post.Content,
-                    DateCreated = x.Post.CreatedAt,
-                    FirstName = x.Post.User.FirstName,
-                    LastName = x.Post.User.LastName,
-                    ProfilePicture = x.Post.User.ProfilePicture,
-                    Categories = x.Post.PostCategories.Select(y => new CategoryDto
-                    {
-                        Id = y.Category.Id,
-                        Name = y.Category.Name
-                    }).ToList()
-                }).ToList()
+                Posts = paginatedPosts,
+                TotalCount = totalPosts,
+                ItemsPerPage = search.PerPage,
+                CurrentPage = search.Page
             };
         }
     }

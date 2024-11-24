@@ -27,9 +27,10 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetCategory")]
-        public IActionResult Get(int id, [FromServices] IGetCategoryQuery query)
+        public IActionResult Get(int id, [FromServices] IGetCategoryQuery query, [FromQuery] CategorySearch search)
         {
-            return Ok(_executor.ExecuteQuery(query, id));
+            search.Id = id;
+            return Ok(_executor.ExecuteQuery(query, search));
         }
 
         [HttpPost]

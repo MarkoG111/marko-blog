@@ -1,20 +1,30 @@
+import { Pagination } from "flowbite-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
 export default function CategoryPage() {
   const { id } = useParams()
+  
   const [category, setCategory] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageCount, setPageCount] = useState(1)
 
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const response = await fetch(`/api/Categories/${id}`, {
+        const queryParams = new URLSearchParams({
+          page: currentPage,
+          perPage: 3
+        })
+
+        const response = await fetch(`/api/Categories/${id}?${queryParams}`, {
           method: "GET"
         })
 
         if (response.ok) {
           const data = await response.json()
           setCategory(data)
+          setPageCount(data.pageCount)
         }
       } catch (error) {
         console.log(error)
@@ -22,7 +32,7 @@ export default function CategoryPage() {
     }
 
     fetchCategory()
-  }, [id])
+  }, [id, currentPage])
 
   return (
     <main className="max-w-6xl mx-auto min-h-screen p-3">
@@ -58,6 +68,14 @@ export default function CategoryPage() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="flex justify-center my-12">
+            <Pagination
+              currentPage={currentPage}
+              onPageChange={(page) => setCurrentPage(page)}
+              totalPages={pageCount}
+              className="text-l"
+            />
           </div>
         </div>
       ) :
