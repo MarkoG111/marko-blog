@@ -52,6 +52,7 @@ namespace Implementation.Queries.Notification
                     Type = x.Type,
                     Content = x.Content,
                     IsRead = x.IsRead,
+                    Link = x.Link,
                     CreatedAt = x.CreatedAt,
                 }).ToList()
             };

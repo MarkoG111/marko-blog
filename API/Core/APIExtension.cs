@@ -21,6 +21,7 @@ using Application.Queries.Comment;
 using Application.Queries.AuthorRequest;
 using Application.Queries.Follow;
 using Application.Queries.Notification;
+using Application.Services;
 
 using Implementation.Validators.Post;
 using Implementation.Validators.Category;
@@ -46,6 +47,7 @@ using Implementation.Queries.User;
 using Implementation.Queries.AuthorRequest;
 using Implementation.Queries.Follow;
 using Implementation.Queries.Notification;
+using Implementation.Services;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -60,6 +62,8 @@ namespace API.Core
             services.AddTransient<UseCaseExecutor>();
 
             services.AddTransient<INotificationHubService, SignalRNotificationHub>();
+
+            services.AddTransient<INotificationService, NotificationService>();
 
             // Commands
             services.AddTransient<IRegisterUserCommand, EFRegisterUserCommand>();

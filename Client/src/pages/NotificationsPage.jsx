@@ -1,11 +1,14 @@
 import { useContext, useEffect, useMemo, useState } from "react"
 import { NotificationsContext } from "../contexts/NotificationsContext"
 import { timeAgo, hoverActualDate } from "../utils/timeAgo"
+import { useNavigate } from "react-router"
 
 export default function Notifications() {
   const [type, setType] = useState(null)
 
   const { notifications, setNotifications, hasNewNotifications } = useContext(NotificationsContext)
+
+  let navigate = useNavigate()
 
   const handleTypeChange = (newType) => {
     setType(newType)
@@ -15,7 +18,9 @@ export default function Notifications() {
     if (hasNewNotifications) {
       setNotifications((prevNotifications) =>
         prevNotifications.map((notification) =>
-          notification.isNew === undefined ? { ...notification, isNew: true } : notification
+          !notification.isRead && notification.isNew !== true
+            ? { ...notification, isNew: true }
+            : notification
         )
       )
     }
@@ -23,7 +28,21 @@ export default function Notifications() {
 
   const sortedNotifications = useMemo(() => [...notifications].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)), [notifications])
 
-  const filteredNotifications = type ? sortedNotifications.filter((notification) => notification.type === type) : sortedNotifications;
+  const filteredNotifications = type ? sortedNotifications.filter((notification) => notification.type === type) : sortedNotifications
+
+  const handleNotificationClick = async (notification) => {
+    if (!notification.isRead) {
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((n) =>
+          n.id === notification.id ? { ...n, isRead: true } : n
+        )
+      )
+    }
+
+    if (notification.link) {
+      navigate(notification.link)
+    }
+  }
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-800 px-96">
@@ -45,11 +64,10 @@ export default function Notifications() {
           ) : (
             filteredNotifications.map((notification) => (
               <div key={notification.id}
-                className={`
-                  p-4 border-b rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 
-                  ${notification.isRead ? "border-gray-300 dark:border-gray-400" : "border-blue-500 dark:border-blue-500"} 
-                  ${notification.isNew ? "border-blue-500 dark:border-blue-500" : ""}`
-                }
+                className={`p-4 border-b rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700
+                ${notification.isNew ? "border-blue-500 dark:border-blue-500" : "border-gray-300 dark:border-gray-400"}
+              `}
+                onClick={() => handleNotificationClick(notification)}
               >
                 <p className="text-gray-700 dark:text-white">{notification.content}</p>
                 <p className="text-sm text-gray-500" title={hoverActualDate(notification.createdAt)}>{timeAgo(notification.createdAt)}</p>

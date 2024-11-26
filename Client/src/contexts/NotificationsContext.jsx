@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setUnreadCount } from "../redux/notificationsSlice"
+import { useLocation } from "react-router-dom"
 import * as signalR from '@microsoft/signalr'
 
 export const NotificationsContext = createContext()
@@ -9,7 +10,10 @@ export const NotificationsContext = createContext()
 export const NotificationsProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([])
   const [hasNewNotifications, setHasNewNotifications] = useState(false)
+
   const { currentUser } = useSelector((state) => state.user)
+
+  const location = useLocation()
 
   const dispatch = useDispatch()
 
@@ -110,37 +114,40 @@ export const NotificationsProvider = ({ children }) => {
     }
   }, [currentUser, updateUnreadCount])
 
-
-  const markAllAsRead = async () => {
-    try {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        throw new Error("Token not found")
+  useEffect(() => {
+    const markAllAsReadOnPageChange = async () => {
+      if (!currentUser || !currentUser.id) {
+        return
       }
 
-      const response = await fetch(`/api/Notifications/mark-all-as-read`, {
-        method: "PATCH",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        }
-      })
+      setNotifications((prevNotifications) => prevNotifications.map((notification) => ({ ...notification, isRead: true })))
 
-      if (response.ok) {
-        setNotifications((prevNotifications) => prevNotifications.map((notification) => ({ ...notification, isRead: true })))
+      try {
+        const token = localStorage.getItem("token")
+        if (!token) {
+          throw new Error("Token not found")
+        }
+
+        await fetch(`/api/Notifications/mark-all-as-read`, {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         setHasNewNotifications(false)
         dispatch(setUnreadCount(0))
-      } else {
-        throw new Error("Failed to mark notifications as read")
+      } catch (error) {
+        console.error("Failed to mark all notifications as read on page change:", error);
       }
-    } catch (error) {
-      console.log(error)
     }
-  }
+
+    markAllAsReadOnPageChange()
+  }, [location, dispatch, currentUser])
 
   return (
-    <NotificationsContext.Provider value={{ notifications, setNotifications, hasNewNotifications, markAllAsRead }}>
+    <NotificationsContext.Provider value={{ notifications, setNotifications, hasNewNotifications }}>
       {children}
     </NotificationsContext.Provider>
   )

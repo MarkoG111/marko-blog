@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application;
 using Application.Commands.Follow;
 using Application.DataTransfer;
+using Application.Services;
 using EFDataAccess;
 using Domain;
 using Application;
@@ -15,12 +16,14 @@ namespace Implementation.Commands.Follow
     {
         private readonly BlogContext _context;
         private readonly IApplicationActor _actor;
-        private readonly INotificationHubService _notificationService;
+        private readonly INotificationHubService _notificationHubService;
+        private readonly INotificationService _notificationService;
 
-        public EFFollowCommand(BlogContext context, IApplicationActor actor, INotificationHubService notificationService)
+        public EFFollowCommand(BlogContext context, IApplicationActor actor, INotificationHubService notificationHubService, INotificationService notificationService)
         {
             _context = context;
             _actor = actor;
+            _notificationHubService = notificationHubService;
             _notificationService = notificationService;
         }
 
@@ -38,22 +41,32 @@ namespace Implementation.Commands.Follow
                 FollowedAt = DateTime.Now
             };
 
-            var notification = new Domain.Notification
+            var notificationDto = new NotificationDto
             {
                 IdUser = request.IdFollowing,
                 FromIdUser = _actor.Id,
                 Type = NotificationType.Like,
                 Content = $"{_actor.Identity} started following you.",
-                IsRead = false
+                CreatedAt = DateTime.Now
             };
 
-            _context.Followers.Add(follow);
-            _context.Notifications.Add(notification);
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    _context.Followers.Add(follow);
+                    _context.SaveChanges();
 
-            _context.SaveChanges();
+                    _notificationService.CreateNotification(notificationDto);
 
-            _notificationService.SendNotificationToUser(request.IdFollowing, notification);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
         }
-
     }
 }

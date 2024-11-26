@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application;
 using Application.Commands.Post;
 using Application.DataTransfer;
+using Application.Services;
 using Domain;
 using EFDataAccess;
 using FluentValidation;
@@ -17,13 +18,15 @@ namespace Implementation.Commands.Post
         private readonly BlogContext _context;
         private readonly IApplicationActor _actor;
         private readonly CreatePostValidator _validator;
-        private readonly INotificationHubService _notificationService;
+        private readonly INotificationHubService _notificationHubService;
+        private readonly INotificationService _notificationService;
 
-        public EFCreatePostCommand(CreatePostValidator validator, IApplicationActor actor, BlogContext context, INotificationHubService notificationService)
+        public EFCreatePostCommand(CreatePostValidator validator, IApplicationActor actor, BlogContext context, INotificationHubService notificationHubService, INotificationService notificationService)
         {
             _validator = validator;
             _actor = actor;
             _context = context;
+            _notificationHubService = notificationHubService;
             _notificationService = notificationService;
         }
 
@@ -50,35 +53,39 @@ namespace Implementation.Commands.Post
                 });
             }
 
-            _context.Posts.Add(post);
-            _context.SaveChanges();
-
-            request.Id = post.Id;
-
-            var followers = _context.Followers.Where(f => f.IdFollowing == post.IdUser).Select(f => f.IdFollower).ToList();
-
-            var notifications = new List<Domain.Notification>();
-
-            foreach (var idFollower in followers)
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                var notification = new Domain.Notification
+                try
                 {
-                    IdUser = idFollower,
-                    FromIdUser = post.IdUser,
-                    Type = NotificationType.Post,
-                    Content = $"{_actor.Identity} has published a new post: {post.Title}",
-                    IsRead = false
-                };
+                    _context.Posts.Add(post);
+                    _context.SaveChanges();
 
-                notifications.Add(notification);
-            }
+                    request.Id = post.Id;
 
-            _context.Notifications.AddRange(notifications);
-            _context.SaveChanges();
+                    var followers = _context.Followers.Where(f => f.IdFollowing == post.IdUser).Select(f => f.IdFollower).ToList();
 
-            foreach (var notification in notifications) 
-            {
-                _notificationService.SendNotificationToUser(notification.IdUser, notification);
+                    foreach (var idFollower in followers)
+                    {
+                        var notificationDto = new NotificationDto
+                        {
+                            IdUser = idFollower,
+                            FromIdUser = post.IdUser,
+                            Type = NotificationType.Post,
+                            Content = $"{_actor.Identity} has published a new post: {post.Title}",
+                            CreatedAt = DateTime.Now,
+                            IdPost = post.Id
+                        };
+
+                        _notificationService.CreateNotification(notificationDto);
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
     }

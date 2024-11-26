@@ -6,6 +6,7 @@ using Application;
 using Application.Exceptions;
 using Application.Commands.Like;
 using Application.DataTransfer;
+using Application.Services;
 using EFDataAccess;
 using FluentValidation;
 using Implementation.Validators.Like;
@@ -18,13 +19,15 @@ namespace Implementation.Commands.Like
         private readonly BlogContext _context;
         private readonly LikePostValidator _validator;
         private readonly IApplicationActor _actor;
-        private readonly INotificationHubService _notificationService;
+        private readonly INotificationHubService _notificationHubService;
+        private readonly INotificationService _notificationService;
 
-        public EFLikePostCommand(LikePostValidator validator, BlogContext context, IApplicationActor actor, INotificationHubService notificationService)
+        public EFLikePostCommand(LikePostValidator validator, BlogContext context, IApplicationActor actor, INotificationHubService notificationHubService, INotificationService notificationService)
         {
             _validator = validator;
             _context = context;
             _actor = actor;
+            _notificationHubService = notificationHubService;
             _notificationService = notificationService;
         }
 
@@ -62,20 +65,18 @@ namespace Implementation.Commands.Like
                 throw new EntityNotFoundException(request.IdPost, typeof(Domain.Post));
             }
 
-            var notification = new Domain.Notification
+            var notificationDto = new NotificationDto
             {
                 IdUser = post.IdUser,
                 FromIdUser = _actor.Id,
                 Type = NotificationType.Like,
                 Content = $"{_actor.Identity} liked your post.",
-                IsRead = false
+                IdPost = request.IdPost,
+                CreatedAt = DateTime.Now
             };
 
-            _context.Notifications.Add(notification);
-            _context.SaveChanges();
-
-            _notificationService.SendNotificationToUser(post.IdUser, notification);
+            _notificationService.CreateNotification(notificationDto);
+            _notificationHubService.SendNotificationToUser(post.IdUser, notificationDto);
         }
-
     }
 }

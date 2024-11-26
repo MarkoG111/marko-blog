@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Application;
 using Application.Commands.Notification;
 using Application.DataTransfer;
+using Application.Services;
 using EFDataAccess;
+using Domain;
 
 namespace Implementation.Commands.Notification
 {
@@ -13,11 +15,13 @@ namespace Implementation.Commands.Notification
     {
         private readonly BlogContext _context;
         private readonly IApplicationActor _actor;
+        private readonly INotificationService _notificationService;
 
-        public EFCreateNotificationCommand(BlogContext context, IApplicationActor actor)
+        public EFCreateNotificationCommand(BlogContext context, IApplicationActor actor, INotificationService notificationService)
         {
             _context = context;
             _actor = actor;
+            _notificationService = notificationService;
         }
 
         public int Id => (int)UseCaseEnum.EFCreateNotificationCommand;
@@ -27,16 +31,7 @@ namespace Implementation.Commands.Notification
         {
             request.IdUser = _actor.Id;
 
-            var notification = new Domain.Notification
-            {
-                IdUser = 3,
-                FromIdUser = request.IdUser,
-                Type = request.Type,
-                Content = request.Content
-            };
-
-            _context.Notifications.Add(notification);
-            _context.SaveChanges();
+            _notificationService.CreateNotification(request);
         }
     }
 }

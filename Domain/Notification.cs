@@ -11,9 +11,9 @@ namespace Domain
         public int FromIdUser { get; set; }
         public virtual User UserReceiver { get; set; }
         public virtual User FromUser { get; set; }
-
         public NotificationType Type { get; set; }
         public string Content { get; set; }
+        public string Link { get; set; }
         public bool IsRead { get; set; }
     }
 

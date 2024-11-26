@@ -18,7 +18,7 @@ export default function Header() {
   const { currentUser } = useSelector((state) => state.user)
   const [headerSearchTerm, setHeaderSearchTerm] = useState('')
 
-  const { notifications, hasNewNotifications, markAllAsRead } = useContext(NotificationsContext)
+  const { notifications, hasNewNotifications } = useContext(NotificationsContext)
 
   const unreadNotificationCount = notifications.filter((n) => !n.isRead).length
   const isAuthor = currentUser && currentUser.roleName === 'Author'
@@ -36,10 +36,6 @@ export default function Header() {
   const handleSearchSubmit = (e) => {
     e.preventDefault()
     navigate(`/posts?search=${headerSearchTerm}`)
-  }
-
-  const handleNotificationsClick = () => {
-    markAllAsRead()
   }
 
   return (
@@ -70,7 +66,7 @@ export default function Header() {
         {/* Notifications Button */}
         {isAuthor && (
           <Link to='/notifications'>
-            <Button className='w-10 md:w-12 h-10 mt-6 md:mt-2 rounded-full' color='gray' onClick={handleNotificationsClick}>
+            <Button className='w-10 md:w-12 h-10 mt-6 md:mt-2 rounded-full' color='gray'>
               <FaRegBell />
               {hasNewNotifications && (
                 <span className='absolute bottom-5 left-6 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full'>{unreadNotificationCount}</span>

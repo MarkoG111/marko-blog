@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application;
 using Application.Commands.Comment;
 using Application.DataTransfer;
+using Application.Services;
 using EFDataAccess;
 using Domain;
 using FluentValidation;
@@ -17,13 +18,15 @@ namespace Implementation.Commands.Comment
         private readonly BlogContext _context;
         private readonly CreateCommentValidator _validator;
         private readonly IApplicationActor _actor;
-        private readonly INotificationHubService _notificationService;
+        private readonly INotificationHubService _notificationHubService;
+        private readonly INotificationService _notificationService;
 
-        public EFCreateCommentCommand(BlogContext context, CreateCommentValidator validator, IApplicationActor actor, INotificationHubService notificationService)
+        public EFCreateCommentCommand(BlogContext context, CreateCommentValidator validator, IApplicationActor actor, INotificationHubService notificationHubService, INotificationService notificationService)
         {
             _context = context;
             _validator = validator;
             _actor = actor;
+            _notificationHubService = notificationHubService;
             _notificationService = notificationService;
         }
 
@@ -57,22 +60,23 @@ namespace Implementation.Commands.Comment
                 throw new Exception("Post not found");
             }
 
-            // Create a list to hold notifications (e.g., for post owner and parent comment user)
-            var notifications = new List<Domain.Notification>();
-
             // Avoid sending a notification to the commenter themselves
             if (post.IdUser != request.IdUser)
             {
-                notifications.Add(new Domain.Notification
+                var postOwnerNotification = new NotificationDto
                 {
                     IdUser = post.IdUser, // Post owner
                     FromIdUser = request.IdUser, // Commenter
                     Type = NotificationType.Comment,
                     Content = $"{_actor.Identity} has commented on your post.",
-                    IsRead = false
-                });
+                    CreatedAt = DateTime.Now,
+                    IdComment = comment.Id
+                };
+
+                _notificationService.CreateNotification(postOwnerNotification);
             }
 
+            // If the comment is a reply, notify the parent comment's owner (if different from the commenter)
             if (request.IdParent.HasValue)
             {
                 var parentComment = _context.Comments
@@ -82,25 +86,19 @@ namespace Implementation.Commands.Comment
 
                 if (parentComment != null && parentComment.IdUser != request.IdUser)
                 {
-                    notifications.Add(new Domain.Notification
+                    var parentCommentNotification = new NotificationDto
                     {
                         IdUser = parentComment.IdUser, // Parent comment owner
                         FromIdUser = request.IdUser, // Commenter
                         Type = NotificationType.Comment,
                         Content = $"{_actor.Identity} has replied to your comment: \"{parentComment.CommentText}\"",
-                        IsRead = false
-                    });
+                        CreatedAt = DateTime.Now,
+                        IdComment = comment.Id
+                    };
+
+                    _notificationService.CreateNotification(parentCommentNotification);
                 }
             }
-
-            _context.Notifications.AddRange(notifications);
-            _context.SaveChanges();
-
-            foreach (var notification in notifications)
-            {
-                _notificationService.SendNotificationToUser(notification.IdUser, notification);
-            }
-
         }
     }
 }

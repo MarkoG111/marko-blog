@@ -13,6 +13,7 @@ namespace EFDataAccess.Configurations
         public void Configure(EntityTypeBuilder<Notification> builder)
         {
             builder.Property(x => x.Content).IsRequired().HasMaxLength(250);
+            builder.Property(x => x.Link).IsRequired().HasMaxLength(250);
             builder.Property(x => x.Type).IsRequired().HasColumnType("int");
             builder.Property(x => x.IsRead).IsRequired().HasDefaultValue(false);
 

@@ -6,7 +6,6 @@ import { RiUserFollowLine, RiUserUnfollowFill } from "react-icons/ri"
 import { FaUserPlus } from "react-icons/fa6";
 import { Button } from "flowbite-react"
 
-
 export default function UserPage() {
   const { id } = useParams()
 
