@@ -43,7 +43,6 @@ namespace Implementation.Queries.Comment
                 TotalCount = comments.Count(),
                 LastMonthCount = comments.Where(x => x.CreatedAt >= thirtyDaysAgo).Count(),
 
-
                 Items = comments.Skip(skipCount).Take(search.PerPage).Select(c => new CommentDto
                 {
                     Id = c.Id,

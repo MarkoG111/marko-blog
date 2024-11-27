@@ -1,9 +1,11 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types'
 import { useEffect, useState } from "react"
 import moment from 'moment'
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa'
 import { Button, Textarea } from 'flowbite-react'
 import { useSelector } from "react-redux"
+
+import ChildComment from './ChildComment'
 
 export default function Comment({ comment, onLike, onDislike, onAddChildComment, childrenComments, onEdit, onDelete, setActiveReplyCommentId, activeReplyCommentId, comments }) {
   const [user, setUser] = useState({})
@@ -15,10 +17,10 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
   const [isEditing, setIsEditing] = useState(false)
   const [editedText, setEditedText] = useState(comment.commentText)
 
-  const [childComment, setChildComment] = useState('');
+  const [childComment, setChildComment] = useState('')
   const isChildComment = childrenComments.some(child => child.idParent == comment.id)
 
-  const isSmallScreen = window.innerWidth <= 768;
+  const isSmallScreen = window.innerWidth <= 768
 
   useEffect(() => {
     const getUser = async () => {
@@ -167,30 +169,37 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
           </form>
         </div>)}
 
-      {
-        isChildComment && (
-          <div>
-            {childrenComments
-              .filter(child => child.idParent === comment.id)
-              .map((child) => (
-                <div key={child.id} style={{ paddingLeft: isFirstReply ? (isSmallScreen ? '25px' : '60px') : '0', paddingBottom: '10px' }}>
-                  <Comment
-                    comment={child}
-                    onDelete={onDelete}
-                    onLike={onLike}
-                    onDislike={onDislike}
-                    onEdit={onEdit}
-                    onAddChildComment={(e, idComment, childComment) => onAddChildComment(e, idComment, childComment)}
-                    childrenComments={childrenComments}
-                    activeReplyCommentId={activeReplyCommentId}
-                    setActiveReplyCommentId={setActiveReplyCommentId}
-                    comments={comments}
-                  />
-                </div>
-              ))}
-          </div>
-        )
-      }
+      {isChildComment && (
+        <ChildComment
+          childComments={childrenComments}
+          parentCommentId={comment.id}
+          onDelete={onDelete}
+          onLike={onLike}
+          onDislike={onDislike}
+          onEdit={onEdit}
+          onAddChildComment={onAddChildComment}
+          activeReplyCommentId={activeReplyCommentId}
+          setActiveReplyCommentId={setActiveReplyCommentId}
+          comments={comments}
+          isFirstReply={isFirstReply}
+          isSmallScreen={isSmallScreen}
+        />
+      )}
     </>
   )
+}
+
+Comment.propTypes = {
+  comment: PropTypes.object.isRequired,
+  onLike: PropTypes.func.isRequired,
+  onDislike: PropTypes.func.isRequired,
+  onAddChildComment: PropTypes.func.isRequired,
+  childrenComments: PropTypes.array.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  setCommentToDelete: PropTypes.func.isRequired,
+  setShowModal: PropTypes.func.isRequired,
+  setActiveReplyCommentId: PropTypes.func.isRequired,
+  activeReplyCommentId: PropTypes.number,
+  comments: PropTypes.array.isRequired,
 }

@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types'
 import { Button, Textarea, Modal } from 'flowbite-react'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -6,12 +6,18 @@ import { Link } from 'react-router-dom'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 
 import Comment from './Comment'
-import { FaRegCommentDots, FaThumbsDown, FaThumbsUp } from 'react-icons/fa'
+
+import {
+  checkIfAlreadyVoted,
+  removeDislikeOrLikeIfPresent,
+  updateCommentLikes,
+  handleOptimisticUpdate
+} from '../utils/commentUtils'
 
 export default function CommentSection({ idPost }) {
   const { currentUser } = useSelector(state => state.user)
-  const [post, setPost] = useState({})
 
+  const [post, setPost] = useState({})
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
   const [childComments, setChildComments] = useState([])
@@ -23,43 +29,31 @@ export default function CommentSection({ idPost }) {
   const [showErrorModal, setShowErrorModal] = useState(false)
 
   useEffect(() => {
-    const fetchComments = async () => {
+    const fetchPostAndComments = async () => {
       try {
-        const response = await fetch(`/api/Posts/${idPost}`, {
-          method: "GET"
-        })
+        const response = await fetch(`/api/Posts/${idPost}`)
 
         if (response.ok) {
           const data = await response.json()
 
-          setCommentsNumber(data.comments.length + data.childrenComments.length)
-
+          setPost(data)
           setComments(data.comments)
           setChildComments(data.childrenComments)
+          setCommentsNumber(data.comments.length + data.childrenComments.length)
         }
       } catch (error) {
-        console.error("Error fetching comments:", error)
+        console.error("Error fetching post and comments:", error)
       }
     }
 
-    const getPost = async () => {
-      try {
-        const response = await fetch(`/api/Posts/${idPost}`, {
-          method: "GET"
-        })
-
-        if (response.ok) {
-          const data = await response.json()
-          setPost(data)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    getPost()
-    fetchComments()
+    fetchPostAndComments()
   }, [idPost])
+
+  const handleError = (message) => {
+    setErrorMessage(message)
+    setShowErrorModal(true)
+    setTimeout(() => setShowErrorModal(false), 10000)
+  }
 
   useEffect(() => {
     if (showErrorModal) {
@@ -156,91 +150,16 @@ export default function CommentSection({ idPost }) {
     }
   }
 
-  const checkIfAlreadyVoted = (comments, idComment, idUser, status) => {
-    return comments.some(comment => {
-      if (comment.id === idComment && comment.likes) {
-        return comment.likes.some(like => like.idUser === idUser && like.status === status)
-      }
-
-      return false
-    })
-  }
-
-  const checkIfAlreadyVotedOnPost = (post, idPost, idUser, status) => {
-    if (post.id == idPost && post.likes) {
-      return post.likes.some(like => like.idUser == idUser && like.status == status)
-    }
-
-    return false
-  }
-
-  const removeDislikeOrLikeIfPresent = (comments, idComment, idUser, status) => {
-    return comments.map((comment) => {
-      if (comment.id === idComment && comment.likes) {
-        const hasDisliked = comment.likes.some(like => like.idUser === idUser && like.status === status)
-        if (hasDisliked) {
-          const updatedLikes = comment.likes.filter(like => !(like.idUser === idUser && like.status === status))
-          return { ...comment, likes: updatedLikes }
-        }
-      }
-
-      return comment
-    })
-  }
-
-  const removeDislikeOrLikeIfPresentInPost = (post, idPost, idUser, status) => {
-    if (post.id == idPost) {
-      const hasVote = post.likes.some(like => like.idUser == idUser && like.status == status)
-      if (hasVote) {
-        const updateLikes = post.likes.filter(like => !(like.idUser == idUser && like.status == status))
-        return { ...post, likes: updateLikes }
-      }
-    }
-
-    return post
-  }
-
-  const updateCommentLikes = (comments, idComment, data, userId) => {
-    return comments.map(comment => {
-      if (comment.id === idComment) {
-        return {
-          ...comment,
-          likesCount: data.likesCount,
-          likes: comment.likes.some(like => like.idUser === userId)
-            ? comment.likes.map(like => (like.idUser === userId ? { ...like, status: data.status } : like))
-            : [...comment.likes, { idUser: userId, idComment, status: data.status }],
-        }
-      }
-
-      if (comment.children && comment.children.length > 0) {
-        return {
-          ...comment,
-          children: updateCommentLikes(comment.children, idComment, data, userId),
-        }
-      }
-
-      return comment
-    })
-  }
-
-  const updatePostLikes = (post, idPost, data, userId) => {
-    if (post.id == idPost) {
-      return {
-        ...post,
-        likes: post.likes.some(like => like.idUser == userId)
-          ? post.likes.map(like => (like.idUser == userId ? { ...like, status: data.status } : like)) : [...post.likes, { idUser: userId, idPost, status: data.status }]
-      }
-    }
-
-    return post
+  const handleLikeOptimistic = (idComment) => {
+    handleOptimisticUpdate(comments, setComments, idComment, 'like')
+    handleLike(idComment)
   }
 
   const handleLike = async (idComment) => {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        setShowErrorModal(true)
-        setErrorMessage("You must be logged in to like a comment.")
+        handleError("You must be logged in to like a comment.")
         return
       }
 
@@ -286,21 +205,23 @@ export default function CommentSection({ idPost }) {
       } else {
         const errorText = await response.text() // Get the response as text
         const errorData = JSON.parse(errorText) // Try to parse it as JSON
-        setShowErrorModal(true)
-        setErrorMessage(errorData.message)
+        handleError(errorData.message)
       }
     } catch (error) {
-      setShowErrorModal(true)
-      setErrorMessage("An error occurred while processing your request.")
+      handleError("An error occurred while processing your request.")
     }
+  }
+
+  const handleDislikeOptimistic = (idComment) => {
+    handleOptimisticUpdate(comments, setComments, idComment, 'dislike')
+    handleDislike(idComment)
   }
 
   const handleDislike = async (idComment) => {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        setShowErrorModal(true)
-        setErrorMessage("You must be logged in to dislike a comment.")
+        handleError("You must be logged in to dislike a comment.")
         return
       }
 
@@ -310,7 +231,7 @@ export default function CommentSection({ idPost }) {
       if (isAlreadyDisliked || isAlreadyDislikedChild) {
         return
       }
-      
+
       const body = JSON.stringify({
         IdUser: currentUser.id,
         IdPost: idPost,
@@ -350,8 +271,7 @@ export default function CommentSection({ idPost }) {
         setErrorMessage(errorData.message)
       }
     } catch (error) {
-      setShowErrorModal(true)
-      setErrorMessage("An error occurred while processing your request.")
+      handleError("An error occurred while processing your request")
     }
   }
 
@@ -407,104 +327,6 @@ export default function CommentSection({ idPost }) {
     }
   }
 
-  const onLikePost = async (idPost) => {
-    try {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        setShowErrorModal(true)
-        setErrorMessage("You must be logged in to like a post.")
-        return
-      }
-
-      const isAlreadyLiked = checkIfAlreadyVotedOnPost(post, idPost, currentUser.id, 1)
-
-      if (isAlreadyLiked) {
-        return
-      }
-
-      const body = JSON.stringify({
-        IdUser: currentUser.id,
-        IdPost: idPost,
-        Status: 1
-      })
-
-      const response = await fetch(`/api/Posts/like`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: body
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-
-        const updatedPost = removeDislikeOrLikeIfPresentInPost(post, idPost, currentUser.id, 2)
-        setPost(updatedPost)
-        const updatePostWithLikes = updatePostLikes(updatedPost, idPost, data, currentUser.id)
-        setPost(updatePostWithLikes)
-      } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-        setShowErrorModal(true)
-        setErrorMessage(errorData.message)
-      }
-    } catch (error) {
-      setShowErrorModal(true)
-      setErrorMessage("An error occurred while processing your request.")
-    }
-  }
-
-  const onDislikePost = async (idPost) => {
-    try {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        setShowErrorModal(true)
-        setErrorMessage("You must be logged in to dislike a post.")
-        return
-      }
-
-      const isAlreadyDisliked = checkIfAlreadyVotedOnPost(post, idPost, currentUser.id, 2)
-
-      if (isAlreadyDisliked) {
-        return
-      }
-
-      const body = JSON.stringify({
-        IdUser: currentUser.id,
-        IdPost: idPost,
-        Status: 2
-      })
-
-      const response = await fetch(`/api/Posts/like`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: body
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-
-        const updatedPost = removeDislikeOrLikeIfPresentInPost(post, idPost, currentUser.id, 1)
-        setPost(updatedPost)
-        const updatePostWithLikes = updatePostLikes(updatedPost, idPost, data, currentUser.id)
-        setPost(updatePostWithLikes)
-      } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-        setShowErrorModal(true)
-        setErrorMessage(errorData.message)
-      }
-    } catch (error) {
-      setShowErrorModal(true)
-      setErrorMessage("An error occurred while processing your request.")
-    }
-  }
-
   return (
     <div className='max-w-2xl mx-auto w-full p-3'>
       {currentUser ? (
@@ -527,24 +349,6 @@ export default function CommentSection({ idPost }) {
         </form>
       )}
 
-      <div className="text-sm my-5 flex items-center justify-between gap-1">
-        <div className='flex'>
-          <FaRegCommentDots className='text-2xl' />
-          <span className='ml-2'>{commentsNumber == 1 ? commentsNumber + ' Comment' : commentsNumber + ' Comments'}</span>
-        </div>
-        <div className='flex ml-10'>
-          <button type="button" onClick={() => onLikePost(idPost)} className={`text-gray-400 hover:text-blue-500 ml-6}`}>
-            <FaThumbsUp className='text-xl' />
-          </button>
-          <span className='ml-2'>{post.likes && post.likes.filter((like) => like.status == 1).length}</span>
-
-          <button type="button" onClick={() => onDislikePost(idPost)} className={`text-gray-400 hover:text-red-500 ml-6}`}>
-            <FaThumbsDown className='ml-5 text-xl' />
-          </button>
-          <span className='ml-2'>{post.likes && post.likes.filter((like) => like.status == 2).length}</span>
-        </div>
-      </div>
-
       {showErrorModal && (
         <div className={`error-modal show`}>{errorMessage}</div>
       )}
@@ -556,8 +360,8 @@ export default function CommentSection({ idPost }) {
           {comments.map(comment => (
             <Comment key={comment.id}
               comment={comment}
-              onLike={handleLike}
-              onDislike={handleDislike}
+              onLike={handleLikeOptimistic}
+              onDislike={handleDislikeOptimistic}
               onAddChildComment={(e, idComment, childComment) => addChildComment(e, idComment, childComment)}
               childrenComments={childComments}
               onEdit={handleEdit}
@@ -593,4 +397,8 @@ export default function CommentSection({ idPost }) {
       </Modal>
     </div>
   )
+}
+
+CommentSection.propTypes = {
+  idPost: PropTypes.number.isRequired,
 }
