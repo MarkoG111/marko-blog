@@ -37,8 +37,8 @@ export default function CommentSection({ idPost }) {
           const data = await response.json()
 
           setPost(data)
-          setComments(data.comments)
-          setChildComments(data.childrenComments)
+          setComments(data.comments.reverse())
+          setChildComments(data.childrenComments.reverse())
           setCommentsNumber(data.comments.length + data.childrenComments.length)
         }
       } catch (error) {
@@ -267,7 +267,6 @@ export default function CommentSection({ idPost }) {
       } else {
         const errorText = await response.text()
         const errorData = JSON.parse(errorText)
-        setShowErrorModal(true)
         setErrorMessage(errorData.message)
       }
     } catch (error) {
