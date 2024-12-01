@@ -12,6 +12,13 @@ namespace API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+
+                    webBuilder.UseSentry(o =>
+                    {
+                        o.Dsn = "https://42856e7ceca42c96759e8d360f357474@o4508383067504640.ingest.de.sentry.io/4508383079235664";
+                        o.Debug = true;
+                        o.TracesSampleRate = 1.0;
+                    });
                 });
     }
 }

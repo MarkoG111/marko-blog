@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.SignalR;
 
+using Sentry;
+
 namespace API
 {
     public class Startup
@@ -28,6 +30,15 @@ namespace API
             Configuration.Bind(appSettings);
 
             services.AddControllers();
+
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddSentry(o =>
+                {
+                    o.Dsn = "https://42856e7ceca42c96759e8d360f357474@o4508383067504640.ingest.de.sentry.io/4508383079235664";
+                    o.TracesSampleRate = 1.0;
+                });
+            });
 
             services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
@@ -111,7 +122,6 @@ namespace API
                 x.AllowAnyMethod();
             });
 
-
             // Dodaje middleware za podršku Swagger-u, koji generiše dokumentaciju API-ja na osnovu definicija ruta i kontrolera u aplikaciji.
             app.UseSwagger();
 
@@ -123,6 +133,8 @@ namespace API
 
             // Dodaje middleware komponentu GlobalExceptionHandler koja obrađuje sve izuzetke koji nisu već obrađeni i pruža odgovarajući odgovor korisniku ili aplikaciji.
             app.UseMiddleware<GlobalExceptionHandler>();
+
+            app.UseSentryTracing();
 
             // Dodaje middleware za definisanje krajnjih tačaka (endpoints) aplikacije, tj. mapiranje HTTP zahteva na odgovarajuće akcije u kontrolerima.
             app.UseEndpoints(endpoints =>
