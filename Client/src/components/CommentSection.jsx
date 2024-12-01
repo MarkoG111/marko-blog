@@ -13,6 +13,7 @@ import {
   updateCommentLikes,
   handleOptimisticUpdate
 } from '../utils/commentUtils'
+import { useError } from '../contexts/ErrorContext'
 
 export default function CommentSection({ idPost }) {
   const { currentUser } = useSelector(state => state.user)
@@ -25,8 +26,8 @@ export default function CommentSection({ idPost }) {
   const [activeReplyCommentId, setActiveReplyCommentId] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [commentToDelete, setCommentToDelete] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
-  const [showErrorModal, setShowErrorModal] = useState(false)
+
+  const { showError } = useError()
 
   useEffect(() => {
     const fetchPostAndComments = async () => {
@@ -40,32 +41,28 @@ export default function CommentSection({ idPost }) {
           setComments(data.comments.reverse())
           setChildComments(data.childrenComments.reverse())
           setCommentsNumber(data.comments.length + data.childrenComments.length)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.error("Error fetching post and comments:", error)
+        showError(error.message)
       }
     }
 
     fetchPostAndComments()
-  }, [idPost])
-
-  const handleError = (message) => {
-    setErrorMessage(message)
-    setShowErrorModal(true)
-    setTimeout(() => setShowErrorModal(false), 10000)
-  }
-
-  useEffect(() => {
-    if (showErrorModal) {
-      setShowErrorModal(true)
-    }
-    const timer = setTimeout(() => {
-      setShowErrorModal(false)
-    }, 10000)
-
-    return () => clearTimeout(timer)
-
-  }, [showErrorModal])
+  }, [idPost, showError])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -77,7 +74,8 @@ export default function CommentSection({ idPost }) {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        throw new Error("Token not found")
+        showError("Token not found")
+        return
       }
 
       const lastIdComment = comments.length > 0 ? Math.max(...comments.map(comment => comment.id)) : 0
@@ -105,9 +103,23 @@ export default function CommentSection({ idPost }) {
         setComments([data, ...comments])
         setCommentsNumber(commentsNumber + 1)
         setComment('')
+      } else {
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
     } catch (error) {
-      console.log(error)
+      showError(error.message)
     }
   }
 
@@ -116,7 +128,8 @@ export default function CommentSection({ idPost }) {
 
     const token = localStorage.getItem("token")
     if (!token) {
-      throw new Error("Token not found")
+      showError("Token not found")
+      return
     }
 
     try {
@@ -143,10 +156,24 @@ export default function CommentSection({ idPost }) {
         setChildComments([data, ...childComments])
         setActiveReplyCommentId(null)
         setCommentsNumber(commentsNumber + 1)
+      } else {
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
     }
     catch (error) {
-      console.log(error)
+      showError(error.message)
     }
   }
 
@@ -159,7 +186,7 @@ export default function CommentSection({ idPost }) {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        handleError("You must be logged in to like a comment.")
+        showError("You must be logged in to like a comment.")
         return
       }
 
@@ -203,12 +230,22 @@ export default function CommentSection({ idPost }) {
         const updatedChildCommentsWithLikes = updateCommentLikes(updatedChildComments, idComment, data, currentUser.id)
         setChildComments(updatedChildCommentsWithLikes)
       } else {
-        const errorText = await response.text() // Get the response as text
-        const errorData = JSON.parse(errorText) // Try to parse it as JSON
-        handleError(errorData.message)
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
     } catch (error) {
-      handleError("An error occurred while processing your request.")
+      showError(error.message)
     }
   }
 
@@ -221,7 +258,7 @@ export default function CommentSection({ idPost }) {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        handleError("You must be logged in to dislike a comment.")
+        showError("You must be logged in to dislike a comment.")
         return
       }
 
@@ -267,10 +304,20 @@ export default function CommentSection({ idPost }) {
       } else {
         const errorText = await response.text()
         const errorData = JSON.parse(errorText)
-        setErrorMessage(errorData.message)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
     } catch (error) {
-      handleError("An error occurred while processing your request")
+      showError(error.message)
     }
   }
 
@@ -294,7 +341,8 @@ export default function CommentSection({ idPost }) {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        throw new Error("Token not found")
+        showError("Token not found")
+        return
       }
       const body = JSON.stringify({
         isDeleted: 1
@@ -320,9 +368,23 @@ export default function CommentSection({ idPost }) {
         setChildComments(updatedChildComments)
 
         setCommentsNumber(commentsNumber - 1)
+      } else {
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
     } catch (error) {
-      console.log(error)
+      showError(error.message)
     }
   }
 
@@ -346,10 +408,6 @@ export default function CommentSection({ idPost }) {
             <Button outline gradientDuoTone='purpleToBlue' type='submit'>Submit</Button>
           </div>
         </form>
-      )}
-
-      {showErrorModal && (
-        <div className={`error-modal show`}>{errorMessage}</div>
       )}
 
       {comments.length === 0 ? (

@@ -4,6 +4,7 @@ import { HiArrowNarrowUp, HiOutlineUserGroup, HiDocumentText } from "react-icons
 import { FaRegComments } from "react-icons/fa";
 import { Button, Table } from "flowbite-react";
 import { Link } from "react-router-dom";
+import { useError } from "../contexts/ErrorContext";
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState([])
@@ -17,6 +18,8 @@ export default function AdminDashboard() {
   const [lastMonthPosts, setLastMonthPosts] = useState(0)
 
   const { currentUser } = useSelector((state) => state.user)
+
+  const { showError } = useError()
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -39,9 +42,23 @@ export default function AdminDashboard() {
           setUsers(data.items.slice(0, 5))
           setTotalUsers(data.totalCount)
           setLastMonthUsers(data.lastMonthCount)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error.message)
       }
     }
 
@@ -65,9 +82,23 @@ export default function AdminDashboard() {
           setComments(data.items.slice(0, 5))
           setTotalComments(data.totalCount)
           setLastMonthComments(data.lastMonthCount)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error.message)
       }
     }
 
@@ -85,15 +116,23 @@ export default function AdminDashboard() {
           }
         })
 
-        const data = await response.json()
-
         if (response.ok) {
-          setPosts(data.items.slice(0, 5))
-          setTotalPosts(data.totalCount)
-          setLastMonthPosts(data.lastMonthCount)
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error.message)
       }
     }
 
@@ -103,7 +142,7 @@ export default function AdminDashboard() {
       fetchPosts()
     }
 
-  }, [])
+  }, [currentUser.roleName, showError])
 
   return (
     <div className="p-3 md:mx-auto">

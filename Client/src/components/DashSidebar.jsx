@@ -6,16 +6,19 @@ import { useDispatch, useSelector } from "react-redux"
 import { signoutSuccess } from '../redux/user/userSlice';
 import { RiPieChart2Fill } from "react-icons/ri";
 import { FaRegComments } from "react-icons/fa";
+import { useError } from '../contexts/ErrorContext';
 
 export default function DashSidebar() {
   const location = useLocation();
-  const [tab, setTab] = useState('');
 
+  const [tab, setTab] = useState('');
   const [user, setUser] = useState('')
 
   const dispatch = useDispatch()
 
   const { currentUser } = useSelector(state => state.user)
+
+  const { showError } = useError()
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -35,28 +38,43 @@ export default function DashSidebar() {
 
         const data = await repsonse.json()
 
-        if (repsonse.ok) {
-          setUser(data)
+        if (!repsonse.ok) {
+          const errorText = await repsonse.text()
+          const errorData = JSON.parse(errorText)
 
-          const token = localStorage.getItem("token")
-          if (!token) {
-            throw new Error("Token not found")
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
           }
+
+          return
+        }
+
+        setUser(data)
+
+        const token = localStorage.getItem("token")
+        if (!token) {
+          showError("Token not found")
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error)
       }
     }
 
     fetchUser()
-  }, [currentUser.id])
+  }, [currentUser.id, showError])
 
   const handleSignout = async () => {
     try {
       localStorage.removeItem("token")
       dispatch(signoutSuccess())
     } catch (error) {
-      console.log(error);
+      showError(error);
     }
   }
 

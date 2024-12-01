@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { useError } from "../contexts/ErrorContext";
 
 export default function DashUsers() {
   const { currentUser } = useSelector((state) => state.user)
@@ -12,33 +13,29 @@ export default function DashUsers() {
   const [showModal, setShowModal] = useState(false)
   const [userIdToDelete, setUserIdToDelete] = useState('')
 
-  const [errorMessage, setErrorMessage] = useState('')
-  const [showErrorModal, setShowErrorModal] = useState(false)
-
   const [successMessage, setSuccessMessage] = useState('')
   const [showSuccessModal, setShowSucessModal] = useState(false)
 
+  const { showError } = useError()
+
   useEffect(() => {
-    if (showErrorModal) {
-      setShowErrorModal(true)
-    }
     if (showSuccessModal) {
       setShowSucessModal(true)
     }
     const timer = setTimeout(() => {
-      setShowErrorModal(false)
       setShowSucessModal(false)
     }, 10000)
 
     return () => clearTimeout(timer)
-  }, [showErrorModal, showSuccessModal])
+  }, [showSuccessModal])
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token")
         if (!token) {
-          throw new Error("Token not found")
+          showError("Token not found")
+          return
         }
 
         const response = await fetch(`/api/Users?page=${currentPage}`, {
@@ -53,14 +50,28 @@ export default function DashUsers() {
         if (response.ok) {
           setUsers(data.items)
           setPageCount(data.pageCount)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error)
       }
     }
 
     fetchUsers()
-  }, [currentPage])
+  }, [currentPage, showError])
 
   const onPageChange = (page) => setCurrentPage(page);
 
@@ -81,17 +92,27 @@ export default function DashUsers() {
       })
 
       if (!response.ok) {
-        setShowErrorModal(true)
-        setErrorMessage("Cannot delete.")
-      } else {
-        setUsers((prev) => prev.filter((user) => user.id !== userIdToDelete))
-        setShowModal(false)
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
 
-        setShowSucessModal(true)
-        setSuccessMessage("You have successfully deleted user.")
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
+
+      setUsers((prev) => prev.filter((user) => user.id !== userIdToDelete))
+      setShowModal(false)
+      setShowSucessModal(true)
+      setSuccessMessage("You have successfully deleted user.")
     } catch (error) {
-      console.log(error);
+      showError(error);
     }
   }
 
@@ -147,12 +168,6 @@ export default function DashUsers() {
     {showSuccessModal && (
       <div className="success-modal show">
         {successMessage}
-      </div>
-    )}
-
-    {showErrorModal && (
-      <div className="error-modal show">
-        {errorMessage}
       </div>
     )}
 

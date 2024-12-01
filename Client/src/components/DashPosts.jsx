@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { useError } from "../contexts/ErrorContext";
 
 export default function DashPosts() {
   const { currentUser } = useSelector((state) => state.user)
@@ -13,26 +14,21 @@ export default function DashPosts() {
   const [postIdToDelete, setPostIdToDelete] = useState('')
   const [postDeleted, setPostDeleted] = useState(false)
 
-  const [errorMessage, setErrorMessage] = useState('')
-  const [showErrorModal, setShowErrorModal] = useState(false)
-
   const [successMessage, setSuccessMessage] = useState('')
   const [showSuccessModal, setShowSucessModal] = useState(false)
 
+  const { showError } = useError()
+
   useEffect(() => {
-    if (showErrorModal) {
-      setShowErrorModal(true)
-    }
     if (showSuccessModal) {
       setShowSucessModal(true)
     }
     const timer = setTimeout(() => {
       setShowSucessModal(false)
-      setShowErrorModal(false)
     }, 10000)
 
     return () => clearTimeout(timer)
-  }, [showSuccessModal, showErrorModal])
+  }, [showSuccessModal])
 
   useEffect(() => {
     const fetchAdminPosts = async () => {
@@ -53,14 +49,28 @@ export default function DashPosts() {
         if (response.ok) {
           setUserPosts(data.items)
           setPageCount(data.pageCount)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error.message)
       }
     }
 
     fetchAdminPosts()
-  }, [currentPage, postDeleted])
+  }, [currentPage, postDeleted, showError])
 
   const onPageChange = (page) => setCurrentPage(page);
 
@@ -81,17 +91,27 @@ export default function DashPosts() {
       })
 
       if (!response.ok) {
-        setShowErrorModal(true)
-        setErrorMessage("Delete error.")
-      } else {
-        setUserPosts((prev) => prev.filter((post) => post.id !== postIdToDelete))
-        setShowSucessModal(true)
-        setSuccessMessage("You have successfully deleted post.")
-        setPostDeleted(!postDeleted)
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
+
+      setUserPosts((prev) => prev.filter((post) => post.id !== postIdToDelete))
+      setShowSucessModal(true)
+      setSuccessMessage("You have successfully deleted post.")
+      setPostDeleted(!postDeleted)
     } catch (error) {
-      setShowErrorModal(true)
-      setErrorMessage("Delete error.")
+      showError(error.message)
     }
   }
 
@@ -156,12 +176,6 @@ export default function DashPosts() {
     {showSuccessModal && (
       <div className="success-modal show">
         {successMessage}
-      </div>
-    )}
-
-    {showErrorModal && (
-      <div className="error-modal show">
-        {errorMessage}
       </div>
     )}
 

@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { useError } from "../contexts/ErrorContext";
 
 export default function UserDashPosts() {
   const { currentUser } = useSelector((state) => state.user)
+
   const [userPosts, setUserPosts] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
@@ -13,26 +15,21 @@ export default function UserDashPosts() {
   const [postIdToDelete, setPostIdToDelete] = useState('')
   const [postDeleted, setPostDeleted] = useState(false)
 
-  const [errorMessage, setErrorMessage] = useState('')
-  const [showErrorModal, setShowErrorModal] = useState(false)
+  const { showError } = useError()
 
   const [successMessage, setSuccessMessage] = useState('')
   const [showSuccessModal, setShowSucessModal] = useState(false)
 
   useEffect(() => {
-    if (showErrorModal) {
-      setShowErrorModal(true)
-    }
     if (showSuccessModal) {
       setShowSucessModal(true)
     }
     const timer = setTimeout(() => {
       setShowSucessModal(false)
-      setShowErrorModal(false)
     }, 10000)
 
     return () => clearTimeout(timer)
-  }, [showSuccessModal, showErrorModal])
+  }, [showSuccessModal])
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -48,17 +45,31 @@ export default function UserDashPosts() {
 
           const token = localStorage.getItem("token")
           if (!token) {
-            throw new Error("Token not found")
+            showError("Token not found")
+            return
           }
+        } else {
+          const errorText = await repsonse.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error)
       }
     }
 
     fetchUser()
-
-  }, [currentUser.id])
+  }, [currentUser.id, showError])
 
   const onPageChange = (page) => setCurrentPage(page);
 
@@ -68,7 +79,8 @@ export default function UserDashPosts() {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        throw new Error("Token not found")
+        showError("Token not found")
+        return
       }
 
       const url = currentUser.id == postIdToDelete ? `/api/Posts/personal/${postIdToDelete}` : `/api/Posts/${postIdToDelete}`
@@ -81,17 +93,27 @@ export default function UserDashPosts() {
       })
 
       if (!response.ok) {
-        setShowErrorModal(true)
-        setErrorMessage("Delete error.")
-      } else {
-        setUserPosts((prev) => prev.filter((post) => post.id !== postIdToDelete))
-        setShowSucessModal(true)
-        setSuccessMessage("You have successfully deleted post.")
-        setPostDeleted(!postDeleted)
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
+
+      setUserPosts((prev) => prev.filter((post) => post.id !== postIdToDelete))
+      setShowSucessModal(true)
+      setSuccessMessage("You have successfully deleted post.")
+      setPostDeleted(!postDeleted)
     } catch (error) {
-      setShowErrorModal(true)
-      setErrorMessage("Delete error.")
+      showError(error)
     }
   }
 
@@ -158,13 +180,7 @@ export default function UserDashPosts() {
         {successMessage}
       </div>
     )}
-
-    {showErrorModal && (
-      <div className="error-modal show">
-        {errorMessage}
-      </div>
-    )}
-
+    
     <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
       <Modal.Header />
       <Modal.Body>

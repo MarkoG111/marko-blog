@@ -1,33 +1,30 @@
 import { Button, Label, Textarea } from "flowbite-react"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import { useError } from "../contexts/ErrorContext"
 
 export default function RequestAuthorForm() {
   const { loading } = useSelector((state) => state.user)
   const { currentUser } = useSelector(state => state.user)
 
-  const [errorMessage, setErrorMessage] = useState('')
-  const [showErrorModal, setShowErrorModal] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
   const [showSuccessModal, setShowSuccessModal] = useState(false)
 
   const [reason, setReason] = useState('')
   const [authorRequests, setAuthorRequests] = useState([])
 
+  const { showError } = useError()
+
   useEffect(() => {
-    if (showErrorModal) {
-      setShowErrorModal(true)
-    }
     if (showSuccessModal) {
       setShowSuccessModal(true)
     }
     const timer = setTimeout(() => {
-      setShowErrorModal(false)
       setShowSuccessModal(false)
     }, 10000);
 
     return () => clearTimeout(timer);
-  }, [showErrorModal, showSuccessModal])
+  }, [showSuccessModal])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -35,7 +32,8 @@ export default function RequestAuthorForm() {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        throw new Error("Token not found")
+        showError("Token not found")
+        return
       }
 
       const body = JSON.stringify({
@@ -57,7 +55,7 @@ export default function RequestAuthorForm() {
 
       if (response.ok) {
         const data = await response.json()
-        console.log(data)
+
         setAuthorRequests([...authorRequests, data])
         setReason('')
         setShowSuccessModal(true)
@@ -65,22 +63,26 @@ export default function RequestAuthorForm() {
       } else {
         const errorText = await response.text()
         const errorData = JSON.parse(errorText)
-        setShowErrorModal(true)
-        setErrorMessage(errorData.message)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
     } catch (error) {
-      setErrorMessage("An error occurred while processing your request.")
-      setShowErrorModal(true)
+      showError(error)
     }
   }
 
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="my-7 text-center font-semibold text-3xl">Submit an author request</h1>
-
-      {showErrorModal && (
-        <div className={`error-modal show`}>{errorMessage}</div>
-      )}
 
       {showSuccessModal && (
         <div className={`success-modal show`}>{successMessage}</div>

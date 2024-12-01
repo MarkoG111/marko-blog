@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { useError } from "../contexts/ErrorContext";
 
 export default function DashComments() {
   const { currentUser } = useSelector((state) => state.user)
@@ -12,26 +13,21 @@ export default function DashComments() {
   const [showModal, setShowModal] = useState(false)
   const [commentIdToDelete, setCommentIdToDelete] = useState('')
 
-  const [errorMessage, setErrorMessage] = useState('')
-  const [showErrorModal, setShowErrorModal] = useState(false)
-
   const [successMessage, setSuccessMessage] = useState('')
   const [showSuccessModal, setShowSucessModal] = useState(false)
 
+  const { showError } = useError()
+
   useEffect(() => {
-    if (showErrorModal) {
-      setShowErrorModal(true)
-    }
     if (showSuccessModal) {
       setShowSucessModal(true)
     }
     const timer = setTimeout(() => {
-      setShowErrorModal(false)
       setShowSucessModal(false)
     }, 10000)
 
     return () => clearTimeout(timer)
-  }, [showErrorModal, showSuccessModal])
+  }, [showSuccessModal])
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -53,14 +49,28 @@ export default function DashComments() {
         if (response.ok) {
           setComments(data.items)
           setPageCount(data.pageCount)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+  
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+  
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error.message)
       }
     }
 
     fetchComments()
-  }, [currentPage])
+  }, [currentPage, showError])
 
   const onPageChange = (page) => setCurrentPage(page);
 
@@ -81,8 +91,19 @@ export default function DashComments() {
       })
 
       if (!response.ok) {
-        setShowErrorModal(true)
-        setErrorMessage("Cannot delete.")
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       } else {
         setComments((prev) => prev.filter((comment) => comment.id !== commentIdToDelete))
         setShowModal(false)
@@ -91,7 +112,7 @@ export default function DashComments() {
         setSuccessMessage("You have successfully deleted comment.")
       }
     } catch (error) {
-      console.log(error);
+      showError(error.message);
     }
   }
 
@@ -115,7 +136,7 @@ export default function DashComments() {
                   {new Date(comment.createdAt).toLocaleDateString()}
                 </Table.Cell>
                 <Table.Cell>
-                  {comment.commentText.length < 35 ?  comment.commentText : comment.commentText.substr(0, 35) + ' ...'}
+                  {comment.commentText.length < 35 ? comment.commentText : comment.commentText.substr(0, 35) + ' ...'}
                 </Table.Cell>
                 <Table.Cell>
                   {comment.likesCount}
@@ -149,12 +170,6 @@ export default function DashComments() {
     {showSuccessModal && (
       <div className="success-modal show">
         {successMessage}
-      </div>
-    )}
-
-    {showErrorModal && (
-      <div className="error-modal show">
-        {errorMessage}
       </div>
     )}
 

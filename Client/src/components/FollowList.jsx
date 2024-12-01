@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useError } from "../contexts/ErrorContext";
 
 /* eslint-disable react/prop-types */
 export default function FollowList({ isFollowersTab }) {
@@ -10,12 +11,15 @@ export default function FollowList({ isFollowersTab }) {
 
   const { currentUser } = useSelector((state) => state.user)
 
+  const { showError } = useError()
+
   useEffect(() => {
     const fetchList = async () => {
       try {
         const token = localStorage.getItem("token")
         if (!token) {
-          throw new Error("Token not found")
+          showError("Token not found")
+          return
         }
 
         const queryParams = new URLSearchParams({
@@ -36,14 +40,28 @@ export default function FollowList({ isFollowersTab }) {
           const data = await response.json()
           setList(data.items)
           setPageCount(data.pageCount)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.error("Error fetching followers:", error);
+        showError(error);
       }
     }
 
     fetchList()
-  }, [isFollowersTab, currentPage])
+  }, [isFollowersTab, currentPage, showError, currentUser.id])
 
   return (
     <div className='mx-auto'>

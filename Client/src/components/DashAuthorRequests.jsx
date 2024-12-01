@@ -7,7 +7,7 @@ import { useError } from "../contexts/ErrorContext"
 
 export default function DashAuthorRequests() {
   const { currentUser } = useSelector((state) => state.user)
-  
+
   const [authorRequests, setAuthorRequests] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
@@ -35,7 +35,19 @@ export default function DashAuthorRequests() {
           setAuthorRequests(data.items)
           setPageCount(data.pageCount)
         } else {
-          throw new Error(data.message || "Failed to fetch requests")
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
         showError(error.message)
@@ -69,14 +81,25 @@ export default function DashAuthorRequests() {
         body: JSON.stringify({ Status: 2, IdRole: 2 })
       })
 
-      const data = await response.json()
       if (!response.ok) {
-        console.log(data.message)
-      } else {
-        updateAuthorRequestStatus(idRequest, 2)
-      }
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
+      } 
+        
+      updateAuthorRequestStatus(idRequest, 2)
     } catch (error) {
-      console.log(error)
+      showError(error.message)
     }
   }
 
@@ -96,14 +119,25 @@ export default function DashAuthorRequests() {
         body: JSON.stringify({ Status: 3, IdRole: 3 })
       })
 
-      const data = await response.json()
       if (!response.ok) {
-        console.log(data.message)
-      } else {
-        updateAuthorRequestStatus(idRequest, 3)
-      }
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
+      } 
+        
+      updateAuthorRequestStatus(idRequest, 3)
     } catch (error) {
-      console.log(error);
+      showError(error.message);
     }
   }
 

@@ -6,6 +6,7 @@ import { Button, Textarea } from 'flowbite-react'
 import { useSelector } from "react-redux"
 
 import ChildComment from './ChildComment'
+import { useError } from '../contexts/ErrorContext'
 
 export default function Comment({ comment, onLike, onDislike, onAddChildComment, childrenComments, onEdit, onDelete, setActiveReplyCommentId, activeReplyCommentId, comments }) {
   const [user, setUser] = useState({})
@@ -22,6 +23,8 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
 
   const isSmallScreen = window.innerWidth <= 768
 
+  const { showError } = useError()
+
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -32,14 +35,28 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
         if (response.ok) {
           const data = await response.json()
           setUser(data)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error.message)
       }
     }
 
     getUser()
-  }, [comment])
+  }, [comment, showError])
 
 
   const openEdit = async () => {
@@ -66,9 +83,23 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
       if (response.ok) {
         setIsEditing(false)
         onEdit(comment, editedText)
+      } else {
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
     } catch (error) {
-      console.log(error)
+      showError(error.message)
     }
   }
 

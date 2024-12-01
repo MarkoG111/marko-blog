@@ -33,7 +33,6 @@ const PostLikeButtons = ({ post, idPost, onLikePost, onDislikePost, commentsNumb
   )
 }
 
-// Prop Types validation
 PostLikeButtons.propTypes = {
   post: PropTypes.shape({
     likes: PropTypes.arrayOf(

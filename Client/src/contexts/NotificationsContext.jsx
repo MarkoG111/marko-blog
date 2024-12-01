@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { setUnreadCount } from "../redux/notificationsSlice"
 import { useLocation } from "react-router-dom"
 import * as signalR from '@microsoft/signalr'
+import { useError } from "./ErrorContext"
 
 export const NotificationsContext = createContext()
 
@@ -19,6 +20,8 @@ export const NotificationsProvider = ({ children }) => {
 
   let connection = useRef(null)
 
+  const { showError } = useError()
+
   // Use useCallback to memoize updateUnreadCount
   const updateUnreadCount = useCallback((notifications) => {
     const newUnreadCount = notifications.filter((n) => !n.isRead).length
@@ -33,7 +36,8 @@ export const NotificationsProvider = ({ children }) => {
       try {
         const token = localStorage.getItem("token")
         if (!token) {
-          throw new Error("Token not found")
+          showError("Token not found")
+          return
         }
 
         const response = await fetch(`/api/Notifications?idUser=${currentUser.id}`, {
@@ -48,16 +52,27 @@ export const NotificationsProvider = ({ children }) => {
           setNotifications(data.items)
           updateUnreadCount(data.items)
         } else {
-          throw new Error("Failed to fetch notifications")
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+  
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error)
       }
     }
 
     fetchNotifications()
-
-  }, [currentUser, dispatch])
+  }, [currentUser, dispatch, updateUnreadCount, showError])
 
   useEffect(() => {
     const startSignalRConnection = async () => {
@@ -69,14 +84,15 @@ export const NotificationsProvider = ({ children }) => {
       try {
         const token = localStorage.getItem("token")
         if (!token) {
-          throw new Error("Token not found")
+          showError("Token not found")
+          return
         }
 
         const hubConnection = new signalR.HubConnectionBuilder()
           .withUrl("/notificationsHub", {
             accessTokenFactory: () => token,
           })
-          .configureLogging(signalR.LogLevel.Information)  // Enable detailed logs
+          .configureLogging(signalR.LogLevel.Information)
           .withAutomaticReconnect([0, 2000, 10000, 30000])
           .build()
 
@@ -89,9 +105,9 @@ export const NotificationsProvider = ({ children }) => {
         })
 
         hubConnection.on("ReceiveNotification", (notification) => {
-          console.log("Notification received:", notification);
-          setNotifications((prev) => [notification, ...prev]);
-          updateUnreadCount([...notifications, notification]); // Ensure count updates
+          console.log("Notification received:", notification)
+          setNotifications((prev) => [notification, ...prev])
+          updateUnreadCount([...notifications, notification])
         })
 
         await hubConnection.start()
@@ -101,7 +117,7 @@ export const NotificationsProvider = ({ children }) => {
 
         connection.current = hubConnection
       } catch (error) {
-        console.error("Connection failed", error)
+        showError(error)
       }
     }
 
@@ -110,9 +126,9 @@ export const NotificationsProvider = ({ children }) => {
     }
 
     return () => {
-      connection.current?.stop() // Clean up the connection on unmount
+      connection.current?.stop() 
     }
-  }, [currentUser, updateUnreadCount])
+  }, [currentUser, updateUnreadCount, notifications, showError])
 
   useEffect(() => {
     const markAllAsReadOnPageChange = async () => {
@@ -125,7 +141,8 @@ export const NotificationsProvider = ({ children }) => {
       try {
         const token = localStorage.getItem("token")
         if (!token) {
-          throw new Error("Token not found")
+          showError("Token not found")
+          return
         }
 
         await fetch(`/api/Notifications/mark-all-as-read`, {
@@ -134,17 +151,17 @@ export const NotificationsProvider = ({ children }) => {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        });
+        })
 
         setHasNewNotifications(false)
         dispatch(setUnreadCount(0))
       } catch (error) {
-        console.error("Failed to mark all notifications as read on page change:", error);
+        showError(error)
       }
     }
 
     markAllAsReadOnPageChange()
-  }, [location, dispatch, currentUser])
+  }, [location, dispatch, currentUser, showError])
 
   return (
     <NotificationsContext.Provider value={{ notifications, setNotifications, hasNewNotifications }}>

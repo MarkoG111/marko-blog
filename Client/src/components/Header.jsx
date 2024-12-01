@@ -9,16 +9,23 @@ import { signoutSuccess } from '../redux/user/userSlice'
 import { useContext, useState } from 'react'
 
 import { NotificationsContext } from '../contexts/NotificationsContext'
+import { useError } from '../contexts/ErrorContext'
 
 export default function Header() {
   const path = useLocation().pathname
+
   const navigate = useNavigate()
+
   const dispatch = useDispatch()
+
   const { theme } = useSelector((state) => state.theme)
   const { currentUser } = useSelector((state) => state.user)
+
   const [headerSearchTerm, setHeaderSearchTerm] = useState('')
 
   const { notifications, hasNewNotifications } = useContext(NotificationsContext)
+
+  const { showError } = useError()
 
   const unreadNotificationCount = notifications.filter((n) => !n.isRead).length
   const isAuthor = currentUser && currentUser.roleName === 'Author'
@@ -29,7 +36,7 @@ export default function Header() {
       dispatch(signoutSuccess())
       navigate('/')
     } catch (error) {
-      console.log(error)
+      showError(error)
     }
   }
 
