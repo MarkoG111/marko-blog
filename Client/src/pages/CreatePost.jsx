@@ -2,6 +2,7 @@ import { Button, Checkbox, FileInput, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useError } from "../contexts/ErrorContext";
 
 export default function CreatePost() {
   const [selectedCategories, setSelectedCategories] = useState([])
@@ -11,36 +12,25 @@ export default function CreatePost() {
   const [imagePreview, setImagePreview] = useState(null);
   const [content, setContent] = useState('')
 
-  const [errorMessage, setErrorMessage] = useState('')
-  const [errorMessages, setErrorMessages] = useState([])
-  const [showErrorModal, setShowErrorModal] = useState(false)
-  const [showErrorsModal, setShowErrorsModal] = useState(false)
-
   const [successMessage, setSuccessMessage] = useState('')
   const [showSuccessModal, setShowSucessModal] = useState(false)
 
+  const { showError } = useError()
+
   useEffect(() => {
-    if (showErrorModal) {
-      setShowErrorModal(true)
-    }
-    if (showErrorsModal) {
-      setShowErrorsModal(true)
-    }
     if (showSuccessModal) {
       setShowSucessModal(true)
     }
     const timer = setTimeout(() => {
-      setShowErrorModal(false)
-      setShowErrorsModal(false)
       setShowSucessModal(false)
     }, 10000)
 
     return () => clearTimeout(timer)
-  }, [showErrorModal, showErrorsModal, showSuccessModal])
+  }, [showSuccessModal])
 
   const handleContentChange = (value) => {
     setContent(value);
-  };
+  }
 
   const handleCategoryChange = (IdCategory) => {
     setSelectedCategories(prevCategories => {
@@ -49,8 +39,8 @@ export default function CreatePost() {
       } else {
         return [...prevCategories, IdCategory];
       }
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     const fetchCategoriesForCreatePost = async () => {
@@ -70,19 +60,32 @@ export default function CreatePost() {
         if (response.ok) {
           const data = await response.json()
           setCategories(data.items)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error)
       }
     }
 
     fetchCategoriesForCreatePost()
-  }, [])
+  }, [showError])
 
   const handleUploadImage = async () => {
     if (!imageFile) {
-      setShowErrorModal(true)
-      setErrorMessage("You must choose image.")
+      showError("You must choose image.")
       return
     }
 
@@ -107,12 +110,22 @@ export default function CreatePost() {
         const imageUrl = await response.json()
         setImagePreview(imageUrl)
       } else {
-        setShowErrorModal(true)
-        setErrorMessage("You must choose image.")
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
     } catch (error) {
-      setShowErrorModal(true)
-      setErrorMessage("Error processing image.")
+      showError(error)
     }
   }
 
@@ -142,29 +155,38 @@ export default function CreatePost() {
       })
 
       if (!response.ok) {
-        const data = await response.json();
-        const errorMessages = data.errors.map(error => error.ErrorMessage)
-        setShowErrorsModal(true)
-        setErrorMessages(errorMessages)
-      } else {
-        const insertPostId = await response.json()
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
 
-        postData.PostCategories.forEach(postCategory => {
-          postCategory.idPost = insertPostId
-        })
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
 
-        setShowSucessModal(true)
-        setSuccessMessage("You have successfully added a post.")
-
-        setContent('')
-        setSelectedCategories([])
-        setImageFile(null)
-        setImagePreview(null)
-        e.target.elements.title.value = ''
-        e.target.elements.fileInput.value = ''
+        return
       }
+      
+      const insertPostId = await response.json()
+
+      postData.PostCategories.forEach(postCategory => {
+        postCategory.idPost = insertPostId
+      })
+
+      setShowSucessModal(true)
+      setSuccessMessage("You have successfully added a post.")
+
+      setContent('')
+      setSelectedCategories([])
+      setImageFile(null)
+      setImagePreview(null)
+      e.target.elements.title.value = ''
+      e.target.elements.fileInput.value = ''
     } catch (error) {
-      console.log(error)
+      showError(error)
     }
   }
 
@@ -216,22 +238,6 @@ export default function CreatePost() {
         {showSuccessModal && (
           <div className="success-modal show">
             {successMessage}
-          </div>
-        )}
-
-        {showErrorModal && (
-          <div className="error-modal show">
-            {errorMessage}
-          </div>
-        )}
-
-        {showErrorsModal && (
-          <div className="error-modals show">
-            {errorMessages.map((message, index) => (
-              <div key={index} className="error-in-list">
-                {message}
-              </div>
-            ))}
           </div>
         )}
       </form>

@@ -1,24 +1,20 @@
-import { Alert, Button, Checkbox, FileInput, TextInput } from "flowbite-react";
+import { Button, Checkbox, FileInput, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { useError } from "../contexts/ErrorContext";
 
 export default function UpdatePost() {
   const [selectedCategories, setSelectedCategories] = useState([])
   const [categories, setCategories] = useState([])
 
   const [imageFile, setImageFile] = useState(null)
-  const [imageUploadError, setImageUploadError] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [content, setEditContent] = useState('')
   const [editData, setEditData] = useState({})
 
-  const [errorMessage, setErrorMessage] = useState('')
-  const [errorMessages, setErrorMessages] = useState([])
-  const [showErrorModal, setShowErrorModal] = useState(false)
-  const [showErrorsModal, setShowErrorsModal] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
   const [showSuccessModal, setShowSucessModal] = useState(false)
 
@@ -26,24 +22,18 @@ export default function UpdatePost() {
 
   const { postId } = useParams()
 
+  const { showError } = useError()
+
   useEffect(() => {
-    if (showErrorModal) {
-      setShowErrorModal(true)
-    }
-    if (showErrorsModal) {
-      setShowErrorsModal(true)
-    }
     if (showSuccessModal) {
       setShowSucessModal(true)
     }
     const timer = setTimeout(() => {
-      setShowErrorModal(false)
-      setShowErrorsModal(false)
       setShowSucessModal(false)
     }, 10000)
 
     return () => clearTimeout(timer)
-  }, [showErrorModal, showErrorsModal, showSuccessModal])
+  }, [showSuccessModal])
 
   useEffect(() => {
     try {
@@ -64,19 +54,32 @@ export default function UpdatePost() {
           const data = await response.json()
 
           if (!response.ok) {
-            throw new Error();
-          } else {
-            setEditData(data);
+            const errorText = await response.text()
+            const errorData = JSON.parse(errorText)
+
+            if (Array.isArray(errorData.errors)) {
+              errorData.errors.forEach((err) => {
+                showError(err.ErrorMessage)
+              })
+            } else {
+              const errorMessage = errorData.message || "An unknown error occurred.";
+              showError(errorMessage)
+            }
+
+            return
           }
+
+          setEditData(data);
         } catch (error) {
-          console.log(error)
+          showError(error)
         }
       }
+
       fetchPost()
     } catch (error) {
-      console.log(error)
+      showError(error)
     }
-  }, [postId])
+  }, [postId, showError])
 
   const handleContentEditPostChange = (value) => {
     setEditContent(value);
@@ -107,17 +110,31 @@ export default function UpdatePost() {
           }
         })
 
-        if (response.ok) {
-          const data = await response.json()
-          setCategories(data.items)
+        if (!response.ok) {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
+
+        const data = await response.json()
+        setCategories(data.items)
       } catch (error) {
-        console.log(error)
+        showError(error)
       }
     }
 
     fetchCategoriesForUpdatePost()
-  }, [])
+  }, [showError])
 
   useEffect(() => {
     if (editData.categories && editData.categories.length > 0) {
@@ -128,7 +145,7 @@ export default function UpdatePost() {
 
   const handleUploadImage = async () => {
     if (!imageFile) {
-      setImageUploadError("Please select an image")
+      showError("Please select an image")
       return
     }
 
@@ -149,10 +166,26 @@ export default function UpdatePost() {
         body: formData
       });
 
+      if (!response.ok) {
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
+      }
+
       const imageUrl = await response.json()
       setImagePreview(imageUrl)
     } catch (error) {
-      setImageUploadError("Image upload failed")
+      showError("Image upload failed")
     }
   }
 
@@ -183,20 +216,28 @@ export default function UpdatePost() {
         body: JSON.stringify(postData)
       })
 
+      if (!response.ok) {
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
+      }
+
       if (response.status == 204) {
         setShowSucessModal(true)
         setSuccessMessage("You have successfully updated post.")
-      } else {
-        const data = await response.json()
-        if (!response.ok) {
-          const errorMessages = data.errors.map(error => error.ErrorMessage)
-          setShowErrorsModal(true)
-          setErrorMessages(errorMessages)
-        }
       }
     } catch (error) {
-      setShowErrorModal(true)
-      setErrorMessage('Cannot update post.')
+      showError('Cannot update post.')
     }
   }
 
@@ -239,12 +280,6 @@ export default function UpdatePost() {
           )}
         </div>
 
-        {imageUploadError && (
-          <Alert color="failure">
-            {imageUploadError}
-          </Alert>
-        )}
-
         <ReactQuill
           theme="snow"
           placeholder="Write something..."
@@ -260,22 +295,6 @@ export default function UpdatePost() {
         {showSuccessModal && (
           <div className="success-modal show">
             {successMessage}
-          </div>
-        )}
-
-        {showErrorModal && (
-          <div className="error-modal show">
-            {errorMessage}
-          </div>
-        )}
-
-        {showErrorsModal && (
-          <div className="error-modals show">
-            {errorMessages.map((message, index) => (
-              <div key={index} className="error-in-list">
-                {message}
-              </div>
-            ))}
           </div>
         )}
       </form>

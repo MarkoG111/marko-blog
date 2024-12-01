@@ -1,11 +1,14 @@
 import { Pagination } from "flowbite-react";
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom";
+import { useError } from "../contexts/ErrorContext";
 
 export default function Authors() {
   const [authors, setAuthors] = useState([]);
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
+
+  const { showError } = useError()
 
   useEffect(() => {
     const fethcAuthors = async () => {
@@ -26,14 +29,28 @@ export default function Authors() {
           
           setAuthors(authors)
           setPageCount(data.pageCount)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error)
       }
     }
 
     fethcAuthors()
-  }, [currentPage])
+  }, [currentPage, showError])
 
   const onPageChange = (page) => setCurrentPage(page)
 

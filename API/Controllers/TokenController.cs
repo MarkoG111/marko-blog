@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Core;
@@ -25,7 +26,7 @@ namespace Api.Controllers
 
             if (token == null)
             {
-                return Unauthorized();
+                return Unauthorized(new { message = "Invalid username or password." });
             }
 
             return Ok(new { token });
@@ -34,7 +35,9 @@ namespace Api.Controllers
 
     public class LoginRequest
     {
+        [Required]
         public string Username { get; set; }
+        [Required]
         public string Password { get; set; }
     }
 }

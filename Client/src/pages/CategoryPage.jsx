@@ -1,13 +1,16 @@
 import { Pagination } from "flowbite-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import { useError } from "../contexts/ErrorContext"
 
 export default function CategoryPage() {
   const { id } = useParams()
-  
+
   const [category, setCategory] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
+
+  const { showError } = useError()
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -25,14 +28,28 @@ export default function CategoryPage() {
           const data = await response.json()
           setCategory(data)
           setPageCount(data.pageCount)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error)
       }
     }
 
     fetchCategory()
-  }, [id, currentPage])
+  }, [id, currentPage, showError])
 
   return (
     <main className="max-w-6xl mx-auto min-h-screen p-3">

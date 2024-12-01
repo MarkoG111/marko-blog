@@ -1,14 +1,18 @@
-import { Table, Pagination, Modal, Button } from "flowbite-react";
+import { Table, Pagination, Button } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineClock, HiOutlineCheck, HiOutlineX } from 'react-icons/hi'
+import { useError } from "../contexts/ErrorContext"
 
 export default function DashAuthorRequests() {
   const { currentUser } = useSelector((state) => state.user)
+  
   const [authorRequests, setAuthorRequests] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
+
+  const { showError } = useError()
 
   useEffect(() => {
     const fetchAuthorRequests = async () => {
@@ -30,14 +34,16 @@ export default function DashAuthorRequests() {
         if (response.ok) {
           setAuthorRequests(data.items)
           setPageCount(data.pageCount)
+        } else {
+          throw new Error(data.message || "Failed to fetch requests")
         }
       } catch (error) {
-        console.log(error)
+        showError(error.message)
       }
     }
 
     fetchAuthorRequests()
-  }, [currentPage])
+  }, [currentPage, showError])
 
   const onPageChange = (page) => setCurrentPage(page)
 

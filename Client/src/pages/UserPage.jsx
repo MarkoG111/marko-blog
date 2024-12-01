@@ -5,6 +5,7 @@ import { FaRegCommentDots, FaUsers } from 'react-icons/fa'
 import { RiUserFollowLine, RiUserUnfollowFill } from "react-icons/ri"
 import { FaUserPlus } from "react-icons/fa6";
 import { Button } from "flowbite-react"
+import { useError } from "../contexts/ErrorContext"
 
 export default function UserPage() {
   const { id } = useParams()
@@ -13,16 +14,18 @@ export default function UserPage() {
   const [isFollowing, setIsFollowing] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
+  const { showError } = useError()
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const repsonse = await fetch(`/api/Users/${id}`, {
+        const response = await fetch(`/api/Users/${id}`, {
           method: "GET"
         })
 
-        const data = await repsonse.json()
+        const data = await response.json()
 
-        if (repsonse.ok) {
+        if (response.ok) {
           setUser(data)
 
           const token = localStorage.getItem("token")
@@ -39,14 +42,26 @@ export default function UserPage() {
             const followData = await followResponse.json()
             setIsFollowing(followData.isFollowing)
           }
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
         }
       } catch (error) {
-        console.log(error)
+        showError(error)
       }
     }
 
     fetchUser()
-  }, [id])
+  }, [id, showError])
 
   const handleFollow = async (idFollowing) => {
     try {
@@ -70,9 +85,21 @@ export default function UserPage() {
           ...prevUser,
           followersCount: prevUser.followersCount + 1,
         }));
+      } else {
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
       }
     } catch (error) {
-      console.log(error)
+      showError(error)
     }
   }
 
@@ -96,9 +123,21 @@ export default function UserPage() {
           ...prevUser,
           followersCount: prevUser.followersCount - 1,
         }));
+      } else {
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
       }
     } catch (error) {
-      console.log(error)
+      showError(error)
     }
   }
 
@@ -121,7 +160,7 @@ export default function UserPage() {
             <FaUsers className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3" /> <span>{user && user.followersCount} {user && user.followersCount == 1 ? 'follower' : 'followers'}</span>
             <RiUserFollowLine className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3 ml-4" /> <span>{user && user.followingCount} following</span>
           </div>
-          {isLoggedIn && ( 
+          {isLoggedIn && (
             <div className="flex -mt-9 gap-x-4 justify-end mr-8">
               {isFollowing ? (
                 <Button

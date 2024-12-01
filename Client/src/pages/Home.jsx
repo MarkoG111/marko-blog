@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
 import PostCard from "../components/PostCard";
 import CallToAction from "../components/CallToAction";
+import { useError } from "../contexts/ErrorContext";
 
 export default function Home() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([])
+
+  const { showError } = useError()
 
   useEffect(() => {
     const fetchHomePagePosts = async () => {
@@ -17,14 +20,28 @@ export default function Home() {
 
         if (response.ok) {
           setPosts(data.items)
+        } else {
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
+          return
         }
       } catch (error) {
-        console.log(error)
+        showError(error)
       }
     }
 
     fetchHomePagePosts()
-  }, [])
+  }, [showError])
 
   return (
     <div>

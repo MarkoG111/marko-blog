@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom"
 import CommentSection from "../components/CommentSection"
 import PostLikeButtons from "../components/PostLikeButtons"
 import { useSelector } from "react-redux"
+import { useError } from "../contexts/ErrorContext"
 
 import {
   removeDislikeOrLikeIfPresentInPost,
@@ -17,8 +18,7 @@ export default function PostPage() {
 
   const [loading, setLoading] = useState(true)
   const [post, setPost] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
-  const [showErrorModal, setShowErrorModal] = useState(false)
+  const { showError } = useError()
 
   const { currentUser } = useSelector(state => state.user)
 
@@ -32,32 +32,38 @@ export default function PostPage() {
         })
 
         if (!response.ok) {
-          setLoading(true)
+          const errorText = await response.text()
+          const errorData = JSON.parse(errorText)
+
+          if (Array.isArray(errorData.errors)) {
+            errorData.errors.forEach((err) => {
+              showError(err.ErrorMessage)
+            })
+          } else {
+            const errorMessage = errorData.message || "An unknown error occurred.";
+            showError(errorMessage)
+          }
+
           return
-        } else {
-          const data = await response.json()
-          setPost(data)
-          setLoading(false)
         }
+
+        const data = await response.json()
+
+        setPost(data)
+        setLoading(false)
       } catch (error) {
-        setLoading(true)
+        showError("An unexpected error occurred while loading the post.")
       }
     }
 
     fethcPost()
-  }, [id])
-
-  const handleError = (message) => {
-    setErrorMessage(message)
-    setShowErrorModal(true)
-    setTimeout(() => setShowErrorModal(false), 10000)
-  }
+  }, [id, showError])
 
   const onLikePost = async (idPost) => {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        handleError("You must be logged in to like a post.")
+        showError("You must be logged in to like a post.")
         return
       }
 
@@ -92,10 +98,20 @@ export default function PostPage() {
       } else {
         const errorText = await response.text()
         const errorData = JSON.parse(errorText)
-        handleError(errorData.message)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
     } catch (error) {
-      handleError("An error occurred while processing your request.")
+      showError("An error occurred while processing your request.")
     }
   }
 
@@ -103,8 +119,7 @@ export default function PostPage() {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        setShowErrorModal(true)
-        setErrorMessage("You must be logged in to dislike a post.")
+        showError("You must be logged in to like a post.")
         return
       }
 
@@ -139,13 +154,22 @@ export default function PostPage() {
       } else {
         const errorText = await response.text()
         const errorData = JSON.parse(errorText)
-        handleError(errorData.message)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
+
+        return
       }
     } catch (error) {
-      handleError("An error occurred while processing your request.")
+      showError("An error occurred while processing your request.")
     }
   }
-
 
   if (loading) return (
     <div className="flex flex-col justify-center text-center min-h-screen">
@@ -181,7 +205,6 @@ export default function PostPage() {
       </div>
 
       <div className="px-4 max-w-2xl mx-auto w-full">
-        {/* Use the PostLikeButtons component here */}
         <PostLikeButtons
           post={post}
           idPost={post.id}
@@ -190,7 +213,6 @@ export default function PostPage() {
           commentsNumber={post.comments.length}
         />
       </div>
-
 
       <CommentSection idPost={post.id} childrenComments={post.comments.filter(comment => comment.children.length > 0).flatMap(comment => comment.children)} />
     </main>

@@ -2,11 +2,14 @@ import { Button } from "flowbite-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { AiOutlineHeart } from "react-icons/ai";
+import { useError } from "../contexts/ErrorContext";
 
 export default function UserCommentPage() {
   const { id } = useParams()
   const [comment, setComment] = useState(null)
   const [parentComment, setParentComment] = useState(null)
+
+  const { showError } = useError()
 
   useEffect(() => {
     const fetchComment = async () => {
@@ -21,6 +24,18 @@ export default function UserCommentPage() {
         if (data.idParent != null) {
           fetchParentComment(data.idParent);
         }
+      } else {
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
       }
     }
 
@@ -32,11 +47,23 @@ export default function UserCommentPage() {
       if (response.ok) {
         const parentData = await response.json()
         setParentComment(parentData)
+      } else {
+        const errorText = await response.text()
+        const errorData = JSON.parse(errorText)
+
+        if (Array.isArray(errorData.errors)) {
+          errorData.errors.forEach((err) => {
+            showError(err.ErrorMessage)
+          })
+        } else {
+          const errorMessage = errorData.message || "An unknown error occurred.";
+          showError(errorMessage)
+        }
       }
     }
 
     fetchComment()
-  }, [id])
+  }, [id, showError])
 
   return (
     <main className="flex flex-col max-w-3xl mx-auto min-h-96 bg-slate-100 dark:bg-gray-800 my-12 rounded-2xl">
