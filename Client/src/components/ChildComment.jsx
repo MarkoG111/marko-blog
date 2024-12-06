@@ -12,7 +12,6 @@ export default function ChildComment({
   activeReplyCommentId,
   setActiveReplyCommentId,
   comments,
-  setLoading,
   isFirstReply,
   isSmallScreen,
 }) {
@@ -39,7 +38,6 @@ export default function ChildComment({
               activeReplyCommentId={activeReplyCommentId}
               setActiveReplyCommentId={setActiveReplyCommentId}
               comments={comments}
-              setLoading={setLoading}
             />
           </div>
         ))}
@@ -63,7 +61,6 @@ ChildComment.propTypes = {
   activeReplyCommentId: PropTypes.number,
   setActiveReplyCommentId: PropTypes.func.isRequired,
   comments: PropTypes.arrayOf(PropTypes.object).isRequired,
-  setLoading: PropTypes.func.isRequired,
   isFirstReply: PropTypes.bool.isRequired,
   isSmallScreen: PropTypes.bool.isRequired,
 }

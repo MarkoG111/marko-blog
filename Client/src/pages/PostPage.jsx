@@ -119,7 +119,7 @@ export default function PostPage() {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        showError("You must be logged in to like a post.")
+        showError("You must be logged in to dislike a post.")
         return
       }
 

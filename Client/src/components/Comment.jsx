@@ -228,8 +228,6 @@ Comment.propTypes = {
   childrenComments: PropTypes.array.isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  setCommentToDelete: PropTypes.func.isRequired,
-  setShowModal: PropTypes.func.isRequired,
   setActiveReplyCommentId: PropTypes.func.isRequired,
   activeReplyCommentId: PropTypes.number,
   comments: PropTypes.array.isRequired,

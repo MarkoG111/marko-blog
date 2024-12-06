@@ -97,7 +97,6 @@ namespace API.Core
 
         private void LogError(Exception ex, HttpContext context, int statusCode)
         {
-            // Example: Log to a database, file system, or monitoring tool
             var errorDetails = new
             {
                 Timestamp = DateTime.UtcNow,
@@ -109,12 +108,7 @@ namespace API.Core
                 User = context.User.Identity?.Name
             };
 
-            // Log to console or use a logging framework like Serilog or ELK
             _logger.LogError($"Error: {JsonConvert.SerializeObject(errorDetails)}");
-
-            // Optional: Save to database or external service
-            // _dbContext.ErrorLogs.Add(new ErrorLog { ... });
-            // _dbContext.SaveChanges();
         }
     }
 }

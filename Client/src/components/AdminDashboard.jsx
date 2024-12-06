@@ -22,126 +22,48 @@ export default function AdminDashboard() {
   const { showError } = useError()
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchDashboardData = async () => {
       try {
         const token = localStorage.getItem("token")
         if (!token) {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/api/Users`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        })
+        const [usersResponse, commentsResponse, postsResponse] = await Promise.all([
+          fetch(`/api/Users`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`/api/Comments`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`/api/Posts`, { headers: { Authorization: `Bearer ${token}` } }),
+        ])
 
-        const data = await response.json()
+        const usersData = await usersResponse.json()
+        const commentsData = await commentsResponse.json()
+        const postsData = await postsResponse.json()
 
-        if (response.ok) {
-          setUsers(data.items.slice(0, 5))
-          setTotalUsers(data.totalCount)
-          setLastMonthUsers(data.lastMonthCount)
-        } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
+        if (usersResponse.ok) {
+          setUsers(usersData.items.slice(0, 5))
+          setTotalUsers(usersData.totalCount)
+          setLastMonthUsers(usersData.lastMonthCount)
+        }
 
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
+        if (commentsResponse.ok) {
+          setComments(commentsData.items.slice(0, 5))
+          setTotalComments(commentsData.totalCount)
+          setLastMonthComments(commentsData.lastMonthCount)
+        }
 
-          return
+        if (postsResponse.ok) {
+          setPosts(postsData.items.slice(0, 5))
+          setTotalPosts(postsData.totalCount)
+          setLastMonthPosts(postsData.lastMonthCount)
         }
       } catch (error) {
-        showError(error.message)
+        showError(error.message);
       }
     }
 
-    const fetchComments = async () => {
-      try {
-        const token = localStorage.getItem("token")
-        if (!token) {
-          throw new Error("Token not found")
-        }
-
-        const response = await fetch(`/api/Comments`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        })
-
-        const data = await response.json()
-
-        if (response.ok) {
-          setComments(data.items.slice(0, 5))
-          setTotalComments(data.totalCount)
-          setLastMonthComments(data.lastMonthCount)
-        } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
-        }
-      } catch (error) {
-        showError(error.message)
-      }
+    if (currentUser.roleName === "Admin") {
+      fetchDashboardData()
     }
-
-    const fetchPosts = async () => {
-      try {
-        const token = localStorage.getItem("token")
-        if (!token) {
-          throw new Error("Token not found")
-        }
-
-        const response = await fetch(`/api/Posts`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        })
-
-        if (response.ok) {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
-        }
-      } catch (error) {
-        showError(error.message)
-      }
-    }
-
-    if (currentUser.roleName === 'Admin') {
-      fetchUsers()
-      fetchComments()
-      fetchPosts()
-    }
-
   }, [currentUser.roleName, showError])
 
   return (

@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Newtonsoft.Json;
 using API.Core;
 using Implementation;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Controllers
 {
@@ -79,25 +80,19 @@ namespace API.Controllers
             }
         }
 
-        private static string GenerateUsername(string name)
-        {
-            string[] nameParts = name.ToLower().Split(' ');
-            string username = string.Join("", nameParts) + new Random().Next(1000, 9999);
-            return username;
-        }
+        private static string GenerateUsername(string name) => $"{name.ToLower().Replace(" ", "")}{Guid.NewGuid().ToString("N").Substring(0, 4)}";
 
         private static string GenerateRandomPassword()
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            var random = new Random();
-            var passwordChars = new char[16];
 
-            for (int i = 0; i < passwordChars.Length; i++)
-            {
-                passwordChars[i] = chars[random.Next(chars.Length)];
-            }
+            var data = new byte[16];
 
-            return new string(passwordChars);
+            using var rng = RandomNumberGenerator.Create();
+
+            rng.GetBytes(data);
+
+            return new string(data.Select(b => chars[b % chars.Length]).ToArray());
         }
 
         private static string HashPassword(string password)
@@ -157,8 +152,11 @@ namespace API.Controllers
 
     public class UserLoginModel
     {
+        [Required]
         public string Email { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string GooglePhotoUrl { get; set; }
     }
 }

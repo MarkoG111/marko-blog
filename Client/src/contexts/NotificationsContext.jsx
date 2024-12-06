@@ -18,7 +18,8 @@ export const NotificationsProvider = ({ children }) => {
 
   const dispatch = useDispatch()
 
-  let connection = useRef(null)
+  const connection = useRef(null)
+  const isConnecting = useRef(false)
 
   const { showError } = useError()
 
@@ -63,7 +64,7 @@ export const NotificationsProvider = ({ children }) => {
             const errorMessage = errorData.message || "An unknown error occurred.";
             showError(errorMessage)
           }
-  
+
           return
         }
       } catch (error) {
@@ -74,12 +75,37 @@ export const NotificationsProvider = ({ children }) => {
     fetchNotifications()
   }, [currentUser, dispatch, updateUnreadCount, showError])
 
+  const debounce = (func, delay) => {
+    let timer
+
+    return (...args) => {
+      clearTimeout(timer)
+      timer = setTimeout(() => func(...args), delay)
+    }
+  }
+
+  const handleNewNotification = debounce((notification) => {
+    setNotifications((prev) => {
+      const isDuplicate = prev.some((n) => n.id === notification.id)
+
+      if (isDuplicate) {
+        return prev
+      }
+
+      const updatedNotifications = [notification, ...prev]
+      updateUnreadCount(updatedNotifications)
+
+      return updatedNotifications
+    })
+  }, 300)
+
   useEffect(() => {
     const startSignalRConnection = async () => {
-      if (connection.current) {
-        await connection.current.stop()
-        connection.current = null
+      if (isConnecting.current || connection.current) {
+        return
       }
+
+      isConnecting.current = true
 
       try {
         const token = localStorage.getItem("token")
@@ -104,11 +130,7 @@ export const NotificationsProvider = ({ children }) => {
           console.log("Reconnected. New connection ID:", connectionId)
         })
 
-        hubConnection.on("ReceiveNotification", (notification) => {
-          console.log("Notification received:", notification)
-          setNotifications((prev) => [notification, ...prev])
-          updateUnreadCount([...notifications, notification])
-        })
+        hubConnection.on("ReceiveNotification", handleNewNotification)
 
         await hubConnection.start()
         console.log("SignalR connected")
@@ -118,50 +140,53 @@ export const NotificationsProvider = ({ children }) => {
         connection.current = hubConnection
       } catch (error) {
         showError(error)
+      } finally {
+        isConnecting.current = false
       }
     }
 
-    if (currentUser?.roleName === 'Author' && currentUser?.id) {
+    if (currentUser?.roleName === "Author" && currentUser?.id) {
       startSignalRConnection()
     }
 
     return () => {
-      connection.current?.stop() 
+      if (connection.current) {
+        connection.current.stop().catch((error) => console.log("Error stopping connection:", error))
+        connection.current = null
+      }
     }
-  }, [currentUser, updateUnreadCount, notifications, showError])
+  }, [currentUser, updateUnreadCount, showError])
 
   useEffect(() => {
-    const markAllAsReadOnPageChange = async () => {
-      if (!currentUser || !currentUser.id) {
-        return
-      }
+    if (location.pathname == "/notifications") {
+      const markAllAsReadOnPageChange = async () => {
+        setNotifications((prevNotifications) => prevNotifications.map((notification) => ({ ...notification, isRead: true })))
 
-      setNotifications((prevNotifications) => prevNotifications.map((notification) => ({ ...notification, isRead: true })))
+        try {
+          const token = localStorage.getItem("token")
+          if (!token) {
+            showError("Token not found")
+            return
+          }
 
-      try {
-        const token = localStorage.getItem("token")
-        if (!token) {
-          showError("Token not found")
-          return
+          await fetch(`/api/Notifications/mark-all-as-read`, {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          })
+
+          setHasNewNotifications(false)
+          dispatch(setUnreadCount(0))
+        } catch (error) {
+          showError(error)
         }
-
-        await fetch(`/api/Notifications/mark-all-as-read`, {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        })
-
-        setHasNewNotifications(false)
-        dispatch(setUnreadCount(0))
-      } catch (error) {
-        showError(error)
       }
-    }
 
-    markAllAsReadOnPageChange()
-  }, [location, dispatch, currentUser, showError])
+      markAllAsReadOnPageChange()
+    }
+  }, [location.pathname, dispatch, showError])
 
   return (
     <NotificationsContext.Provider value={{ notifications, setNotifications, hasNewNotifications }}>
