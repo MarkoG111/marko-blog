@@ -10,11 +10,11 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TokenController : ControllerBase
+    public class LoginController : ControllerBase
     {
         private readonly JWTManager _manager;
 
-        public TokenController(JWTManager manager)
+        public LoginController(JWTManager manager)
         {
             _manager = manager;
         }

@@ -19,10 +19,12 @@ namespace API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly BlogContext _context;
+        private readonly JWTManager _jwtManager;
 
-        public AuthController(BlogContext context)
+        public AuthController(BlogContext context, JWTManager jWTManager)
         {
             _context = context;
+            _jwtManager = jWTManager;
         }
 
         [HttpPost]
@@ -39,6 +41,7 @@ namespace API.Controllers
 
                 var generatedPassword = GenerateRandomPassword();
                 var role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User");
+
                 if (role == null)
                 {
                     return null;
@@ -63,14 +66,14 @@ namespace API.Controllers
                 _context.Users.Add(newUser);
                 await _context.SaveChangesAsync();
 
-                var token = GenerateJwtToken(newUser);
+                var token = _jwtManager.GenerateToken(_jwtManager.GenerateClaims(newUser));
                 return Ok(new { token });
             }
             else
             {
                 try
                 {
-                    var token = GenerateJwtToken(user);
+                    var token = _jwtManager.GenerateToken(_jwtManager.GenerateClaims(user));
                     return Ok(new { token });
                 }
                 catch (Exception ex)
@@ -80,7 +83,7 @@ namespace API.Controllers
             }
         }
 
-        private static string GenerateUsername(string name) => $"{name.ToLower().Replace(" ", "")}{Guid.NewGuid().ToString("N").Substring(0, 4)}";
+        private static string GenerateUsername(string name) => $"{name.ToLower().Replace(" ", "")}{Guid.NewGuid().ToString("N").Substring(0, 6)}";
 
         private static string GenerateRandomPassword()
         {
@@ -109,50 +112,12 @@ namespace API.Controllers
                 return builder.ToString();
             }
         }
-
-        private string GenerateJwtToken(User newUser)
-        {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MyVeryVeryVerySecretKeyThatIsVeryVeryVeryBadHidden"));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var actor = new JWTActor
-            {
-                Id = newUser.Id,
-                Identity = newUser.Username,
-                AllowedUseCases = newUser.UserUseCases.Select(x => x.IdUseCase),
-                FirstName = newUser.FirstName,
-                LastName = newUser.LastName,
-                Email = newUser.Email,
-                RoleName = newUser.Role.Name,
-                ProfilePicture = newUser.ProfilePicture
-            };
-
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString(), ClaimValueTypes.String, "asp_api_project"),
-                new Claim(JwtRegisteredClaimNames.Iss, "asp_api_project", ClaimValueTypes.String, "asp_api_project"),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, "asp_api_project"),
-                new Claim("IdUser", newUser.Id.ToString(), ClaimValueTypes.String, "asp_api_project"),
-                new Claim("ActorData", JsonConvert.SerializeObject(actor), ClaimValueTypes.String, "asp_api_project")
-            };
-
-            var dateTimeNow = DateTime.UtcNow;
-            var token = new JwtSecurityToken(
-                issuer: "asp_api_project",
-                audience: "Any",
-                claims: claims,
-                notBefore: dateTimeNow,
-                expires: dateTimeNow.AddMinutes(120),
-                signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
     }
 
     public class UserLoginModel
     {
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
         [Required]
         public string Name { get; set; }

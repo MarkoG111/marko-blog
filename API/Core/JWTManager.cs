@@ -5,6 +5,7 @@ using EFDataAccess;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Microsoft.IdentityModel.Tokens;
+using Domain;
 
 namespace API.Core
 {
@@ -23,20 +24,28 @@ namespace API.Core
 
         public string MakeToken(string username, string password)
         {
-            var user = _context.Users.Include(u => u.UserUseCases).Include(u => u.Role)
-                .FirstOrDefault(x => x.Username == username && x.Password == password && x.IsActive == true);
-
+            var user = FetchUser(username, password);
             if (user == null)
             {
                 return null;
             }
 
+            var claims = GenerateClaims(user);
+            return GenerateToken(claims);
+        }
+
+        public User FetchUser(string username, string password)
+        {
+            return _context.Users.Include(u => u.UserUseCases).Include(u => u.Role).FirstOrDefault(u => u.Username == username && u.Password == password);
+        }
+
+        public List<Claim> GenerateClaims(User user)
+        {
             var actor = new JWTActor
             {
                 Id = user.Id,
                 AllowedUseCases = user.UserUseCases.Select(x => x.IdUseCase),
                 Identity = user.Username,
-
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
@@ -44,26 +53,27 @@ namespace API.Core
                 ProfilePicture = user.ProfilePicture
             };
 
-            var claims = new List<Claim>
+            return new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString(), ClaimValueTypes.String, _issuer),
-                new Claim(JwtRegisteredClaimNames.Iss, "asp_api_project", ClaimValueTypes.String, _issuer),
+                new Claim(JwtRegisteredClaimNames.Iss, _issuer, ClaimValueTypes.String, _issuer),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _issuer),
                 new Claim("IdUser", actor.Id.ToString(), ClaimValueTypes.String, _issuer),
                 new Claim("ActorData", JsonConvert.SerializeObject(actor), ClaimValueTypes.String, _issuer)
             };
+        }
 
+        public string GenerateToken(IEnumerable<Claim> claims)
+        {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
-
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var dateTimeNow = DateTime.UtcNow;
             var token = new JwtSecurityToken(
                 issuer: _issuer,
                 audience: "Any",
                 claims: claims,
-                notBefore: dateTimeNow,
-                expires: dateTimeNow.AddMinutes(120),
+                notBefore: DateTime.UtcNow,
+                expires: DateTime.UtcNow.AddMinutes(120),
                 signingCredentials: credentials
             );
 
