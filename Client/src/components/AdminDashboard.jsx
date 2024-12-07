@@ -30,8 +30,8 @@ export default function AdminDashboard() {
         }
 
         const [usersResponse, commentsResponse, postsResponse] = await Promise.all([
-          fetch(`/api/Users`, { headers: { Authorization: `Bearer ${token}` } }),
-          fetch(`/api/Comments`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`/users`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`/comments`, { headers: { Authorization: `Bearer ${token}` } }),
           fetch(`/posts`, { headers: { Authorization: `Bearer ${token}` } }),
         ])
 
@@ -187,7 +187,7 @@ export default function AdminDashboard() {
               <Table.Body key={post.id} className="divide-y">
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell>
-                    <img src={`api/Images/images/${post.imageName}`} alt={post.title} className="w-16 h-14 rounded-md " />
+                    <img src={`/images/${post.imageName}`} alt={post.title} className="w-16 h-14 rounded-md " />
                   </Table.Cell>
                   <Table.Cell className="">{post.title}</Table.Cell>
                   <Table.Cell className="">

@@ -2,11 +2,13 @@ import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
 
 export default function PostCard({ post }) {
+  console.log(post);
+
   return (
     <div className="group relative flex-1 min-w-[250px] w-full border h-[400px] overflow-hidden rounded-lg sm:w-[430px] border-teal-500 hover:border-2 transition-all">
       <Link to={`/post/${post.id}`}>
         <img
-          src={`api/Images/images/${post.imageName}`}
+          src={`http://localhost:5207/images/${post.imageName}`}
           alt="post cover"
           className="p-4 h-[210px] w-full object-contain group-hover:h-[220px] transition-all duration-300 z-20"
         />
@@ -44,15 +46,15 @@ export default function PostCard({ post }) {
 
 PostCard.propTypes = {
   post: PropTypes.shape({
-    id: PropTypes.number.isRequired, 
-    imageName: PropTypes.string.isRequired, 
-    title: PropTypes.string.isRequired, 
+    id: PropTypes.number.isRequired,
+    imageName: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     categories: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.number.isRequired, 
-        name: PropTypes.string.isRequired, 
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
       })
-    ).isRequired, 
-    username: PropTypes.string.isRequired, 
+    ).isRequired,
+    username: PropTypes.string.isRequired,
   }).isRequired,
 }

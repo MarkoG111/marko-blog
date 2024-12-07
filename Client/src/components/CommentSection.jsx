@@ -23,8 +23,8 @@ export default function CommentSection({ idPost }) {
   const [comments, setComments] = useState([])
   const [childComments, setChildComments] = useState([])
   const [commentsNumber, setCommentsNumber] = useState(0)
-  const [activeReplyCommentId, setActiveReplyCommentId] = useState(null)
-  const [showModal, setShowModal] = useState(false)
+  const [activeReplyIdComment, setActiveReplyIdComment] = useState(null)
+  const [showModalToDeleteComment, setShowModalToDeleteComment] = useState(false)
   const [commentToDelete, setCommentToDelete] = useState(null)
 
   const { showError } = useError()
@@ -64,7 +64,7 @@ export default function CommentSection({ idPost }) {
     fetchPostAndComments()
   }, [idPost, showError])
 
-  const handleSubmit = async (e) => {
+  const handleSubmitComment = async (e) => {
     e.preventDefault()
 
     if (comment.length > 200) {
@@ -88,7 +88,7 @@ export default function CommentSection({ idPost }) {
         Username: currentUser.username
       })
 
-      const response = await fetch(`/api/Comments`, {
+      const response = await fetch(`/comments`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -141,7 +141,7 @@ export default function CommentSection({ idPost }) {
         Username: currentUser.username
       })
 
-      const response = await fetch(`/api/Comments`, {
+      const response = await fetch(`/comments`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -154,7 +154,7 @@ export default function CommentSection({ idPost }) {
         const data = await response.json()
 
         setChildComments([data, ...childComments])
-        setActiveReplyCommentId(null)
+        setActiveReplyIdComment(null)
         setCommentsNumber(commentsNumber + 1)
       } else {
         const errorText = await response.text()
@@ -177,12 +177,12 @@ export default function CommentSection({ idPost }) {
     }
   }
 
-  const handleLikeOptimistic = (idComment) => {
+  const handleLikeCommentOptimistic = (idComment) => {
     handleOptimisticUpdate(comments, setComments, idComment, 'like')
-    handleLike(idComment)
+    handleLikeComment(idComment)
   }
 
-  const handleLike = async (idComment) => {
+  const handleLikeComment = async (idComment) => {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
@@ -204,7 +204,7 @@ export default function CommentSection({ idPost }) {
         Status: 1,
       })
 
-      const response = await fetch(`/api/Comments/like`, {
+      const response = await fetch(`/comments/${idComment}/like`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -245,16 +245,16 @@ export default function CommentSection({ idPost }) {
         return
       }
     } catch (error) {
-      showError(error.message)
+      showError(error.message || "An unknown error occurred.")
     }
   }
 
-  const handleDislikeOptimistic = (idComment) => {
+  const handleDislikeCommentOptimistic = (idComment) => {
     handleOptimisticUpdate(comments, setComments, idComment, 'dislike')
-    handleDislike(idComment)
+    handleDislikeComment(idComment)
   }
 
-  const handleDislike = async (idComment) => {
+  const handleDislikeComment = async (idComment) => {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
@@ -276,7 +276,7 @@ export default function CommentSection({ idPost }) {
         Status: 2
       })
 
-      const response = await fetch(`/api/Comments/like`, {
+      const response = await fetch(`/comments/${idComment}/like`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -317,11 +317,11 @@ export default function CommentSection({ idPost }) {
         return
       }
     } catch (error) {
-      showError(error.message)
+      showError(error.message || "An unknown error occurred.")
     }
   }
 
-  const handleEdit = async (comment, editedText) => {
+  const handleEditComment = async (comment, editedText) => {
     setComments(
       comments.map((c) =>
         c.id == comment.id ? { ...c, commentText: editedText } : c
@@ -335,8 +335,8 @@ export default function CommentSection({ idPost }) {
     )
   }
 
-  const handleDelete = async (commentId) => {
-    setShowModal(false)
+  const handleDeleteComment = async (idComment) => {
+    setShowModalToDeleteComment(false)
 
     try {
       const token = localStorage.getItem("token")
@@ -348,7 +348,7 @@ export default function CommentSection({ idPost }) {
         isDeleted: 1
       })
 
-      const response = await fetch(`/api/Comments/comment/${commentId}`, {
+      const response = await fetch(`/comments/${idComment}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -358,12 +358,12 @@ export default function CommentSection({ idPost }) {
 
       if (response.ok) {
         const updatedComments = comments.map(comment =>
-          comment.id === commentId ? { ...comment, isDeleted: 1 } : comment
+          comment.id === idComment ? { ...comment, isDeleted: 1 } : comment
         )
         setComments(updatedComments)
 
         const updatedChildComments = childComments.map(comment =>
-          comment.id === commentId ? { ...comment, isDeleted: 1 } : comment
+          comment.id === idComment ? { ...comment, isDeleted: 1 } : comment
         )
         setChildComments(updatedChildComments)
 
@@ -393,7 +393,7 @@ export default function CommentSection({ idPost }) {
       {currentUser ? (
         <div className='flex items-center gap-1 my-5 text-gray-500 text-sm'>
           <p>Signed in as:</p>
-          <img src={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `../api/Users/images/${currentUser.profilePicture}`} alt='' className='w-10 object-cover rounded-full' />
+          <img src={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `../users/images/${currentUser.profilePicture}`} alt='' className='w-10 object-cover rounded-full' />
           <Link to={'/dashboard?tab=profile'} className='text-cyan-600 hover:underline'>
             @{currentUser.username}
           </Link>
@@ -401,7 +401,7 @@ export default function CommentSection({ idPost }) {
       ) : (<div className='text-teal-500 my-5 flex gap-1'>You must be signed in to comment. <Link to={'/sign-in'} className='text-blue-500 hover:underline'>Sign In</Link></div>)}
 
       {currentUser && (
-        <form className='border border-teal-500 rounded-md p-3' onSubmit={handleSubmit}>
+        <form className='border border-teal-500 rounded-md p-3' onSubmit={handleSubmitComment}>
           <Textarea placeholder='Leave a comment...' rows='3' maxLength='200' onChange={(e) => setComment(e.target.value)} value={comment} />
           <div className='flex justify-between items-center mt-5'>
             <p className='text-gray-500 text-sm'>{200 - comment.length} characters remaining</p>
@@ -417,26 +417,26 @@ export default function CommentSection({ idPost }) {
           {comments.map(comment => (
             <Comment key={comment.id}
               comment={comment}
-              onLike={handleLikeOptimistic}
-              onDislike={handleDislikeOptimistic}
+              onLikeComment={handleLikeCommentOptimistic}
+              onDislikeComment={handleDislikeCommentOptimistic}
               onAddChildComment={(e, idComment, childComment) => addChildComment(e, idComment, childComment)}
               childrenComments={childComments}
-              onEdit={handleEdit}
-              onDelete={(commentId) => {
-                setShowModal(true)
-                setCommentToDelete(commentId)
+              onEditComment={handleEditComment}
+              onDeleteComment={(idComment) => {
+                setShowModalToDeleteComment(true)
+                setCommentToDelete(idComment)
               }}
               setCommentToDelete={setCommentToDelete}
-              setShowModal={setShowModal}
-              setActiveReplyCommentId={setActiveReplyCommentId}
-              activeReplyCommentId={activeReplyCommentId}
+              setShowModalToDeleteComment={setShowModalToDeleteComment}
+              setActiveReplyIdComment={setActiveReplyIdComment}
+              activeReplyIdComment={activeReplyIdComment}
               comments={comments}
             />
           ))}
         </>
       )}
 
-      <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
+      <Modal show={showModalToDeleteComment} onClose={() => setShowModalToDeleteComment(false)} popup size='md'>
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
@@ -444,10 +444,10 @@ export default function CommentSection({ idPost }) {
             <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">Are you sure you want to delete this comment?</h3>
 
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={() => handleDelete(commentToDelete)}>
+              <Button color="failure" onClick={() => handleDeleteComment(commentToDelete)}>
                 Yes, I&apos;m sure
               </Button>
-              <Button color="gray" onClick={() => setShowModal(false)}>No, cancel</Button>
+              <Button color="gray" onClick={() => setShowModalToDeleteComment(false)}>No, cancel</Button>
             </div>
           </div>
         </Modal.Body>

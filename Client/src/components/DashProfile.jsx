@@ -59,7 +59,7 @@ export default function DashProfile() {
         return
       }
 
-      const response = await fetch(`/api/Users/${currentUser.id}`, {
+      const response = await fetch(`/users/${currentUser.id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -102,7 +102,7 @@ export default function DashProfile() {
     setShowModal(false)
 
     try {
-      const response = await fetch(`/api/Users/${currentUser.id}`, {
+      const response = await fetch(`/users/${currentUser.id}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`

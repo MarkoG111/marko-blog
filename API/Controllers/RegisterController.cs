@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class RegisterController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
@@ -16,7 +16,7 @@ namespace API.Controllers
             _executor = executor;
         }
 
-        [HttpPost]
+        [HttpPost("/register")]
         public IActionResult Post([FromBody] RegisterUserDto dto, [FromServices] IRegisterUserCommand command)
         {
             _executor.ExecuteCommand(command, dto);

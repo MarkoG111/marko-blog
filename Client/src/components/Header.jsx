@@ -84,7 +84,7 @@ export default function Header() {
 
         {/* User Avatar or Sign In Button */}
         {currentUser ? (
-          <Dropdown arrowIcon={false} inline label={<Avatar alt='user' img={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `/api/Users/images/${currentUser.profilePicture}`} rounded className='mt-6 md:mt-2' />}>
+          <Dropdown arrowIcon={false} inline label={<Avatar alt='user' img={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `/users/images/${currentUser.profilePicture}`} rounded className='mt-6 md:mt-2' />}>
             <Dropdown.Header>
               <span className='block text-sm mb-2'>@{currentUser.username}</span>
               <span className='block text-sm font-medium truncate'>{currentUser.email}</span>

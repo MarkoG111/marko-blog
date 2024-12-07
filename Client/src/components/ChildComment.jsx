@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 
 export default function ChildComment({
   childComments,
-  parentCommentId,
-  onDelete,
-  onLike,
-  onDislike,
-  onEdit,
+  idParentComment,
+  onDeleteComment,
+  onLikeComment,
+  onDislikeComment,
+  onEditComment,
   onAddChildComment,
-  activeReplyCommentId,
-  setActiveReplyCommentId,
+  activeReplyIdComment,
+  setActiveReplyIdComment,
   comments,
   isFirstReply,
   isSmallScreen,
@@ -18,7 +18,7 @@ export default function ChildComment({
   return (
     <>
       {childComments
-        .filter((child) => child.idParent === parentCommentId)
+        .filter((child) => child.idParent === idParentComment)
         .map((child) => (
           <div
             key={child.id}
@@ -29,14 +29,14 @@ export default function ChildComment({
           >
             <Comment
               comment={child}
-              onDelete={onDelete}
-              onLike={onLike}
-              onDislike={onDislike}
-              onEdit={onEdit}
+              onDeleteComment={onDeleteComment}
+              onLikeComment={onLikeComment}
+              onDislikeComment={onDislikeComment}
+              onEditComment={onEditComment}
               onAddChildComment={onAddChildComment}
               childrenComments={childComments}
-              activeReplyCommentId={activeReplyCommentId}
-              setActiveReplyCommentId={setActiveReplyCommentId}
+              activeReplyIdComment={activeReplyIdComment}
+              setActiveReplyIdComment={setActiveReplyIdComment}
               comments={comments}
             />
           </div>
@@ -52,14 +52,14 @@ ChildComment.propTypes = {
       idParent: PropTypes.number.isRequired,
     })
   ).isRequired,
-  parentCommentId: PropTypes.number.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  onLike: PropTypes.func.isRequired,
-  onDislike: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
+  idParentComment: PropTypes.number.isRequired,
+  onDeleteComment: PropTypes.func.isRequired,
+  onLikeComment: PropTypes.func.isRequired,
+  onDislikeComment: PropTypes.func.isRequired,
+  onEditComment: PropTypes.func.isRequired,
   onAddChildComment: PropTypes.func.isRequired,
-  activeReplyCommentId: PropTypes.number,
-  setActiveReplyCommentId: PropTypes.func.isRequired,
+  activeReplyIdComment: PropTypes.number,
+  setActiveReplyIdComment: PropTypes.func.isRequired,
   comments: PropTypes.arrayOf(PropTypes.object).isRequired,
   isFirstReply: PropTypes.bool.isRequired,
   isSmallScreen: PropTypes.bool.isRequired,

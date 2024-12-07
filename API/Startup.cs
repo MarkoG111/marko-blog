@@ -94,26 +94,27 @@ namespace API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //  Proverava da li je aplikacija pokrenuta u razvojnom okruženju. Ako jeste, dodaje se middleware komponenta DeveloperExceptionPage, koja prikazuje detaljne informacije o izuzecima prilikom razvoja aplikacije.
+            // Checks if the application is running in a development environment. If it is, adds the DeveloperExceptionPage middleware, which displays detailed information about exceptions during application development.
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            // Dodaje middleware za rutiranje, što omogućava aplikaciji da odredi koji kod će se izvršiti na osnovu dolaznog HTTP zahteva.
+            // Adds middleware for routing, which enables the application to determine which code to execute based on the incoming HTTP request.
             app.UseRouting();
-            // Dodaje middleware koji omogućava serveru da poslužuje statičke datoteke, poput HTML, CSS, JavaScript i slika.
+
+            // Adds middleware that allows the server to serve static files, such as HTML, CSS, JavaScript, and images.
             app.UseStaticFiles();
 
-            // Dodaje middleware za autentifikaciju, koji omogućava aplikaciji da autentifikuje korisnike na osnovu pristiglih kredencijala ili tokena.
+            // Adds middleware for authentication, which allows the application to authenticate users based on incoming credentials or tokens.
             app.UseAuthentication();
-            // Dodaje middleware za autorizaciju, koji omogućava aplikaciji da proveri da li korisnik ima odgovarajuće dozvole za pristup određenom resursu.
+
+            // Adds middleware for authorization, which allows the application to check if the user has the necessary permissions to access a particular resource.
             app.UseAuthorization();
 
             app.UseDefaultFiles();
-            app.UseStaticFiles();
 
-            // Dodaje middleware za obrađivanje Cross-Origin Resource Sharing (CORS) zahteva. Ovaj middleware omogućava definisanje politika CORS-a koje određuju koje origin domene su dozvoljene da pristupaju resursima na serveru.
+            // Adds middleware for handling Cross-Origin Resource Sharing (CORS) requests. This middleware allows defining CORS policies that determine which origin domains are allowed to access resources on the server.
             app.UseCors(x =>
             {
                 x.AllowAnyMethod();
@@ -122,27 +123,26 @@ namespace API
                 x.AllowAnyMethod();
             });
 
-            // Dodaje middleware za podršku Swagger-u, koji generiše dokumentaciju API-ja na osnovu definicija ruta i kontrolera u aplikaciji.
+            // Adds middleware for Swagger support, which generates API documentation based on route and controller definitions in the application.
             app.UseSwagger();
 
-            // Dodaje middleware koji generiše HTML interfejs za Swagger dokumentaciju, omogućavajući pregled API specifikacija putem web pregledača.
+            // Adds middleware that generates an HTML interface for the Swagger documentation, allowing the API specifications to be viewed in a web browser.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "BlogAPI v1");
             });
 
-            // Dodaje middleware komponentu GlobalExceptionHandler koja obrađuje sve izuzetke koji nisu već obrađeni i pruža odgovarajući odgovor korisniku ili aplikaciji.
+            // Adds the GlobalExceptionHandler middleware component, which handles all exceptions that have not been processed yet and provides an appropriate response to the user or application.
             app.UseMiddleware<GlobalExceptionHandler>();
 
             app.UseSentryTracing();
 
-            // Dodaje middleware za definisanje krajnjih tačaka (endpoints) aplikacije, tj. mapiranje HTTP zahteva na odgovarajuće akcije u kontrolerima.
+            // Adds middleware for defining endpoints in the application, i.e., mapping HTTP requests to corresponding actions in controllers.
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<NotificationHub>("/notificationsHub");
             });
-
         }
     }
 }

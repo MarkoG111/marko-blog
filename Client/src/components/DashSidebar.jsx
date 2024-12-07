@@ -32,7 +32,7 @@ export default function DashSidebar() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const repsonse = await fetch(`/api/Users/${currentUser.id}`, {
+        const repsonse = await fetch(`/users/${currentUser.id}`, {
           method: "GET"
         })
 

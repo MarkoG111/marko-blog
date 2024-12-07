@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Application;
 using Application.DataTransfer;
 using Domain;
 using EFDataAccess;
@@ -7,7 +6,7 @@ using EFDataAccess;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ImagesController : ControllerBase
     {
         private readonly BlogContext _context;
@@ -17,15 +16,7 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet("images/{imageName}")]
-        public IActionResult GetImage(string imageName)
-        {
-            var imagePath = Path.Combine("wwwroot", "Images", imageName);
-            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
-            return File(imageBytes, "image/jpeg");
-        }
-
-        [HttpPost]
+        [HttpPost("/images")]
         public IActionResult Post([FromForm] UploadImageDto dto)
         {
             var guid = Guid.NewGuid();
@@ -50,6 +41,14 @@ namespace API.Controllers
             _context.SaveChanges();
 
             return Ok(image);
+        }
+
+        [HttpGet("/images/{image-name}")]
+        public IActionResult GetImage([FromRoute(Name = "image-name")] string imageName)
+        {
+            var imagePath = Path.Combine("wwwroot", "Images", imageName);
+            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            return File(imageBytes, "image/jpeg");
         }
     }
 }

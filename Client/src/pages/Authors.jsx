@@ -14,19 +14,23 @@ export default function Authors() {
     const fethcAuthors = async () => {
       try {
         const queryParams = new URLSearchParams({
-          page: currentPage,
+          onlyAuthors: true,
           perPage: 3,
-          onlyAuthors: true
+          page: currentPage
         })
 
-        const response = await fetch(`/api/Users?${queryParams}`, {
+        const response = await fetch(`/users?${queryParams}`, {
           method: "GET"
         })
 
         if (response.ok) {
+          console.log(response);
+
           const data = await response.json()
+          console.log(data);
+
           const authors = data.items.filter((author) => author.role == 'Author')
-          
+
           setAuthors(authors)
           setPageCount(data.pageCount)
         } else {
@@ -45,7 +49,7 @@ export default function Authors() {
           return
         }
       } catch (error) {
-        showError(error)
+        showError(error.message || "An unknown error occurred.")
       }
     }
 

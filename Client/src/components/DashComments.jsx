@@ -11,7 +11,7 @@ export default function DashComments() {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
   const [showModal, setShowModal] = useState(false)
-  const [commentIdToDelete, setCommentIdToDelete] = useState('')
+  const [idCommentToDelete, setIdCommentToDelete] = useState('')
 
   const [successMessage, setSuccessMessage] = useState('')
   const [showSuccessModal, setShowSucessModal] = useState(false)
@@ -37,7 +37,7 @@ export default function DashComments() {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/api/Comments?page=${currentPage}`, {
+        const response = await fetch(`/comments?page=${currentPage}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -52,7 +52,7 @@ export default function DashComments() {
         } else {
           const errorText = await response.text()
           const errorData = JSON.parse(errorText)
-  
+
           if (Array.isArray(errorData.errors)) {
             errorData.errors.forEach((err) => {
               showError(err.ErrorMessage)
@@ -61,7 +61,7 @@ export default function DashComments() {
             const errorMessage = errorData.message || "An unknown error occurred.";
             showError(errorMessage)
           }
-  
+
           return
         }
       } catch (error) {
@@ -83,7 +83,7 @@ export default function DashComments() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`api/Comments/${commentIdToDelete}`, {
+      const response = await fetch(`/comments/${idCommentToDelete}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -105,7 +105,7 @@ export default function DashComments() {
 
         return
       } else {
-        setComments((prev) => prev.filter((comment) => comment.id !== commentIdToDelete))
+        setComments((prev) => prev.filter((comment) => comment.id !== idCommentToDelete))
         setShowModal(false)
 
         setShowSucessModal(true)
@@ -150,7 +150,7 @@ export default function DashComments() {
                   {comment.username}
                 </Table.Cell>
                 <Table.Cell>
-                  <span onClick={() => { setShowModal(true); setCommentIdToDelete(comment.id) }} className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span>
+                  <span onClick={() => { setShowModal(true); setIdCommentToDelete(comment.id) }} className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span>
                 </Table.Cell>
               </Table.Row>
             </Table.Body>

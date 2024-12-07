@@ -269,13 +269,13 @@ export default function UpdatePost() {
 
           {editData.imageName && !imagePreview && (
             <div>
-              <img src={`/api/Images/images/${editData.imageName}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
+              <img src={`/images/${editData.imageName}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
             </div>
           )}
 
           {imagePreview && (
             <div>
-              <img src={`/api/Images/images/${imagePreview.imagePath}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
+              <img src={`/images/${imagePreview.imagePath}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
             </div>
           )}
         </div>

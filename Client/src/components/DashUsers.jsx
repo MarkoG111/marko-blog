@@ -38,7 +38,7 @@ export default function DashUsers() {
           return
         }
 
-        const response = await fetch(`/api/Users?page=${currentPage}`, {
+        const response = await fetch(`/users?page=${currentPage}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -135,7 +135,7 @@ export default function DashUsers() {
                 <Table.Cell>{new Date(user.createdAt).toLocaleDateString()}</Table.Cell>
                 <Table.Cell>
                   <Link to={'/user/'}>
-                    {user.profilePicture.startsWith('http') ? (<img src={user.profilePicture} className="w-10 h-10 object-cover bg-gray-500 rounded-full" />) : (<img src={`/api/Users/images/${user.profilePicture}`} className="w-10 h-10 object-cover bg-gray-500 rounded-full" />)}
+                    {user.profilePicture.startsWith('http') ? (<img src={user.profilePicture} className="w-10 h-10 object-cover bg-gray-500 rounded-full" />) : (<img src={`/users/images/${user.profilePicture}`} className="w-10 h-10 object-cover bg-gray-500 rounded-full" />)}
                   </Link>
                 </Table.Cell>
                 <Table.Cell>

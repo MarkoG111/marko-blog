@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
 using EFDataAccess;
 using Domain;
 using System.Security.Cryptography;
-using System.Security.Claims;
 using Newtonsoft.Json;
 using API.Core;
 using Implementation;
@@ -15,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly BlogContext _context;
@@ -27,7 +24,7 @@ namespace API.Controllers
             _jwtManager = jWTManager;
         }
 
-        [HttpPost]
+        [HttpPost("/auth")]
         public async Task<IActionResult> GoogleLogin(UserLoginModel model)
         {
             var user = _context.Users.Include(u => u.UserUseCases).Include(u => u.Role)

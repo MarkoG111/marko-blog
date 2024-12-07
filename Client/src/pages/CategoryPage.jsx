@@ -64,7 +64,7 @@ export default function CategoryPage() {
               <div key={post.id} className="dark:bg-gray-800 border border-teal-500 rounded-lg mt-12 w-full pb-8 mr-auto">
                 <div className="flex pt-4 pl-2">
                   <div>
-                    <img src={post && post.profilePicture.startsWith('http') ? post.profilePicture : `../api/Users/images/${post.profilePicture}`} alt='profilePicture' className='w-10 object-cover rounded-full' />
+                    <img src={post && post.profilePicture.startsWith('http') ? post.profilePicture : `../users/images/${post.profilePicture}`} alt='profilePicture' className='w-10 object-cover rounded-full' />
                   </div>
                   <div className="flex flex-col pl-4">
                     <div className="text-sm">{post && post.firstName + " " + post.lastName}</div>

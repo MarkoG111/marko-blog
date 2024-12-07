@@ -28,7 +28,7 @@ export default function SignIn() {
       dispatch(signInStart());
       setLoading(true);
 
-      const response = await fetch('/api/Login', {
+      const response = await fetch('/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

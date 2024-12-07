@@ -8,7 +8,7 @@ import { useSelector } from "react-redux"
 import ChildComment from './ChildComment'
 import { useError } from '../contexts/ErrorContext'
 
-export default function Comment({ comment, onLike, onDislike, onAddChildComment, childrenComments, onEdit, onDelete, setActiveReplyCommentId, activeReplyCommentId, comments }) {
+export default function Comment({ comment, onLikeComment, onDislikeComment, onAddChildComment, childrenComments, onEditComment, onDeleteComment, setActiveReplyIdComment, activeReplyIdComment, comments }) {
   const [user, setUser] = useState({})
   const { currentUser } = useSelector((state) => state.user)
 
@@ -28,7 +28,7 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await fetch(`/api/Users/${comment.idUser}`, {
+        const response = await fetch(`/users/${comment.idUser}`, {
           method: "GET"
         })
 
@@ -71,7 +71,7 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/api/Comments/${comment.id}`, {
+      const response = await fetch(`/comments/${comment.id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -82,7 +82,7 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
 
       if (response.ok) {
         setIsEditing(false)
-        onEdit(comment, editedText)
+        onEditComment(comment, editedText)
       } else {
         const errorText = await response.text()
         const errorData = JSON.parse(errorText)
@@ -114,14 +114,14 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
       setChildComment('')
     }
 
-    setActiveReplyCommentId(commentToReply ? commentToReply.id : null)
+    setActiveReplyIdComment(commentToReply ? commentToReply.id : null)
   }
 
   return (
     <>
       <div className="flex p-4 border-b dark:border-gray-600 text-sm">
         <div className="flex-shrink-0 mr-3">
-          <img className="w-10 h-10 rounded-full bg-gray-200" src={user && user.profilePicture && user.profilePicture.startsWith('http') ? user.profilePicture : `api/Users/images/${user.profilePicture}`} alt={user.username} />
+          <img className="w-10 h-10 rounded-full bg-gray-200" src={user && user.profilePicture && user.profilePicture.startsWith('http') ? user.profilePicture : `users/images/${user.profilePicture}`} alt={user.username} />
         </div>
 
         <div className="flex-1">
@@ -155,12 +155,12 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
                     <p className="text-gray-500 pb-2">{comment.commentText}</p>
 
                     <div className="flex items-center pt-2 text-xs border-t dark:border-gray-700 max-w-fit gap-2">
-                      <button type="button" onClick={() => onLike(comment.id)} className={`text-gray-400 hover:text-blue-500 ${currentUser && comment.likes && comment?.likes.some(like => like.idUser == currentUser.id && like.status == 1) && '!text-blue-500'}`}>
+                      <button type="button" onClick={() => onLikeComment(comment.id)} className={`text-gray-400 hover:text-blue-500 ${currentUser && comment.likes && comment?.likes.some(like => like.idUser == currentUser.id && like.status == 1) && '!text-blue-500'}`}>
                         <FaThumbsUp className="text-sm" />
                       </button>
                       {comment.likes && comment.likes.filter((like) => like.status == 1).length}
 
-                      <button type="button" onClick={() => onDislike(comment.id)} className={`text-gray-400 hover:text-red-500 ml-6 ${currentUser && comment.likes && comment.likes.some(like => like.idUser == currentUser.id && like.status == 2) && '!text-red-500'}`}>
+                      <button type="button" onClick={() => onDislikeComment(comment.id)} className={`text-gray-400 hover:text-red-500 ml-6 ${currentUser && comment.likes && comment.likes.some(like => like.idUser == currentUser.id && like.status == 2) && '!text-red-500'}`}>
                         <FaThumbsDown className="text-sm" />
                       </button>
                       {comment.likes && comment.likes.filter((like) => like.status == 2).length}
@@ -168,7 +168,7 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
                       {currentUser && (currentUser.id == comment.idUser || currentUser.roleName == 'Admin') && (
                         <>
                           <button type="button" className="text-gray-400 hover:text-blue-500 ml-6" onClick={() => openEdit()}>Edit</button>
-                          <button type="button" className="text-gray-400 hover:text-red-500 ml-6" onClick={() => onDelete(comment.id)}>Delete</button>
+                          <button type="button" className="text-gray-400 hover:text-red-500 ml-6" onClick={() => onDeleteComment(comment.id)}>Delete</button>
                         </>
                       )}
                     </div>
@@ -190,7 +190,7 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
         }
       </div>
 
-      {activeReplyCommentId == comment.id &&
+      {activeReplyIdComment == comment.id &&
         (<div className="p-10">
           <form className="border border-teal-500 rounded-md p-3" onSubmit={(e) => onAddChildComment(e, comment.id, childComment)}>
             <Textarea placeholder='Leave a comment...' rows='3' maxLength='200' onChange={(e) => setChildComment(e.target.value)} value={childComment} />
@@ -203,14 +203,14 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
       {isChildComment && (
         <ChildComment
           childComments={childrenComments}
-          parentCommentId={comment.id}
-          onDelete={onDelete}
-          onLike={onLike}
-          onDislike={onDislike}
-          onEdit={onEdit}
+          idParentComment={comment.id}
+          onDeleteComment={onDeleteComment}
+          onLikeComment={onLikeComment}
+          onDislikeComment={onDislikeComment}
+          onEditComment={onEditComment}
           onAddChildComment={onAddChildComment}
-          activeReplyCommentId={activeReplyCommentId}
-          setActiveReplyCommentId={setActiveReplyCommentId}
+          activeReplyIdComment={activeReplyIdComment}
+          setActiveReplyIdComment={setActiveReplyIdComment}
           comments={comments}
           isFirstReply={isFirstReply}
           isSmallScreen={isSmallScreen}
@@ -222,13 +222,13 @@ export default function Comment({ comment, onLike, onDislike, onAddChildComment,
 
 Comment.propTypes = {
   comment: PropTypes.object.isRequired,
-  onLike: PropTypes.func.isRequired,
-  onDislike: PropTypes.func.isRequired,
+  onLikeComment: PropTypes.func.isRequired,
+  onDislikeComment: PropTypes.func.isRequired,
   onAddChildComment: PropTypes.func.isRequired,
   childrenComments: PropTypes.array.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  setActiveReplyCommentId: PropTypes.func.isRequired,
-  activeReplyCommentId: PropTypes.number,
+  onEditComment: PropTypes.func.isRequired,
+  onDeleteComment: PropTypes.func.isRequired,
+  setActiveReplyIdComment: PropTypes.func.isRequired,
+  activeReplyIdComment: PropTypes.number,
   comments: PropTypes.array.isRequired,
 }

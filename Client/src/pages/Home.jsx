@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
     const fetchHomePagePosts = async () => {
       try {
-        const response = await fetch(`http://localhost:5173/posts?perPage=4`, {
+        const response = await fetch(`/posts?perPage=4`, {
           method: "GET"
         })
 

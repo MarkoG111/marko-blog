@@ -34,7 +34,7 @@ export default function UserDashPosts() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const repsonse = await fetch(`/api/Users/${currentUser.id}`, {
+        const repsonse = await fetch(`/users/${currentUser.id}`, {
           method: "GET"
         })
 
@@ -139,7 +139,7 @@ export default function UserDashPosts() {
                 <Table.Cell>{new Date(post.dateCreated).toLocaleDateString()}</Table.Cell>
                 <Table.Cell>
                   <Link to={`/post/${post.id}`}>
-                    <img src={`api/Images/images/${post.imageName}`} alt={post.title} className="w-20 h-10 object-contain bg-gray-500" />
+                    <img src={`/images/${post.imageName}`} alt={post.title} className="w-20 h-10 object-contain bg-gray-500" />
                   </Link>
                 </Table.Cell>
                 <Table.Cell>

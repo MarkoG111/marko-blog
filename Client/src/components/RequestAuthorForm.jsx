@@ -44,7 +44,7 @@ export default function RequestAuthorForm() {
         Reason: reason
       })
 
-      const response = await fetch(`/api/AuthorRequests`, {
+      const response = await fetch(`/authorrequests`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,

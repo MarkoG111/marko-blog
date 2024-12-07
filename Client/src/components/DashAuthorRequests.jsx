@@ -22,7 +22,7 @@ export default function DashAuthorRequests() {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/api/AuthorRequests?page=${currentPage}`, {
+        const response = await fetch(`/authorrequests?page=${currentPage}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -65,14 +65,14 @@ export default function DashAuthorRequests() {
     ))
   }
 
-  const handleAcceptRequest = async (idRequest) => {
+  const handleAcceptAuthorRequest = async (idRequest) => {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`api/AuthorRequests/accept?id=${idRequest}`, {
+      const response = await fetch(`/authorrequests/accept?id=${idRequest}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -103,14 +103,14 @@ export default function DashAuthorRequests() {
     }
   }
 
-  const handleRejectRequest = async (idRequest) => {
+  const handleRejectAuthorRequest = async (idRequest) => {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`api/AuthorRequests/reject?id=${idRequest}`, {
+      const response = await fetch(`/authorrequests/reject?id=${idRequest}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -173,7 +173,7 @@ export default function DashAuthorRequests() {
                 <Table.Cell>
                   <Link to={`/user/${authorRequest.idUser}`}>
                     {authorRequest.profilePicture.startsWith('http') ? (<img src={authorRequest.profilePicture} className="w-10 h-10 object-cover bg-gray-500 rounded-full" />
-                    ) : (<img src={`/api/Users/images/${authorRequest.profilePicture}`} className="w-10 h-10 object-cover bg-gray-500 rounded-full" />
+                    ) : (<img src={`/users/images/${authorRequest.profilePicture}`} className="w-10 h-10 object-cover bg-gray-500 rounded-full" />
                     )}
                   </Link>
                 </Table.Cell>
@@ -187,8 +187,8 @@ export default function DashAuthorRequests() {
                   <AuthorRequestStatus status={authorRequest.status} />
                 </Table.Cell>
                 <Table.Cell className="flex">
-                  <Button className="mr-3" color="failure" onClick={() => handleRejectRequest(authorRequest.id)}>Reject</Button>
-                  <Button className="ml-6" color="success" onClick={() => handleAcceptRequest(authorRequest.id)}>Accept</Button>
+                  <Button className="mr-3" color="failure" onClick={() => handleRejectAuthorRequest(authorRequest.id)}>Reject</Button>
+                  <Button className="ml-6" color="success" onClick={() => handleAcceptAuthorRequest(authorRequest.id)}>Accept</Button>
                 </Table.Cell>
               </Table.Row>
             </Table.Body>

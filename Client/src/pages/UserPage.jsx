@@ -19,7 +19,7 @@ export default function UserPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`/api/Users/${id}`, {
+        const response = await fetch(`/users/${id}`, {
           method: "GET"
         })
 
@@ -32,7 +32,7 @@ export default function UserPage() {
           if (token) {
             setIsLoggedIn(true)
 
-            const followResponse = await fetch(`/api/Followers/check/${id}`, {
+            const followResponse = await fetch(`/followers/${id}/check`, {
               method: "GET",
               headers: {
                 "Authorization": `Bearer ${token}`
@@ -63,20 +63,20 @@ export default function UserPage() {
     fetchUser()
   }, [id, showError])
 
-  const handleFollow = async (idFollowing) => {
+  const handleFollow = async (id) => {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/api/Followers`, {
+      const response = await fetch(`/followers`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "Application/json"
         },
-        body: JSON.stringify({ IdFollowing: idFollowing })
+        body: JSON.stringify({ IdFollowing: id })
       })
 
       if (response.ok) {
@@ -103,14 +103,14 @@ export default function UserPage() {
     }
   }
 
-  const handleUnfollow = async (idFollowing) => {
+  const handleUnfollow = async (id) => {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/api/Followers/unfollow/${idFollowing}`, {
+      const response = await fetch(`/followers/${id}/unfollow`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`,

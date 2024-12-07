@@ -11,7 +11,7 @@ using Application.DataTransfer;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class FollowersController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
@@ -23,7 +23,7 @@ namespace API.Controllers
             _actor = actor;
         }
 
-        [HttpPost]
+        [HttpPost("/followers")]
         public IActionResult Post([FromBody] FollowDto dto, [FromServices] IFollowCommand command)
         {
             dto.IdUser = _actor.Id;
@@ -31,32 +31,32 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpDelete("unfollow/{idFollowing}")]
-        public IActionResult Delete(int idFollowing, [FromServices] IUnfollowCommand command)
-        {
-            _executor.ExecuteCommand(command, idFollowing);
-            return Ok();
-        }
-
-        [HttpGet("check/{id}")]
-        public IActionResult CheckFollowStatus(int id, [FromServices] ICheckFollowStatusQuery query)
-        {
-            var isFollowing = _executor.ExecuteQuery(query, id);
-            return Ok(new { isFollowing });
-        }
-
-        [HttpGet("{id}/followers")]
+        [HttpGet("/followers/{id}/followers")]
         public IActionResult GetFollowers(int id, [FromServices] IGetFollowersQuery query)
         {
             var followers = _executor.ExecuteQuery(query, id);
             return Ok(followers);
         }
 
-        [HttpGet("{id}/following")]
+        [HttpGet("/followers/{id}/following")]
         public IActionResult GetFollowing(int id, [FromServices] IGetFollowingQuery query)
         {
             var following = _executor.ExecuteQuery(query, id);
             return Ok(following);
+        }
+
+        [HttpDelete("/followers/{id}/unfollow")]
+        public IActionResult Delete(int id, [FromServices] IUnfollowCommand command)
+        {
+            _executor.ExecuteCommand(command, id);
+            return Ok();
+        }
+
+        [HttpGet("/followers/{id}/check")]
+        public IActionResult CheckFollowStatus(int id, [FromServices] ICheckFollowStatusQuery query)
+        {
+            var isFollowing = _executor.ExecuteQuery(query, id);
+            return Ok(new { isFollowing });
         }
     }
 }

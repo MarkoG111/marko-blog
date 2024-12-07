@@ -98,7 +98,7 @@ export default function CreatePost() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/api/Images`, {
+      const response = await fetch(`/images`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -218,7 +218,7 @@ export default function CreatePost() {
 
           {imagePreview && (
             <div>
-              <img src={`api/Images/images/${imagePreview.imagePath}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
+              <img src={`/images/${imagePreview.imagePath}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
             </div>
           )}
         </div>
