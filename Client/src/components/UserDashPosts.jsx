@@ -83,7 +83,7 @@ export default function UserDashPosts() {
         return
       }
 
-      const url = currentUser.id == postIdToDelete ? `/api/Posts/personal/${postIdToDelete}` : `/api/Posts/${postIdToDelete}`
+      const url = currentUser.id == postIdToDelete ? `/api/posts/personal/${postIdToDelete}` : `/api/posts/${postIdToDelete}`
 
       const response = await fetch(url, {
         method: "DELETE",

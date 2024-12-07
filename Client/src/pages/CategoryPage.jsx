@@ -20,7 +20,7 @@ export default function CategoryPage() {
           perPage: 3
         })
 
-        const response = await fetch(`/api/Categories/${id}?${queryParams}`, {
+        const response = await fetch(`/categories/${id}?${queryParams}`, {
           method: "GET"
         })
 

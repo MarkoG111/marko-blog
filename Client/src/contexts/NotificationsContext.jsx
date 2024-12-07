@@ -41,7 +41,7 @@ export const NotificationsProvider = ({ children }) => {
           return
         }
 
-        const response = await fetch(`/api/Notifications?idUser=${currentUser.id}`, {
+        const response = await fetch(`/notifications`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -169,7 +169,7 @@ export const NotificationsProvider = ({ children }) => {
             return
           }
 
-          await fetch(`/api/Notifications/mark-all-as-read`, {
+          await fetch(`/notifications/mark-as-read`, {
             method: "PATCH",
             headers: {
               Authorization: `Bearer ${token}`,

@@ -10,7 +10,7 @@ export default function Footer() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`/api/Categories`, {
+        const response = await fetch(`/categories`, {
           method: "GET"
         })
   

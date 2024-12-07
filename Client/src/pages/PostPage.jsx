@@ -27,7 +27,7 @@ export default function PostPage() {
       try {
         setLoading(true)
 
-        const response = await fetch(`/api/Posts/${id}`, {
+        const response = await fetch(`/posts/${id}`, {
           method: "GET"
         })
 
@@ -79,7 +79,7 @@ export default function PostPage() {
         Status: 1
       })
 
-      const response = await fetch(`/api/Posts/like`, {
+      const response = await fetch(`/posts/${idPost}/like`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -135,7 +135,7 @@ export default function PostPage() {
         Status: 2
       })
 
-      const response = await fetch(`/api/Posts/like`, {
+      const response = await fetch(`/posts/${idPost}/like`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,

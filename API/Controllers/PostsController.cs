@@ -11,7 +11,7 @@ using API.Core;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class PostsController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
@@ -23,34 +23,26 @@ namespace API.Controllers
             _actor = actor;
         }
 
-        [HttpPost("like")]
-        public IActionResult Like([FromBody] LikePostDto request, [FromServices] ILikePostCommand command)
-        {
-            request.IdUser = _actor.Id;
-            _executor.ExecuteCommand(command, request);
-            return Ok(request);
-        }
-
-        [HttpGet]
-        public IActionResult Get([FromQuery] PostSearch search, [FromServices] IGetPostsQuery query)
-        {
-            return Ok(_executor.ExecuteQuery(query, search));
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult Get(int id, [FromServices] IGetPostQuery query)
-        {
-            return Ok(_executor.ExecuteQuery(query, id));
-        }
-
-        [HttpPost]
+        [HttpPost("/posts")]
         public IActionResult Post([FromBody] InsertPostDto dto, [FromServices] ICreatePostCommand command)
         {
             _executor.ExecuteCommand(command, dto);
             return Ok(dto.Id);
         }
 
-        [HttpPut("{id}")]
+        [HttpGet("/posts")]
+        public IActionResult Get([FromQuery] PostSearch search, [FromServices] IGetPostsQuery query)
+        {
+            return Ok(_executor.ExecuteQuery(query, search));
+        }
+
+        [HttpGet("/posts/{id}")]
+        public IActionResult Get(int id, [FromServices] IGetPostQuery query)
+        {
+            return Ok(_executor.ExecuteQuery(query, id));
+        }
+
+        [HttpPut("/posts/{id}")]
         public IActionResult Put(int id, [FromBody] UpdatePostDto dto, [FromServices] IUpdatePostCommand command)
         {
             dto.Id = id;
@@ -58,7 +50,22 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPut("personal/{id}", Name = "UpdatePersonalPost")]
+        [HttpDelete("/posts/{id}")]
+        public IActionResult Delete(int id, [FromServices] IDeletePostCommand command)
+        {
+            _executor.ExecuteCommand(command, id);
+            return NoContent();
+        }
+
+        [HttpPost("/posts/{id}/like")]
+        public IActionResult Like([FromBody] LikePostDto request, [FromServices] ILikePostCommand command)
+        {
+            request.IdUser = _actor.Id;
+            _executor.ExecuteCommand(command, request);
+            return Ok(request);
+        }
+
+        [HttpPut("/posts/{id}/personal")]
         public IActionResult UpdatePersonalPost(int id, [FromBody] UpdatePostDto dto, [FromServices] IUpdatePersonalPostCommand command)
         {
             dto.Id = id;
@@ -66,14 +73,7 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id, [FromServices] IDeletePostCommand command)
-        {
-            _executor.ExecuteCommand(command, id);
-            return NoContent();
-        }
-
-        [HttpDelete("personal/{id}", Name = "DeletePersonalPost")]
+        [HttpDelete("/posts/{id}/personal")]
         public IActionResult DeletePersonalPost(int id, [FromServices] IDeletePersonalPostCommand command)
         {
             _executor.ExecuteCommand(command, id);

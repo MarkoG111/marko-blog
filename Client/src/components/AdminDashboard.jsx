@@ -32,7 +32,7 @@ export default function AdminDashboard() {
         const [usersResponse, commentsResponse, postsResponse] = await Promise.all([
           fetch(`/api/Users`, { headers: { Authorization: `Bearer ${token}` } }),
           fetch(`/api/Comments`, { headers: { Authorization: `Bearer ${token}` } }),
-          fetch(`/api/Posts`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`/posts`, { headers: { Authorization: `Bearer ${token}` } }),
         ])
 
         const usersData = await usersResponse.json()

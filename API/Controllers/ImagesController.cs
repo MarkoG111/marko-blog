@@ -10,15 +10,11 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ImagesController : ControllerBase
     {
-        private readonly IApplicationActor _actor;
-        private readonly UseCaseExecutor _executor;
         private readonly BlogContext _context;
 
-        public ImagesController(BlogContext context, UseCaseExecutor executor, IApplicationActor actor)
+        public ImagesController(BlogContext context)
         {
             _context = context;
-            _executor = executor;
-            _actor = actor;
         }
 
         [HttpGet("images/{imageName}")]

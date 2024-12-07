@@ -44,7 +44,7 @@ export default function UpdatePost() {
         }
 
         try {
-          const response = await fetch(`/api/Posts/${postId}`, {
+          const response = await fetch(`/posts/${postId}`, {
             method: "GET",
             headers: {
               "Authorization": `Bearer ${token}`
@@ -103,7 +103,7 @@ export default function UpdatePost() {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/api/Categories`, {
+        const response = await fetch(`/categories`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -205,7 +205,7 @@ export default function UpdatePost() {
         throw new Error("Token not found")
       }
 
-      const url = currentUser.id == postId ? `/api/Posts/personal/${editData.id}` : `/api/Posts/${editData.id}`
+      const url = currentUser.id == postId ? `/posts/personal/${editData.id}` : `/posts/${editData.id}`
 
       const response = await fetch(url, {
         method: "PUT",

@@ -32,7 +32,7 @@ export default function CommentSection({ idPost }) {
   useEffect(() => {
     const fetchPostAndComments = async () => {
       try {
-        const response = await fetch(`/api/Posts/${idPost}`)
+        const response = await fetch(`/posts/${idPost}`)
 
         if (response.ok) {
           const data = await response.json()

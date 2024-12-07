@@ -42,7 +42,7 @@ export default function PostsPage() {
           })
         }
 
-        const response = await fetch(`/api/Posts?${queryParams}`, {
+        const response = await fetch(`/posts?${queryParams}`, {
           method: "GET"
         })
 
@@ -77,7 +77,7 @@ export default function PostsPage() {
   useEffect(() => {
     const fetchPostCategories = async () => {
       try {
-        const response = await fetch(`/api/Categories`, {
+        const response = await fetch(`/categories`, {
           method: "GET"
         })
 

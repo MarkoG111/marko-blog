@@ -5,7 +5,15 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   server: {
     proxy: {
-      '/api': {
+      '/posts': {
+        target: 'http://localhost:5207',
+        secure: false,
+      },
+      '/categories': {
+        target: 'http://localhost:5207',
+        secure: false,
+      },
+      '/notifications': {
         target: 'http://localhost:5207',
         secure: false,
       },
