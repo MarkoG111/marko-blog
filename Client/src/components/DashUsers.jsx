@@ -11,7 +11,7 @@ export default function DashUsers() {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
   const [showModal, setShowModal] = useState(false)
-  const [userIdToDelete, setUserIdToDelete] = useState('')
+  const [idUserToDelete, setIdUserToDelete] = useState('')
 
   const [successMessage, setSuccessMessage] = useState('')
   const [showSuccessModal, setShowSucessModal] = useState(false)
@@ -84,7 +84,7 @@ export default function DashUsers() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`api/Users/${userIdToDelete}`, {
+      const response = await fetch(`users/${idUserToDelete}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -107,7 +107,7 @@ export default function DashUsers() {
         return
       }
 
-      setUsers((prev) => prev.filter((user) => user.id !== userIdToDelete))
+      setUsers((prev) => prev.filter((user) => user.id !== idUserToDelete))
       setShowModal(false)
       setShowSucessModal(true)
       setSuccessMessage("You have successfully deleted user.")
@@ -148,7 +148,7 @@ export default function DashUsers() {
                   <span>{user.role}</span>
                 </Table.Cell>
                 <Table.Cell>
-                  <span onClick={() => { setShowModal(true); setUserIdToDelete(user.id) }} className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span>
+                  <span onClick={() => { setShowModal(true); setIdUserToDelete(user.id) }} className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span>
                 </Table.Cell>
               </Table.Row>
             </Table.Body>

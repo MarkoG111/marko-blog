@@ -12,7 +12,7 @@ export default function UserDashPosts() {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
   const [showModal, setShowModal] = useState(false)
-  const [postIdToDelete, setPostIdToDelete] = useState('')
+  const [idPostToDelete, setIdPostToDelete] = useState('')
   const [postDeleted, setPostDeleted] = useState(false)
 
   const { showError } = useError()
@@ -83,7 +83,7 @@ export default function UserDashPosts() {
         return
       }
 
-      const url = currentUser.id == postIdToDelete ? `/api/posts/personal/${postIdToDelete}` : `/api/posts/${postIdToDelete}`
+      const url = currentUser.id == idPostToDelete ? `/posts/personal/${idPostToDelete}` : `/posts/${idPostToDelete}`
 
       const response = await fetch(url, {
         method: "DELETE",
@@ -108,7 +108,7 @@ export default function UserDashPosts() {
         return
       }
 
-      setUserPosts((prev) => prev.filter((post) => post.id !== postIdToDelete))
+      setUserPosts((prev) => prev.filter((post) => post.id !== idPostToDelete))
       setShowSucessModal(true)
       setSuccessMessage("You have successfully deleted post.")
       setPostDeleted(!postDeleted)
@@ -153,7 +153,7 @@ export default function UserDashPosts() {
                   ))}
                 </Table.Cell>
                 <Table.Cell>
-                  <span onClick={() => { setShowModal(true); setPostIdToDelete(post.id) }} className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span>
+                  <span onClick={() => { setShowModal(true); setIdPostToDelete(post.id) }} className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span>
                 </Table.Cell>
                 <Table.Cell>
                   <Link to={`/update-post/${post.id}`} className="text-teal-500 hover:underline">
@@ -180,7 +180,7 @@ export default function UserDashPosts() {
         {successMessage}
       </div>
     )}
-    
+
     <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
       <Modal.Header />
       <Modal.Body>

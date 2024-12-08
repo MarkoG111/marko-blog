@@ -56,7 +56,7 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPost("/comments/{id}like")]
+        [HttpPost("/comments/{id}/like")]
         public IActionResult Like([FromBody] LikeCommentDto request, [FromServices] ILikeCommentCommand command)
         {
             _executor.ExecuteCommand(command, request);

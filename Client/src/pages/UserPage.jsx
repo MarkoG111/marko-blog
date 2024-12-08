@@ -202,7 +202,7 @@ export default function UserPage() {
                 <div className="dark:bg-gray-800 border border-teal-500 rounded-lg mt-12 w-2/5 pb-8 mr-auto">
                   <div className="flex pt-4 pl-2">
                     <div>
-                      <img src={user && user.profilePicture.startsWith('http') ? user && user.profilePicture : user && `api/Users/images/${user.profilePicture}`} alt='user image' className='w-10 object-cover rounded-full mr-3' />
+                      <img src={user && user.profilePicture.startsWith('http') ? user && user.profilePicture : user && `users/images/${user.profilePicture}`} alt='user image' className='w-10 object-cover rounded-full mr-3' />
                     </div>
                     <div>
                       <span className="text-sm md:pl-3">{user && user.firstName + " " + user.lastName}</span> <br />
@@ -254,7 +254,7 @@ export default function UserPage() {
                     <div className="dark:bg-gray-800 border border-teal-500 rounded-lg mt-12 w-full pb-8 mr-auto">
                       <div className="flex pt-4 pl-2">
                         <div>
-                          <img src={user && user.profilePicture.startsWith('http') ? user && user.profilePicture : user && `api/Users/images/${user.profilePicture}`} alt='profilePicture' className='w-10 object-cover rounded-full' />
+                          <img src={user && user.profilePicture.startsWith('http') ? user && user.profilePicture : user && `users/images/${user.profilePicture}`} alt='profilePicture' className='w-10 object-cover rounded-full' />
                         </div>
                         <div className="pl-4">
                           <span className="text-sm">{user && user.firstName + " " + user.lastName}</span> <br />

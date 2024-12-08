@@ -27,7 +27,7 @@ namespace API.Controllers
         public IActionResult Post([FromBody] InsertPostDto dto, [FromServices] ICreatePostCommand command)
         {
             _executor.ExecuteCommand(command, dto);
-            return Ok(dto.Id);
+            return Ok(new { idPost = dto.Id });
         }
 
         [HttpGet("/posts")]

@@ -153,7 +153,7 @@ export default function DashProfile() {
           {imageFileUrl ? (
             <img src={imageFileUrl} alt="user" className="rounded-full w-full h-full border-8 border-[lightgray] object-cover" />
           ) : (
-            <img src={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `api/Users/images/${currentUser.profilePicture}`} alt="user" className="rounded-full w-full h-full border-8 border-[lightgray] object-cover" />
+            <img src={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `users/images/${currentUser.profilePicture}`} alt="user" className="rounded-full w-full h-full border-8 border-[lightgray] object-cover" />
           )}
         </div>
 
