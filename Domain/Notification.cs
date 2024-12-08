@@ -22,5 +22,6 @@ namespace Domain
         Post = 1,
         Comment = 2,
         Like = 3,
+        Follow = 4,
     }
 }

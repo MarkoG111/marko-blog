@@ -45,7 +45,7 @@ namespace Implementation.Commands.Follow
             {
                 IdUser = request.IdFollowing,
                 FromIdUser = _actor.Id,
-                Type = NotificationType.Like,
+                Type = NotificationType.Follow,
                 Content = $"{_actor.Identity} started following you.",
                 CreatedAt = DateTime.Now
             };

@@ -21,13 +21,14 @@ namespace Implementation.Services
             _notificationHubService = notificationHubService;
         }
 
-        private string GenerateNotificationLink(NotificationDto dto)
+        private string? GenerateNotificationLink(NotificationDto dto)
         {
             return dto.Type switch
             {
                 NotificationType.Post => $"/post/{dto.IdPost}",
                 NotificationType.Comment => $"/comment/{dto.IdComment}",
                 NotificationType.Like => $"/post/{dto.IdPost}",
+                NotificationType.Follow => "/dashboard?tab=followers",
                 _ => "/notifications",
             };
         }
