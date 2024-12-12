@@ -2,29 +2,17 @@ import { Button, Label, Textarea } from "flowbite-react"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useError } from "../contexts/ErrorContext"
+import { useSuccess } from "../contexts/SuccessContext"
 
 export default function RequestAuthorForm() {
   const { loading } = useSelector((state) => state.user)
   const { currentUser } = useSelector(state => state.user)
 
-  const [successMessage, setSuccessMessage] = useState('')
-  const [showSuccessModal, setShowSuccessModal] = useState(false)
-
   const [reason, setReason] = useState('')
   const [authorRequests, setAuthorRequests] = useState([])
 
   const { showError } = useError()
-
-  useEffect(() => {
-    if (showSuccessModal) {
-      setShowSuccessModal(true)
-    }
-    const timer = setTimeout(() => {
-      setShowSuccessModal(false)
-    }, 10000);
-
-    return () => clearTimeout(timer);
-  }, [showSuccessModal])
+  const { showSuccess } = useSuccess()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -58,8 +46,7 @@ export default function RequestAuthorForm() {
 
         setAuthorRequests([...authorRequests, data])
         setReason('')
-        setShowSuccessModal(true)
-        setSuccessMessage('Successfully submited request.')
+        showSuccess('Successfully submited request')
       } else {
         const errorText = await response.text()
         const errorData = JSON.parse(errorText)
@@ -76,17 +63,13 @@ export default function RequestAuthorForm() {
         return
       }
     } catch (error) {
-      showError(error)
+      showError(error.message)
     }
   }
 
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="my-7 text-center font-semibold text-3xl">Submit an author request</h1>
-
-      {showSuccessModal && (
-        <div className={`success-modal show`}>{successMessage}</div>
-      )}
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="">

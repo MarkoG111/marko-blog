@@ -26,7 +26,7 @@ namespace Api.Controllers
 
             if (token == null)
             {
-                return Unauthorized(new { message = "Invalid username or password." });
+                return Unauthorized(new { message = "Invalid username or password" });
             }
 
             return Ok(new { token });

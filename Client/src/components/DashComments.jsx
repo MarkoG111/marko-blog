@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext";
+import { useSuccess } from "../contexts/SuccessContext";
 
 export default function DashComments() {
   const { currentUser } = useSelector((state) => state.user)
@@ -13,21 +14,8 @@ export default function DashComments() {
   const [showModal, setShowModal] = useState(false)
   const [idCommentToDelete, setIdCommentToDelete] = useState('')
 
-  const [successMessage, setSuccessMessage] = useState('')
-  const [showSuccessModal, setShowSucessModal] = useState(false)
-
   const { showError } = useError()
-
-  useEffect(() => {
-    if (showSuccessModal) {
-      setShowSucessModal(true)
-    }
-    const timer = setTimeout(() => {
-      setShowSucessModal(false)
-    }, 10000)
-
-    return () => clearTimeout(timer)
-  }, [showSuccessModal])
+  const { showSuccess } = useSuccess()
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -108,8 +96,7 @@ export default function DashComments() {
         setComments((prev) => prev.filter((comment) => comment.id !== idCommentToDelete))
         setShowModal(false)
 
-        setShowSucessModal(true)
-        setSuccessMessage("You have successfully deleted comment.")
+        showSuccess("You have successfully deleted a comment")
       }
     } catch (error) {
       showError(error.message);
@@ -166,12 +153,6 @@ export default function DashComments() {
       </>
     ) : (<p>No comments</p>)
     }
-
-    {showSuccessModal && (
-      <div className="success-modal show">
-        {successMessage}
-      </div>
-    )}
 
     <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
       <Modal.Header />

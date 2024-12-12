@@ -129,7 +129,7 @@ export default function DashProfile() {
       }
     } catch (error) {
       dispatch(deleteUserFailure(error))
-      showError(error)
+      showError(error.message)
     }
   }
 
@@ -138,7 +138,7 @@ export default function DashProfile() {
       localStorage.removeItem("token")
       dispatch(signoutSuccess())
     } catch (error) {
-      showError(error);
+      showError(error.message);
     }
   }
 

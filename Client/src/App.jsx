@@ -20,11 +20,13 @@ import NotificationsPage from './pages/NotificationsPage'
 
 import { NotificationsProvider } from './contexts/NotificationsContext'
 import { ErrorProvider } from './contexts/ErrorContext'
+import { SuccessProvider } from './contexts/SuccessContext'
 
 export default function App() {
   return (
     <BrowserRouter>
       <ErrorProvider>
+      <SuccessProvider>
         <NotificationsProvider>
           <ScrollToTop />
           <Header />
@@ -51,6 +53,7 @@ export default function App() {
           </Routes>
           <Footer />
         </NotificationsProvider>
+      </SuccessProvider>
       </ErrorProvider>
     </BrowserRouter>
   )

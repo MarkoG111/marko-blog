@@ -62,7 +62,7 @@ export default function DashSidebar() {
           return
         }
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 
@@ -74,7 +74,7 @@ export default function DashSidebar() {
       localStorage.removeItem("token")
       dispatch(signoutSuccess())
     } catch (error) {
-      showError(error);
+      showError(error.message);
     }
   }
 

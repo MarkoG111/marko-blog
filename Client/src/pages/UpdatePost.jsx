@@ -5,6 +5,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useError } from "../contexts/ErrorContext";
+import { useSuccess } from "../contexts/SuccessContext";
 
 export default function UpdatePost() {
   const [selectedCategories, setSelectedCategories] = useState([])
@@ -15,25 +16,12 @@ export default function UpdatePost() {
   const [content, setEditContent] = useState('')
   const [editData, setEditData] = useState({})
 
-  const [successMessage, setSuccessMessage] = useState('')
-  const [showSuccessModal, setShowSucessModal] = useState(false)
-
   const { currentUser } = useSelector((state) => state.user)
 
   const { postId } = useParams()
 
   const { showError } = useError()
-
-  useEffect(() => {
-    if (showSuccessModal) {
-      setShowSucessModal(true)
-    }
-    const timer = setTimeout(() => {
-      setShowSucessModal(false)
-    }, 10000)
-
-    return () => clearTimeout(timer)
-  }, [showSuccessModal])
+  const { showSuccess } = useSuccess()
 
   useEffect(() => {
     try {
@@ -71,13 +59,13 @@ export default function UpdatePost() {
 
           setEditData(data);
         } catch (error) {
-          showError(error)
+          showError(error.message)
         }
       }
 
       fetchPost()
     } catch (error) {
-      showError(error)
+      showError(error.message)
     }
   }, [postId, showError])
 
@@ -129,7 +117,7 @@ export default function UpdatePost() {
         const data = await response.json()
         setCategories(data.items)
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 
@@ -225,7 +213,7 @@ export default function UpdatePost() {
             showError(err.ErrorMessage)
           })
         } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
+          const errorMessage = errorData.message || "An unknown error occurred";
           showError(errorMessage)
         }
 
@@ -233,11 +221,10 @@ export default function UpdatePost() {
       }
 
       if (response.status == 204) {
-        setShowSucessModal(true)
-        setSuccessMessage("You have successfully updated post.")
+        showSuccess('Post updated successfully');
       }
     } catch (error) {
-      showError('Cannot update post.')
+      showError('Cannot update post')
     }
   }
 
@@ -291,12 +278,6 @@ export default function UpdatePost() {
         />
 
         <Button type="submit" gradientDuoTone="purpleToPink">Update post</Button>
-
-        {showSuccessModal && (
-          <div className="success-modal show">
-            {successMessage}
-          </div>
-        )}
       </form>
     </div>
   )

@@ -8,7 +8,7 @@ namespace Application.Exceptions
     public class AlreadyAddedException : Exception
     {
         public AlreadyAddedException(IApplicationActor actor)
-            : base($"You already submitted request to admin approval.")
+            : base($"You already submitted request to admin approval")
         {
 
         }

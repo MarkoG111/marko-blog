@@ -63,7 +63,7 @@ export default function OAuth() {
         return
       }
     } catch (error) {
-      showError(error)
+      showError(error.message)
     }
   }
 

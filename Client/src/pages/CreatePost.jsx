@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useError } from "../contexts/ErrorContext";
+import { useSuccess } from "../contexts/SuccessContext";
 
 export default function CreatePost() {
   const [selectedCategories, setSelectedCategories] = useState([])
@@ -12,21 +13,8 @@ export default function CreatePost() {
   const [imagePreview, setImagePreview] = useState(null);
   const [content, setContent] = useState('')
 
-  const [successMessage, setSuccessMessage] = useState('')
-  const [showSuccessModal, setShowSucessModal] = useState(false)
-
   const { showError } = useError()
-
-  useEffect(() => {
-    if (showSuccessModal) {
-      setShowSucessModal(true)
-    }
-    const timer = setTimeout(() => {
-      setShowSucessModal(false)
-    }, 10000)
-
-    return () => clearTimeout(timer)
-  }, [showSuccessModal])
+  const { showSuccess } = useSuccess()
 
   const handleContentChange = (value) => {
     setContent(value);
@@ -76,7 +64,7 @@ export default function CreatePost() {
           return
         }
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 
@@ -125,7 +113,7 @@ export default function CreatePost() {
         return
       }
     } catch (error) {
-      showError(error)
+      showError(error.message)
     }
   }
 
@@ -176,8 +164,7 @@ export default function CreatePost() {
         postCategory.idPost = insertPostId
       })
 
-      setShowSucessModal(true)
-      setSuccessMessage("You have successfully added a post.")
+      showSuccess("You have successfully added a post")
 
       setContent('')
       setSelectedCategories([])
@@ -186,7 +173,7 @@ export default function CreatePost() {
       e.target.elements.title.value = ''
       e.target.elements.fileInput.value = ''
     } catch (error) {
-      showError(error)
+      showError(error.message)
     }
   }
 
@@ -234,12 +221,6 @@ export default function CreatePost() {
         />
 
         <Button type="submit" gradientDuoTone="purpleToPink" className="mt-4">Publish</Button>
-
-        {showSuccessModal && (
-          <div className="success-modal show">
-            {successMessage}
-          </div>
-        )}
       </form>
     </div>
   )

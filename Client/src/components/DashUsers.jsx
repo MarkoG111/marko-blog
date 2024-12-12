@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext";
+import { useSuccess } from "../contexts/SuccessContext";
 
 export default function DashUsers() {
   const { currentUser } = useSelector((state) => state.user)
@@ -13,21 +14,8 @@ export default function DashUsers() {
   const [showModal, setShowModal] = useState(false)
   const [idUserToDelete, setIdUserToDelete] = useState('')
 
-  const [successMessage, setSuccessMessage] = useState('')
-  const [showSuccessModal, setShowSucessModal] = useState(false)
-
   const { showError } = useError()
-
-  useEffect(() => {
-    if (showSuccessModal) {
-      setShowSucessModal(true)
-    }
-    const timer = setTimeout(() => {
-      setShowSucessModal(false)
-    }, 10000)
-
-    return () => clearTimeout(timer)
-  }, [showSuccessModal])
+  const { showSuccess } = useSuccess()
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -66,7 +54,7 @@ export default function DashUsers() {
           return
         }
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 
@@ -109,10 +97,9 @@ export default function DashUsers() {
 
       setUsers((prev) => prev.filter((user) => user.id !== idUserToDelete))
       setShowModal(false)
-      setShowSucessModal(true)
-      setSuccessMessage("You have successfully deleted user.")
+      showSuccess("You have successfully deleted a user")
     } catch (error) {
-      showError(error);
+      showError(error.message);
     }
   }
 
@@ -164,12 +151,6 @@ export default function DashUsers() {
       </>
     ) : (<p>No users</p>)
     }
-
-    {showSuccessModal && (
-      <div className="success-modal show">
-        {successMessage}
-      </div>
-    )}
 
     <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
       <Modal.Header />

@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext";
+import { useSuccess } from "../contexts/SuccessContext";
 
 export default function UserDashPosts() {
   const { currentUser } = useSelector((state) => state.user)
@@ -16,20 +17,7 @@ export default function UserDashPosts() {
   const [postDeleted, setPostDeleted] = useState(false)
 
   const { showError } = useError()
-
-  const [successMessage, setSuccessMessage] = useState('')
-  const [showSuccessModal, setShowSucessModal] = useState(false)
-
-  useEffect(() => {
-    if (showSuccessModal) {
-      setShowSucessModal(true)
-    }
-    const timer = setTimeout(() => {
-      setShowSucessModal(false)
-    }, 10000)
-
-    return () => clearTimeout(timer)
-  }, [showSuccessModal])
+  const { showSuccess } = useSuccess()
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -64,7 +52,7 @@ export default function UserDashPosts() {
           return
         }
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 
@@ -109,14 +97,12 @@ export default function UserDashPosts() {
       }
 
       setUserPosts((prev) => prev.filter((post) => post.id !== idPostToDelete))
-      setShowSucessModal(true)
-      setSuccessMessage("You have successfully deleted post.")
+      showSuccess("You have successfully deleted a post")
       setPostDeleted(!postDeleted)
     } catch (error) {
-      showError(error)
+      showError(error.message)
     }
   }
-
 
   return <div className="table-container-scrollbar table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
     {currentUser.roleName === 'Author' && userPosts.length > 0 ? (
@@ -174,12 +160,6 @@ export default function UserDashPosts() {
       </>
     ) : (<p>You have no posts</p>)
     }
-
-    {showSuccessModal && (
-      <div className="success-modal show">
-        {successMessage}
-      </div>
-    )}
 
     <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
       <Modal.Header />

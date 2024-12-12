@@ -36,7 +36,7 @@ export default function Home() {
           return
         }
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 

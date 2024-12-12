@@ -56,7 +56,7 @@ export default function FollowList({ isFollowersTab }) {
           return
         }
       } catch (error) {
-        showError(error);
+        showError(error.message);
       }
     }
 

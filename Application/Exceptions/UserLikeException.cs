@@ -8,7 +8,7 @@ namespace Application.Exceptions
     public class UserLikeException : Exception
     {
         public UserLikeException(IApplicationActor actor)
-            : base("You can't like or dislike your own comment.")
+            : base("You can't like or dislike your own comment")
         {
 
         }

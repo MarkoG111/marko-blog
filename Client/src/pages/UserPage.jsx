@@ -41,6 +41,8 @@ export default function UserPage() {
 
             const followData = await followResponse.json()
             setIsFollowing(followData.isFollowing)
+          } else {
+            showError("You must log in")
           }
         } else {
           const errorText = await response.text()
@@ -56,7 +58,7 @@ export default function UserPage() {
           }
         }
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 
@@ -94,12 +96,12 @@ export default function UserPage() {
             showError(err.ErrorMessage)
           })
         } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
+          const errorMessage = errorData.title || "An unknown error occurred";
           showError(errorMessage)
         }
       }
     } catch (error) {
-      showError(error)
+      showError(error.message)
     }
   }
 
@@ -111,7 +113,7 @@ export default function UserPage() {
       }
 
       const response = await fetch(`/followers/${id}/unfollow`, {
-        method: "DELETE",
+        method: "DELETEs",
         headers: {
           "Authorization": `Bearer ${token}`,
         }
@@ -137,7 +139,7 @@ export default function UserPage() {
         }
       }
     } catch (error) {
-      showError(error)
+      showError(error.message)
     }
   }
 

@@ -33,7 +33,7 @@ export default function Footer() {
           return
         }
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 

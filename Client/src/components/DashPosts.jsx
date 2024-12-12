@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext";
+import { useSuccess } from "../contexts/SuccessContext";
 
 export default function DashPosts() {
   const { currentUser } = useSelector((state) => state.user)
@@ -14,21 +15,8 @@ export default function DashPosts() {
   const [postIdToDelete, setPostIdToDelete] = useState('')
   const [postDeleted, setPostDeleted] = useState(false)
 
-  const [successMessage, setSuccessMessage] = useState('')
-  const [showSuccessModal, setShowSucessModal] = useState(false)
-
   const { showError } = useError()
-
-  useEffect(() => {
-    if (showSuccessModal) {
-      setShowSucessModal(true)
-    }
-    const timer = setTimeout(() => {
-      setShowSucessModal(false)
-    }, 10000)
-
-    return () => clearTimeout(timer)
-  }, [showSuccessModal])
+  const { showSuccess } = useSuccess()
 
   useEffect(() => {
     const fetchAdminPosts = async () => {
@@ -107,8 +95,7 @@ export default function DashPosts() {
       }
 
       setUserPosts((prev) => prev.filter((post) => post.id !== postIdToDelete))
-      setShowSucessModal(true)
-      setSuccessMessage("You have successfully deleted post.")
+      showSuccess("You have successfully deleted a post")
       setPostDeleted(!postDeleted)
     } catch (error) {
       showError(error.message)
@@ -172,12 +159,6 @@ export default function DashPosts() {
       </>
     ) : (<p>You have no posts</p>)
     }
-
-    {showSuccessModal && (
-      <div className="success-modal show">
-        {successMessage}
-      </div>
-    )}
 
     <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
       <Modal.Header />

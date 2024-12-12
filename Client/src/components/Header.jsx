@@ -36,7 +36,7 @@ export default function Header() {
       dispatch(signoutSuccess())
       navigate('/')
     } catch (error) {
-      showError(error)
+      showError(error.message)
     }
   }
 

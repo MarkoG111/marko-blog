@@ -44,7 +44,7 @@ export default function CategoryPage() {
           return
         }
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 

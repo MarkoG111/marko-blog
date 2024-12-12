@@ -67,7 +67,7 @@ export default function PostsPage() {
           return
         }
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 
@@ -98,7 +98,7 @@ export default function PostsPage() {
           }
         }
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 

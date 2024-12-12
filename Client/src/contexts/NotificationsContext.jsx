@@ -68,7 +68,7 @@ export const NotificationsProvider = ({ children }) => {
           return
         }
       } catch (error) {
-        showError(error)
+        showError(error.message)
       }
     }
 
@@ -139,7 +139,7 @@ export const NotificationsProvider = ({ children }) => {
 
         connection.current = hubConnection
       } catch (error) {
-        showError(error)
+        showError(error.message)
       } finally {
         isConnecting.current = false
       }
@@ -180,7 +180,7 @@ export const NotificationsProvider = ({ children }) => {
           setHasNewNotifications(false)
           dispatch(setUnreadCount(0))
         } catch (error) {
-          showError(error)
+          showError(error.message)
         }
       }
 
