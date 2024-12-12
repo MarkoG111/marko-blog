@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext";
 import { useSuccess } from "../contexts/SuccessContext";
+import { handleApiError } from "../utils/handleApiUtils";
 
 export default function UserDashPosts() {
   const { currentUser } = useSelector((state) => state.user)
@@ -37,19 +38,7 @@ export default function UserDashPosts() {
             return
           }
         } else {
-          const errorText = await repsonse.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+          await handleApiError(repsonse, showError)
         }
       } catch (error) {
         showError(error.message)
@@ -80,25 +69,13 @@ export default function UserDashPosts() {
         },
       })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+      if (response.ok) {
+        setUserPosts((prev) => prev.filter((post) => post.id !== idPostToDelete))
+        showSuccess("You have successfully deleted a post")
+        setPostDeleted(!postDeleted)
+      } else {
+        await handleApiError(response, showError)
       }
-
-      setUserPosts((prev) => prev.filter((post) => post.id !== idPostToDelete))
-      showSuccess("You have successfully deleted a post")
-      setPostDeleted(!postDeleted)
     } catch (error) {
       showError(error.message)
     }

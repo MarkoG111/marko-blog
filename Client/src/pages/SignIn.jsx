@@ -8,6 +8,7 @@ import OAuth from '../components/OAuth';
 
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 import { useError } from '../contexts/ErrorContext';
+import { handleApiError } from '../utils/handleApiUtils';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -36,33 +37,22 @@ export default function SignIn() {
 
       setLoading(false);
 
-      if (!response.ok) {
+      if (response.ok) {
+        const { token } = await response.json();
+        const decodedToken = jwtDecode(token);
+        const userProfile = decodedToken.ActorData;
+
+        localStorage.setItem('token', token);
+
+        dispatch(signInSuccess(userProfile));
+
+        navigate('/');
+      } else {
         const data = await response.json();
-
-        if (Array.isArray(data.errors)) {
-          data.errors.forEach((error) => showError(error.ErrorMessage));
-        } else if (data.errors && typeof data.errors === 'object') {
-          Object.entries(data.errors).forEach(([field, messages]) => {
-            messages.forEach((message) => showError(`${message}`))
-          })
-        } else {
-          const errorMessage = data.message || 'An unknown error occurred.';
-          showError(errorMessage);
-        }
-
+        
+        await handleApiError(response, showError)
         dispatch(signInFailure(data.message));
-        return;
       }
-
-      const { token } = await response.json();
-      const decodedToken = jwtDecode(token);
-      const userProfile = decodedToken.ActorData;
-
-      localStorage.setItem('token', token);
-
-      dispatch(signInSuccess(userProfile));
-
-      navigate('/');
     } catch (error) {
       showError('An error occurred while processing your request.');
       dispatch(signInFailure(error.message));

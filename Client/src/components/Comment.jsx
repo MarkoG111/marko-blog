@@ -8,6 +8,8 @@ import { useSelector } from "react-redux"
 import ChildComment from './ChildComment'
 import { useError } from '../contexts/ErrorContext'
 
+import { handleApiError } from '../utils/handleApiUtils'
+
 export default function Comment({ comment, onLikeComment, onDislikeComment, onAddChildComment, childrenComments, onEditComment, onDeleteComment, setActiveReplyIdComment, activeReplyIdComment, comments }) {
   const [user, setUser] = useState({})
   const { currentUser } = useSelector((state) => state.user)
@@ -28,7 +30,7 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await fetch(`/users/${comment.idUser}`, {
+        const response = await fetch(`/users/${comment.idUsesafr}`, {
           method: "GET"
         })
 
@@ -36,19 +38,7 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
           const data = await response.json()
           setUser(data)
         } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+          await handleApiError(response, showError)
         }
       } catch (error) {
         showError(error.message)
@@ -84,19 +74,7 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
         setIsEditing(false)
         onEditComment(comment, editedText)
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError(error.message)

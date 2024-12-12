@@ -4,6 +4,7 @@ import { setUnreadCount } from "../redux/notificationsSlice"
 import { useLocation } from "react-router-dom"
 import * as signalR from '@microsoft/signalr'
 import { useError } from "./ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export const NotificationsContext = createContext()
 
@@ -53,19 +54,7 @@ export const NotificationsProvider = ({ children }) => {
           setNotifications(data.items)
           updateUnreadCount(data.items)
         } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+          await handleApiError(response, showError)
         }
       } catch (error) {
         showError(error.message)

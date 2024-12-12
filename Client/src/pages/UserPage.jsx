@@ -6,6 +6,7 @@ import { RiUserFollowLine, RiUserUnfollowFill } from "react-icons/ri"
 import { FaUserPlus } from "react-icons/fa6";
 import { Button } from "flowbite-react"
 import { useError } from "../contexts/ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export default function UserPage() {
   const { id } = useParams()
@@ -45,17 +46,7 @@ export default function UserPage() {
             showError("You must log in")
           }
         } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
+          await handleApiError(response, showError)
         }
       } catch (error) {
         showError(error.message)
@@ -88,17 +79,7 @@ export default function UserPage() {
           followersCount: prevUser.followersCount + 1,
         }));
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.title || "An unknown error occurred";
-          showError(errorMessage)
-        }
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError(error.message)
@@ -126,17 +107,7 @@ export default function UserPage() {
           followersCount: prevUser.followersCount - 1,
         }));
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError(error.message)

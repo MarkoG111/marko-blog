@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { handleApiError } from '../utils/handleApiUtils'
 
 import Comment from './Comment'
 
@@ -42,19 +43,7 @@ export default function CommentSection({ idPost }) {
           setChildComments(data.childrenComments.reverse())
           setCommentsNumber(data.comments.length + data.childrenComments.length)
         } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+          await handleApiError(response, showError)
         }
       } catch (error) {
         showError(error.message)
@@ -104,19 +93,7 @@ export default function CommentSection({ idPost }) {
         setCommentsNumber(commentsNumber + 1)
         setComment('')
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError(error.message)
@@ -157,19 +134,7 @@ export default function CommentSection({ idPost }) {
         setActiveReplyIdComment(null)
         setCommentsNumber(commentsNumber + 1)
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     }
     catch (error) {
@@ -230,19 +195,7 @@ export default function CommentSection({ idPost }) {
         const updatedChildCommentsWithLikes = updateCommentLikes(updatedChildComments, idComment, data, currentUser.id)
         setChildComments(updatedChildCommentsWithLikes)
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError(error.message || "An unknown error occurred.")
@@ -302,19 +255,7 @@ export default function CommentSection({ idPost }) {
         const updatedChildCommentsWithLikes = updateCommentLikes(updatedChildComments, idComment, data, currentUser.id)
         setChildComments(updatedChildCommentsWithLikes)
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError(error.message || "An unknown error occurred.")
@@ -369,19 +310,7 @@ export default function CommentSection({ idPost }) {
 
         setCommentsNumber(commentsNumber - 1)
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError(error.message)

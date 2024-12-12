@@ -7,6 +7,7 @@ import { signoutSuccess } from '../redux/user/userSlice';
 import { RiPieChart2Fill } from "react-icons/ri";
 import { FaRegComments } from "react-icons/fa";
 import { useError } from '../contexts/ErrorContext';
+import { handleApiError } from '../utils/handleApiUtils';
 
 export default function DashSidebar() {
   const location = useLocation();
@@ -32,34 +33,22 @@ export default function DashSidebar() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        const token = localStorage.getItem("token")
+        if (!token) {
+          showError("Token not found")
+          return
+        }
+
         const repsonse = await fetch(`/users/${currentUser.id}`, {
           method: "GET"
         })
 
         const data = await repsonse.json()
 
-        if (!repsonse.ok) {
-          const errorText = await repsonse.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
-        }
-
-        setUser(data)
-
-        const token = localStorage.getItem("token")
-        if (!token) {
-          showError("Token not found")
-          return
+        if (repsonse.ok) {
+          setUser(data)
+        } else {
+          await handleApiError(repsonse, showError)
         }
       } catch (error) {
         showError(error.message)

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useError } from "../contexts/ErrorContext"
 import { useSuccess } from "../contexts/SuccessContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export default function RequestAuthorForm() {
   const { loading } = useSelector((state) => state.user)
@@ -48,19 +49,7 @@ export default function RequestAuthorForm() {
         setReason('')
         showSuccess('Successfully submited request')
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError(error.message)

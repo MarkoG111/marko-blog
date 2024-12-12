@@ -4,6 +4,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useError } from "../contexts/ErrorContext";
 import { useSuccess } from "../contexts/SuccessContext";
+import { handleApiError } from "../utils/handleApiUtils";
 
 export default function CreatePost() {
   const [selectedCategories, setSelectedCategories] = useState([])
@@ -49,19 +50,7 @@ export default function CreatePost() {
           const data = await response.json()
           setCategories(data.items)
         } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+          await handleApiError(response, showError)
         }
       } catch (error) {
         showError(error.message)
@@ -98,19 +87,7 @@ export default function CreatePost() {
         const imageUrl = await response.json()
         setImagePreview(imageUrl)
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError(error.message)
@@ -142,36 +119,25 @@ export default function CreatePost() {
         body: JSON.stringify(postData)
       })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
+      if (response.ok) {
+        const insertPostId = await response.json()
 
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        postData.PostCategories.forEach(postCategory => {
+          postCategory.idPost = insertPostId
+        })
+  
+        showSuccess("You have successfully added a post")
+  
+        setContent('')
+        setSelectedCategories([])
+        setImageFile(null)
+        setImagePreview(null)
+        
+        e.target.elements.title.value = ''
+        e.target.elements.fileInput.value = ''
+      } else {
+        await handleApiError(response, showError)
       }
-      
-      const insertPostId = await response.json()
-
-      postData.PostCategories.forEach(postCategory => {
-        postCategory.idPost = insertPostId
-      })
-
-      showSuccess("You have successfully added a post")
-
-      setContent('')
-      setSelectedCategories([])
-      setImageFile(null)
-      setImagePreview(null)
-      e.target.elements.title.value = ''
-      e.target.elements.fileInput.value = ''
     } catch (error) {
       showError(error.message)
     }

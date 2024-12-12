@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { deleteUserFailure, deleteUserSuccess, updateProfilePictureSuccess, updateUserSuccess, signoutSuccess } from '../redux/user/userSlice'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export default function DashProfile() {
   const { currentUser, loading } = useSelector((state) => state.user)
@@ -73,19 +74,7 @@ export default function DashProfile() {
         dispatch(updateUserSuccess(responseData))
         dispatch(updateProfilePictureSuccess(updatedProfilePicture))
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError(error.message)
@@ -113,19 +102,7 @@ export default function DashProfile() {
         dispatch(deleteUserSuccess())
       } else {
         dispatch(deleteUserFailure())
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       dispatch(deleteUserFailure(error))

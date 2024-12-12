@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineClock, HiOutlineCheck, HiOutlineX } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export default function DashAuthorRequests() {
   const { currentUser } = useSelector((state) => state.user)
@@ -35,19 +36,7 @@ export default function DashAuthorRequests() {
           setAuthorRequests(data.items)
           setPageCount(data.pageCount)
         } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+          await handleApiError(response, showError)
         }
       } catch (error) {
         showError(error.message)
@@ -81,23 +70,11 @@ export default function DashAuthorRequests() {
         body: JSON.stringify({ Status: 2, IdRole: 2 })
       })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
-      } 
-        
-      updateAuthorRequestStatus(idRequest, 2)
+      if (response.ok) {
+        updateAuthorRequestStatus(idRequest, 2)
+      } else {
+        await handleApiError(response, showError)
+      }
     } catch (error) {
       showError(error.message)
     }
@@ -119,23 +96,11 @@ export default function DashAuthorRequests() {
         body: JSON.stringify({ Status: 3, IdRole: 3 })
       })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
-      } 
-        
-      updateAuthorRequestStatus(idRequest, 3)
+      if (response.ok) {
+        updateAuthorRequestStatus(idRequest, 3)
+      } else {
+        await handleApiError(response, showError)
+      }
     } catch (error) {
       showError(error.message);
     }

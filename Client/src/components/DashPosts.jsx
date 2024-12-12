@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext";
 import { useSuccess } from "../contexts/SuccessContext";
+import { handleApiError } from "../utils/handleApiUtils";
 
 export default function DashPosts() {
   const { currentUser } = useSelector((state) => state.user)
@@ -17,6 +18,7 @@ export default function DashPosts() {
 
   const { showError } = useError()
   const { showSuccess } = useSuccess()
+
 
   useEffect(() => {
     const fetchAdminPosts = async () => {
@@ -38,19 +40,7 @@ export default function DashPosts() {
           setUserPosts(data.items)
           setPageCount(data.pageCount)
         } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+          await handleApiError(response, showError)
         }
       } catch (error) {
         showError(error.message)
@@ -78,25 +68,13 @@ export default function DashPosts() {
         },
       })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+      if (response.ok) {
+        setUserPosts((prev) => prev.filter((post) => post.id !== postIdToDelete))
+        showSuccess("You have successfully deleted a post")
+        setPostDeleted(!postDeleted)
+      } else {
+        await handleApiError(response, showError)
       }
-
-      setUserPosts((prev) => prev.filter((post) => post.id !== postIdToDelete))
-      showSuccess("You have successfully deleted a post")
-      setPostDeleted(!postDeleted)
     } catch (error) {
       showError(error.message)
     }

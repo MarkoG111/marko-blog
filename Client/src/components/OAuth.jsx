@@ -7,6 +7,7 @@ import { signInSuccess } from "../redux/user/userSlice"
 import { useNavigate } from "react-router-dom"
 import { jwtDecode } from 'jwt-decode'
 import { useError } from "../contexts/ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export default function OAuth() {
   const auth = getAuth(app)
@@ -48,19 +49,7 @@ export default function OAuth() {
 
         navigate('/')
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError(error.message)

@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useError } from "../contexts/ErrorContext";
 import { useSuccess } from "../contexts/SuccessContext";
+import { handleApiError } from "../utils/handleApiUtils";
 
 export default function UpdatePost() {
   const [selectedCategories, setSelectedCategories] = useState([])
@@ -39,25 +40,13 @@ export default function UpdatePost() {
             }
           });
 
-          const data = await response.json()
+          if (response.ok) {
+            const data = await response.json()
 
-          if (!response.ok) {
-            const errorText = await response.text()
-            const errorData = JSON.parse(errorText)
-
-            if (Array.isArray(errorData.errors)) {
-              errorData.errors.forEach((err) => {
-                showError(err.ErrorMessage)
-              })
-            } else {
-              const errorMessage = errorData.message || "An unknown error occurred.";
-              showError(errorMessage)
-            }
-
-            return
+            setEditData(data);
+          } else {
+            await handleApiError(response, showError)
           }
-
-          setEditData(data);
         } catch (error) {
           showError(error.message)
         }
@@ -98,24 +87,12 @@ export default function UpdatePost() {
           }
         })
 
-        if (!response.ok) {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+        if (response.ok) {
+          const data = await response.json()
+          setCategories(data.items)
+        } else {
+          await handleApiError(response, showError)
         }
-
-        const data = await response.json()
-        setCategories(data.items)
       } catch (error) {
         showError(error.message)
       }
@@ -154,24 +131,12 @@ export default function UpdatePost() {
         body: formData
       });
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+      if (response.ok) {
+        const imageUrl = await response.json()
+        setImagePreview(imageUrl)
+      } else {
+        await handleApiError(response, showError)
       }
-
-      const imageUrl = await response.json()
-      setImagePreview(imageUrl)
     } catch (error) {
       showError("Image upload failed")
     }
@@ -204,24 +169,12 @@ export default function UpdatePost() {
         body: JSON.stringify(postData)
       })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred";
-          showError(errorMessage)
+      if (response.ok) {
+        if (response.status == 204) {
+          showSuccess('Post updated successfully');
         }
-
-        return
-      }
-
-      if (response.status == 204) {
-        showSuccess('Post updated successfully');
+      } else {
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError('Cannot update post')

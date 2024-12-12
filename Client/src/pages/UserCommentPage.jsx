@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { AiOutlineHeart } from "react-icons/ai";
 import { useError } from "../contexts/ErrorContext";
+import { handleApiError } from "../utils/handleApiUtils";
 
 export default function UserCommentPage() {
   const { id } = useParams()
@@ -25,17 +26,7 @@ export default function UserCommentPage() {
           fetchParentComment(data.idParent);
         }
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
+        await handleApiError(response, showError)
       }
     }
 
@@ -48,17 +39,7 @@ export default function UserCommentPage() {
         const parentData = await response.json()
         setParentComment(parentData)
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
+        await handleApiError(response, showError)
       }
     }
 

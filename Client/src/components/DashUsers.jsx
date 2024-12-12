@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext";
 import { useSuccess } from "../contexts/SuccessContext";
+import { handleApiError } from "../utils/handleApiUtils";
 
 export default function DashUsers() {
   const { currentUser } = useSelector((state) => state.user)
@@ -39,19 +40,7 @@ export default function DashUsers() {
           setUsers(data.items)
           setPageCount(data.pageCount)
         } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+          await handleApiError(response, showError)
         }
       } catch (error) {
         showError(error.message)
@@ -79,25 +68,13 @@ export default function DashUsers() {
         },
       })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+      if (response.ok) {
+        setUsers((prev) => prev.filter((user) => user.id !== idUserToDelete))
+        setShowModal(false)
+        showSuccess("You have successfully deleted a user")
+      } else {
+        await handleApiError(response, showError)
       }
-
-      setUsers((prev) => prev.filter((user) => user.id !== idUserToDelete))
-      setShowModal(false)
-      showSuccess("You have successfully deleted a user")
     } catch (error) {
       showError(error.message);
     }

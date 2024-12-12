@@ -5,6 +5,7 @@ import CommentSection from "../components/CommentSection"
 import PostLikeButtons from "../components/PostLikeButtons"
 import { useSelector } from "react-redux"
 import { useError } from "../contexts/ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 import {
   removeDislikeOrLikeIfPresentInPost,
@@ -31,26 +32,14 @@ export default function PostPage() {
           method: "GET"
         })
 
-        if (!response.ok) {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+        if (response.ok) {
+          const data = await response.json()
+          
+          setPost(data)
+          setLoading(false)
+        } else {
+          await handleApiError(response, showError)
         }
-
-        const data = await response.json()
-
-        setPost(data)
-        setLoading(false)
       } catch (error) {
         showError("An unexpected error occurred while loading the post.")
       }
@@ -96,19 +85,7 @@ export default function PostPage() {
         const updatePostWithLikes = updatePostLikes(updatedPost, idPost, data, currentUser.id)
         setPost(updatePostWithLikes)
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError("An error occurred while processing your request.")
@@ -152,19 +129,7 @@ export default function PostPage() {
         const updatePostWithLikes = updatePostLikes(updatedPost, idPost, data, currentUser.id)
         setPost(updatePostWithLikes)
       } else {
-        const errorText = await response.text()
-        const errorData = JSON.parse(errorText)
-
-        if (Array.isArray(errorData.errors)) {
-          errorData.errors.forEach((err) => {
-            showError(err.ErrorMessage)
-          })
-        } else {
-          const errorMessage = errorData.message || "An unknown error occurred.";
-          showError(errorMessage)
-        }
-
-        return
+        await handleApiError(response, showError)
       }
     } catch (error) {
       showError("An error occurred while processing your request.")

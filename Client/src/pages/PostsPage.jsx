@@ -4,6 +4,7 @@ import PostCard from "../components/PostCard"
 import MultiSelectDropdown from "../components/MultiSelectDropdown"
 import { useLocation } from "react-router-dom"
 import { useError } from "../contexts/ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export default function PostsPage() {
   const [posts, setPosts] = useState([])
@@ -52,19 +53,7 @@ export default function PostsPage() {
           setPosts(data.items)
           setPageCount(data.pageCount)
         } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+          await handleApiError(response, showError)
         }
       } catch (error) {
         showError(error.message)
@@ -85,17 +74,7 @@ export default function PostsPage() {
           const data = await response.json()
           setCategories(data.items)
         } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
+          await handleApiError(response, showError)
         }
       } catch (error) {
         showError(error.message)

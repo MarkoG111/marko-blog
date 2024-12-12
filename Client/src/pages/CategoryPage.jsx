@@ -2,6 +2,7 @@ import { Pagination } from "flowbite-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useError } from "../contexts/ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export default function CategoryPage() {
   const { id } = useParams()
@@ -29,19 +30,7 @@ export default function CategoryPage() {
           setCategory(data)
           setPageCount(data.pageCount)
         } else {
-          const errorText = await response.text()
-          const errorData = JSON.parse(errorText)
-
-          if (Array.isArray(errorData.errors)) {
-            errorData.errors.forEach((err) => {
-              showError(err.ErrorMessage)
-            })
-          } else {
-            const errorMessage = errorData.message || "An unknown error occurred.";
-            showError(errorMessage)
-          }
-
-          return
+          await handleApiError(response, showError)
         }
       } catch (error) {
         showError(error.message)
