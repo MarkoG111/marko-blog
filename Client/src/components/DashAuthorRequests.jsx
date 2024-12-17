@@ -1,8 +1,9 @@
-import { Table, Pagination, Button } from "flowbite-react";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import PropTypes from 'prop-types'
+import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import { Link } from "react-router-dom"
 import { HiOutlineClock, HiOutlineCheck, HiOutlineX } from 'react-icons/hi'
+import { Table, Pagination, Button } from "flowbite-react"
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
 
@@ -102,7 +103,7 @@ export default function DashAuthorRequests() {
         await handleApiError(response, showError)
       }
     } catch (error) {
-      showError(error.message);
+      showError(error.message)
     }
   }
 
@@ -112,7 +113,6 @@ export default function DashAuthorRequests() {
     3: { icon: <HiOutlineX />, className: 'text-red-500', text: "Rejected" },
   }
 
-  // eslint-disable-next-line react/prop-types
   const AuthorRequestStatus = ({ status }) => {
     const { icon, className, text } = statusIcon[status] || {}
     return <div className={className}><p className="flex">{text} <span className="ml-3 text-xl">{icon}</span></p> </div>
@@ -149,7 +149,7 @@ export default function DashAuthorRequests() {
                   {authorRequest.reason}
                 </Table.Cell>
                 <Table.Cell className="w-64">
-                  <AuthorRequestStatus status={authorRequest.status} />
+                  <AuthorRequestStatus status={authorRequest.status || 1} />
                 </Table.Cell>
                 <Table.Cell className="flex">
                   <Button className="mr-3" color="failure" onClick={() => handleRejectAuthorRequest(authorRequest.id)}>Reject</Button>
@@ -170,4 +170,8 @@ export default function DashAuthorRequests() {
     ) : (<p>No requests</p>)
     }
   </div>
+}
+
+DashAuthorRequests.propTypes = {
+  status: PropTypes.number
 }

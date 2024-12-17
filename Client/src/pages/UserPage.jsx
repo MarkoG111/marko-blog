@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import { HiDocumentText, HiOutlineMail } from 'react-icons/hi'
 import { FaRegCommentDots, FaUsers } from 'react-icons/fa'
 import { RiUserFollowLine, RiUserUnfollowFill } from "react-icons/ri"
-import { FaUserPlus } from "react-icons/fa6";
+import { FaUserPlus } from "react-icons/fa6"
 import { Button } from "flowbite-react"
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
@@ -74,10 +74,11 @@ export default function UserPage() {
 
       if (response.ok) {
         setIsFollowing(true)
+
         setUser((prevUser) => ({
           ...prevUser,
           followersCount: prevUser.followersCount + 1,
-        }));
+        }))
       } else {
         await handleApiError(response, showError)
       }
@@ -94,7 +95,7 @@ export default function UserPage() {
       }
 
       const response = await fetch(`/followers/${id}/unfollow`, {
-        method: "DELETEs",
+        method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`,
         }
@@ -102,10 +103,11 @@ export default function UserPage() {
 
       if (response.ok) {
         setIsFollowing(false)
+
         setUser((prevUser) => ({
           ...prevUser,
           followersCount: prevUser.followersCount - 1,
-        }));
+        }))
       } else {
         await handleApiError(response, showError)
       }

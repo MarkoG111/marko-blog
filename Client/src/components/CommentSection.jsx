@@ -1,21 +1,18 @@
 import PropTypes from 'prop-types'
-import { Button, Textarea, Modal } from 'flowbite-react'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { Button, Textarea, Modal } from 'flowbite-react'
 import { handleApiError } from '../utils/handleApiUtils'
-
 import Comment from './Comment'
-
+import { useError } from '../contexts/ErrorContext'
 import {
   checkIfAlreadyVoted,
   removeDislikeOrLikeIfPresent,
   updateCommentLikes,
   handleOptimisticUpdate
 } from '../utils/commentUtils'
-import { useError } from '../contexts/ErrorContext'
-
 export default function CommentSection({ idPost }) {
   const { currentUser } = useSelector(state => state.user)
 

@@ -1,11 +1,11 @@
 import { Button } from "flowbite-react"
 import { AiFillGoogleCircle } from "react-icons/ai"
 import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth"
-import { app } from "../firebase"
-import { useDispatch } from "react-redux"
-import { signInSuccess } from "../redux/user/userSlice"
 import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
 import { jwtDecode } from 'jwt-decode'
+import { signInSuccess } from "../redux/user/userSlice"
+import { app } from "../firebase"
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
 

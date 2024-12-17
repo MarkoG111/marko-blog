@@ -1,13 +1,11 @@
-import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { AiOutlineSearch } from 'react-icons/ai'
-import { FaMoon, FaSun, FaRegBell } from 'react-icons/fa'
-
+import { useContext, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleTheme } from '../redux/theme/themeSlice'
 import { signoutSuccess } from '../redux/user/userSlice'
-import { useContext, useState } from 'react'
-
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react'
+import { AiOutlineSearch } from 'react-icons/ai'
+import { FaMoon, FaSun, FaRegBell } from 'react-icons/fa'
 import { NotificationsContext } from '../contexts/NotificationsContext'
 import { useError } from '../contexts/ErrorContext'
 

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useMemo, useState } from "react"
+import { useNavigate } from "react-router"
 import { NotificationsContext } from "../contexts/NotificationsContext"
 import { timeAgo, hoverActualDate } from "../utils/timeAgo"
-import { useNavigate } from "react-router"
 
 export default function Notifications() {
   const [type, setType] = useState(null)

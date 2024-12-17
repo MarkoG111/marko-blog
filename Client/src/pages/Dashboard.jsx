@@ -1,29 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import DashSidebar from '../components/DashSidebar';
-import DashProfile from '../components/DashProfile';
-import DashPosts from '../components/DashPosts';
-import DashUsers from '../components/DashUsers';
-import RequestAuthorForm from '../components/RequestAuthorForm';
-import DashAuthorRequests from '../components/DashAuthorRequests';
-import AdminDashboard from '../components/AdminDashboard';
-import DashComments from '../components/DashComments';
-import FollowList from '../components/FollowList';
-import UserDashPosts from '../components/UserDashPosts';
+import DashSidebar from '../components/DashSidebar'
+import DashProfile from '../components/DashProfile'
+import DashPosts from '../components/DashPosts'
+import DashUsers from '../components/DashUsers'
+import RequestAuthorForm from '../components/RequestAuthorForm'
+import DashAuthorRequests from '../components/DashAuthorRequests'
+import DashComments from '../components/DashComments'
+import AdminDashboard from '../components/AdminDashboard'
+import FollowList from '../components/FollowList'
+import UserDashPosts from '../components/UserDashPosts'
 
 export default function Dashboard() {
-  const location = useLocation();
-  const [tab, setTab] = useState('');
+  const location = useLocation()
+  
+  const [tab, setTab] = useState('')
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const tabFromUrl = urlParams.get('tab');
+    const urlParams = new URLSearchParams(location.search)
+    const tabFromUrl = urlParams.get('tab')
 
     if (tabFromUrl) {
-      setTab(tabFromUrl);
+      setTab(tabFromUrl)
     }
 
-  }, [location.search]);
+  }, [location.search])
 
   return (
     <div className='min-h-screen flex flex-col md:flex-row'>

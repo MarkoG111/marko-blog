@@ -1,6 +1,6 @@
-import { Pagination } from "flowbite-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import { Pagination } from "flowbite-react"
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
 

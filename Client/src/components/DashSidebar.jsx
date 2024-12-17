@@ -1,18 +1,18 @@
-import { Sidebar, Button } from 'flowbite-react'
-import { HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiOutlineUserAdd } from 'react-icons/hi'
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
-import { signoutSuccess } from '../redux/user/userSlice';
-import { RiPieChart2Fill } from "react-icons/ri";
-import { FaRegComments } from "react-icons/fa";
-import { useError } from '../contexts/ErrorContext';
-import { handleApiError } from '../utils/handleApiUtils';
+import { signoutSuccess } from '../redux/user/userSlice'
+import { Sidebar, Button } from 'flowbite-react'
+import { HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiOutlineUserAdd } from 'react-icons/hi'
+import { RiPieChart2Fill } from "react-icons/ri"
+import { FaRegComments } from "react-icons/fa"
+import { useError } from '../contexts/ErrorContext'
+import { handleApiError } from '../utils/handleApiUtils'
 
 export default function DashSidebar() {
-  const location = useLocation();
+  const location = useLocation()
 
-  const [tab, setTab] = useState('');
+  const [tab, setTab] = useState('')
   const [user, setUser] = useState('')
 
   const dispatch = useDispatch()
@@ -22,13 +22,13 @@ export default function DashSidebar() {
   const { showError } = useError()
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const tabFromUrl = urlParams.get('tab');
+    const urlParams = new URLSearchParams(location.search)
+    const tabFromUrl = urlParams.get('tab')
 
     if (tabFromUrl) {
-      setTab(tabFromUrl);
+      setTab(tabFromUrl)
     }
-  }, [location.search]);
+  }, [location.search])
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -63,7 +63,7 @@ export default function DashSidebar() {
       localStorage.removeItem("token")
       dispatch(signoutSuccess())
     } catch (error) {
-      showError(error.message);
+      showError(error.message)
     }
   }
 

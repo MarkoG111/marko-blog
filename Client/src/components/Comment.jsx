@@ -1,15 +1,12 @@
 import PropTypes from 'prop-types'
-import { useEffect, useState } from "react"
 import moment from 'moment'
+import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa'
 import { Button, Textarea } from 'flowbite-react'
-import { useSelector } from "react-redux"
-
-import ChildComment from './ChildComment'
 import { useError } from '../contexts/ErrorContext'
-
 import { handleApiError } from '../utils/handleApiUtils'
-
+import ChildComment from './ChildComment'
 export default function Comment({ comment, onLikeComment, onDislikeComment, onAddChildComment, childrenComments, onEditComment, onDeleteComment, setActiveReplyIdComment, activeReplyIdComment, comments }) {
   const [user, setUser] = useState({})
   const { currentUser } = useSelector((state) => state.user)
@@ -30,7 +27,7 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await fetch(`/users/${comment.idUsesafr}`, {
+        const response = await fetch(`/users/${comment.idUser}`, {
           method: "GET"
         })
 

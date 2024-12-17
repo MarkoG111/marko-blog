@@ -1,11 +1,11 @@
-import { Table, Pagination, Modal, Button } from "flowbite-react";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import { Link } from "react-router-dom"
+import { Table, Pagination, Modal, Button } from "flowbite-react"
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
-import { useError } from "../contexts/ErrorContext";
-import { useSuccess } from "../contexts/SuccessContext";
-import { handleApiError } from "../utils/handleApiUtils";
+import { useError } from "../contexts/ErrorContext"
+import { useSuccess } from "../contexts/SuccessContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export default function DashUsers() {
   const { currentUser } = useSelector((state) => state.user)
@@ -50,7 +50,7 @@ export default function DashUsers() {
     fetchUsers()
   }, [currentPage, showError])
 
-  const onPageChange = (page) => setCurrentPage(page);
+  const onPageChange = (page) => setCurrentPage(page)
 
   const handleDeleteUser = async () => {
     setShowModal(false)
@@ -76,7 +76,7 @@ export default function DashUsers() {
         await handleApiError(response, showError)
       }
     } catch (error) {
-      showError(error.message);
+      showError(error.message)
     }
   }
 

@@ -1,12 +1,12 @@
-import { Button, Checkbox, FileInput, TextInput } from "flowbite-react";
-import { useEffect, useState } from "react";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { useError } from "../contexts/ErrorContext";
-import { useSuccess } from "../contexts/SuccessContext";
-import { handleApiError } from "../utils/handleApiUtils";
+import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import { useParams } from "react-router-dom"
+import { Button, Checkbox, FileInput, TextInput } from "flowbite-react"
+import { useError } from "../contexts/ErrorContext"
+import { useSuccess } from "../contexts/SuccessContext"
+import { handleApiError } from "../utils/handleApiUtils"
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 export default function UpdatePost() {
   const [selectedCategories, setSelectedCategories] = useState([])
@@ -38,12 +38,12 @@ export default function UpdatePost() {
             headers: {
               "Authorization": `Bearer ${token}`
             }
-          });
+          })
 
           if (response.ok) {
             const data = await response.json()
 
-            setEditData(data);
+            setEditData(data)
           } else {
             await handleApiError(response, showError)
           }
@@ -59,8 +59,8 @@ export default function UpdatePost() {
   }, [postId, showError])
 
   const handleContentEditPostChange = (value) => {
-    setEditContent(value);
-  };
+    setEditContent(value)
+  }
 
   const handleCategoryChange = (idCategory) => {
     setSelectedCategories(prevCategories => {
@@ -69,8 +69,8 @@ export default function UpdatePost() {
       } else {
         return [...prevCategories, idCategory]
       }
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     const fetchCategoriesForUpdatePost = async () => {
@@ -103,10 +103,10 @@ export default function UpdatePost() {
 
   useEffect(() => {
     if (editData.categories && editData.categories.length > 0) {
-      const initialSelectedCategories = editData.categories.map(category => category.id);
-      setSelectedCategories(initialSelectedCategories);
+      const initialSelectedCategories = editData.categories.map(category => category.id)
+      setSelectedCategories(initialSelectedCategories)
     }
-  }, [editData]);
+  }, [editData])
 
   const handleUploadImage = async () => {
     if (!imageFile) {
@@ -129,7 +129,7 @@ export default function UpdatePost() {
           "Authorization": `Bearer ${token}`
         },
         body: formData
-      });
+      })
 
       if (response.ok) {
         const imageUrl = await response.json()
@@ -171,7 +171,7 @@ export default function UpdatePost() {
 
       if (response.ok) {
         if (response.status == 204) {
-          showSuccess('Post updated successfully');
+          showSuccess('Post updated successfully')
         }
       } else {
         await handleApiError(response, showError)

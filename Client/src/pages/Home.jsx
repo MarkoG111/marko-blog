@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import PostCard from "../components/PostCard";
-import CallToAction from "../components/CallToAction";
-import { useError } from "../contexts/ErrorContext";
-import { handleApiError } from "../utils/handleApiUtils";
+import PostCard from "../components/PostCard"
+import CallToAction from "../components/CallToAction"
+import { useError } from "../contexts/ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export default function Home() {
   const [posts, setPosts] = useState([])

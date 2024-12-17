@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
-
 export default function PostCard({ post }) {
   return (
     <div className="group relative flex-1 min-w-[250px] w-full border h-[400px] overflow-hidden rounded-lg sm:w-[430px] border-teal-500 hover:border-2 transition-all">

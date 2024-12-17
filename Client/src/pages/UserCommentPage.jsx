@@ -1,9 +1,9 @@
-import { Button } from "flowbite-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { AiOutlineHeart } from "react-icons/ai";
-import { useError } from "../contexts/ErrorContext";
-import { handleApiError } from "../utils/handleApiUtils";
+import { Button } from "flowbite-react"
+import { AiOutlineHeart } from "react-icons/ai"
+import { useError } from "../contexts/ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export default function UserCommentPage() {
   const { id } = useParams()
@@ -23,7 +23,7 @@ export default function UserCommentPage() {
         setComment(data)
 
         if (data.idParent != null) {
-          fetchParentComment(data.idParent);
+          fetchParentComment(data.idParent)
         }
       } else {
         await handleApiError(response, showError)

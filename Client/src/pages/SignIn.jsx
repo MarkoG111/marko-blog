@@ -1,63 +1,63 @@
-import { Button, Label, Spinner, TextInput } from 'flowbite-react';
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { jwtDecode } from 'jwt-decode';
+import { Button, Label, Spinner, TextInput } from 'flowbite-react'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { jwtDecode } from 'jwt-decode'
 
-import OAuth from '../components/OAuth';
+import OAuth from '../components/OAuth'
 
-import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
-import { useError } from '../contexts/ErrorContext';
-import { handleApiError } from '../utils/handleApiUtils';
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice'
+import { useError } from '../contexts/ErrorContext'
+import { handleApiError } from '../utils/handleApiUtils'
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({})
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  const { showError } = useError();
+  const { showError } = useError()
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
-  };
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() })
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
-      dispatch(signInStart());
-      setLoading(true);
+      dispatch(signInStart())
+      setLoading(true)
 
       const response = await fetch('/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
-      });
+      })
 
-      setLoading(false);
+      setLoading(false)
 
       if (response.ok) {
-        const { token } = await response.json();
-        const decodedToken = jwtDecode(token);
-        const userProfile = decodedToken.ActorData;
+        const { token } = await response.json()
+        const decodedToken = jwtDecode(token)
+        const userProfile = decodedToken.ActorData
 
-        localStorage.setItem('token', token);
+        localStorage.setItem('token', token)
 
-        dispatch(signInSuccess(userProfile));
+        dispatch(signInSuccess(userProfile))
 
-        navigate('/');
+        navigate('/')
       } else {
-        const data = await response.json();
+        const data = await response.json()
         
         await handleApiError(response, showError)
-        dispatch(signInFailure(data.message));
+        dispatch(signInFailure(data.message))
       }
     } catch (error) {
-      showError('An error occurred while processing your request.');
-      dispatch(signInFailure(error.message));
+      showError('An error occurred while processing your request.')
+      dispatch(signInFailure(error.message))
     }
-  };
+  }
 
   return (
     <div className="min-h-screen mt-20">
@@ -108,5 +108,5 @@ export default function SignIn() {
         </div>
       </div>
     </div>
-  );
+  )
 }

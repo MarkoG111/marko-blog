@@ -21,7 +21,7 @@ export default function PostsPage() {
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search)
-    const search = queryParams.get('search') || '';
+    const search = queryParams.get('search') || ''
 
     setSearchTerm(search)
     setCurrentPage(1)

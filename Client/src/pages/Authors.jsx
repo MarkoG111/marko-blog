@@ -1,11 +1,11 @@
-import { Pagination } from "flowbite-react";
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom";
-import { useError } from "../contexts/ErrorContext";
-import { handleApiError } from "../utils/handleApiUtils";
+import { Link } from "react-router-dom"
+import { Pagination } from "flowbite-react"
+import { useError } from "../contexts/ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
 export default function Authors() {
-  const [authors, setAuthors] = useState([]);
+  const [authors, setAuthors] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
 
@@ -25,10 +25,7 @@ export default function Authors() {
         })
 
         if (response.ok) {
-          console.log(response);
-
           const data = await response.json()
-          console.log(data);
 
           const authors = data.items.filter((author) => author.role == 'Author')
 

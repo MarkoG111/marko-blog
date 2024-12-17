@@ -1,14 +1,14 @@
+import PropTypes from 'prop-types'
 import React, { createContext, useCallback, useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setUnreadCount } from "../redux/notificationsSlice"
 import { useLocation } from "react-router-dom"
-import * as signalR from '@microsoft/signalr'
 import { useError } from "./ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
+import * as signalR from '@microsoft/signalr'
 
 export const NotificationsContext = createContext()
 
-/* eslint-disable react/prop-types */
 export const NotificationsProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([])
   const [hasNewNotifications, setHasNewNotifications] = useState(false)
@@ -182,4 +182,8 @@ export const NotificationsProvider = ({ children }) => {
       {children}
     </NotificationsContext.Provider>
   )
+}
+
+NotificationsProvider.propTypes = {
+  children: PropTypes.node.isRequired
 }

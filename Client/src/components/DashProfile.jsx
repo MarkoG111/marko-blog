@@ -1,7 +1,7 @@
-import { Button, Modal, TextInput } from "flowbite-react"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { deleteUserFailure, deleteUserSuccess, updateProfilePictureSuccess, updateUserSuccess, signoutSuccess } from '../redux/user/userSlice'
+import { Button, Modal, TextInput } from "flowbite-react"
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
@@ -14,6 +14,7 @@ export default function DashProfile() {
   const [showModal, setShowModal] = useState(false)
 
   const filePickerRef = useRef()
+  
   const dispatch = useDispatch()
 
   const { showError } = useError()
@@ -30,9 +31,9 @@ export default function DashProfile() {
   useEffect(() => {
     return () => {
       if (imageFileUrl) {
-        URL.revokeObjectURL(imageFileUrl);
+        URL.revokeObjectURL(imageFileUrl)
       }
-    };
+    }
   }, [imageFileUrl, imageFile, currentUser.profilePicture])
 
 
@@ -66,7 +67,7 @@ export default function DashProfile() {
           "Authorization": `Bearer ${token}`
         },
         body: formData
-      });
+      })
 
       if (response.ok) {
         const responseData = await response.json()
@@ -96,7 +97,7 @@ export default function DashProfile() {
         headers: {
           "Authorization": `Bearer ${token}`
         },
-      });
+      })
 
       if (response.ok) {
         dispatch(deleteUserSuccess())
@@ -115,7 +116,7 @@ export default function DashProfile() {
       localStorage.removeItem("token")
       dispatch(signoutSuccess())
     } catch (error) {
-      showError(error.message);
+      showError(error.message)
     }
   }
 

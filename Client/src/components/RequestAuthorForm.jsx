@@ -1,6 +1,6 @@
-import { Button, Label, Textarea } from "flowbite-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useSelector } from "react-redux"
+import { Button, Label, Textarea } from "flowbite-react"
 import { useError } from "../contexts/ErrorContext"
 import { useSuccess } from "../contexts/SuccessContext"
 import { handleApiError } from "../utils/handleApiUtils"
@@ -40,7 +40,7 @@ export default function RequestAuthorForm() {
           "Content-Type": "application/json"
         },
         body: body
-      });
+      })
 
       if (response.ok) {
         const data = await response.json()

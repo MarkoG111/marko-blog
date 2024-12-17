@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { HiArrowNarrowUp, HiOutlineUserGroup, HiDocumentText } from "react-icons/hi";
-import { FaRegComments } from "react-icons/fa";
-import { Button, Table } from "flowbite-react";
-import { Link } from "react-router-dom";
-import { useError } from "../contexts/ErrorContext";
+import { HiArrowNarrowUp, HiOutlineUserGroup, HiDocumentText } from "react-icons/hi"
+import { FaRegComments } from "react-icons/fa"
+import { Button, Table } from "flowbite-react"
+import { Link } from "react-router-dom"
+import { useError } from "../contexts/ErrorContext"
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState([])
@@ -57,7 +57,7 @@ export default function AdminDashboard() {
           setLastMonthPosts(postsData.lastMonthCount)
         }
       } catch (error) {
-        showError(error.message);
+        showError(error.message)
       }
     }
 

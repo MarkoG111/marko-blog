@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useError } from "../contexts/ErrorContext";
-import { handleApiError } from "../utils/handleApiUtils";
+import PropTypes from 'prop-types'
+import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { useError } from "../contexts/ErrorContext"
+import { handleApiError } from "../utils/handleApiUtils"
 
-/* eslint-disable react/prop-types */
 export default function FollowList({ isFollowersTab }) {
   const [listUsers, setList] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -26,7 +26,7 @@ export default function FollowList({ isFollowersTab }) {
         const queryParams = new URLSearchParams({
           page: currentPage,
           perPage: 3,
-        });
+        })
 
         const url = isFollowersTab ? `/followers/${currentUser.id}/followers?${queryParams}` : `/followers/${currentUser.id}/following?${queryParams}`
 
@@ -45,7 +45,7 @@ export default function FollowList({ isFollowersTab }) {
           await handleApiError(response, showError)
         }
       } catch (error) {
-        showError(error.message);
+        showError(error.message)
       }
     }
 
@@ -105,5 +105,10 @@ export default function FollowList({ isFollowersTab }) {
         )
       }
     </div>
-  );
+  )
+}
+
+
+FollowList.propTypes = {
+  isFollowersTab: PropTypes.bool.isRequired,
 }

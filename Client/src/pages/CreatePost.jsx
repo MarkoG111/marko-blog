@@ -1,32 +1,32 @@
-import { Button, Checkbox, FileInput, TextInput } from "flowbite-react";
-import { useEffect, useState } from "react";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { useError } from "../contexts/ErrorContext";
-import { useSuccess } from "../contexts/SuccessContext";
-import { handleApiError } from "../utils/handleApiUtils";
+import { useEffect, useState } from "react"
+import { Button, Checkbox, FileInput, TextInput } from "flowbite-react"
+import { useError } from "../contexts/ErrorContext"
+import { useSuccess } from "../contexts/SuccessContext"
+import { handleApiError } from "../utils/handleApiUtils"
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 export default function CreatePost() {
   const [selectedCategories, setSelectedCategories] = useState([])
   const [categories, setCategories] = useState([])
 
   const [imageFile, setImageFile] = useState(null)
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null)
   const [content, setContent] = useState('')
 
   const { showError } = useError()
   const { showSuccess } = useSuccess()
 
   const handleContentChange = (value) => {
-    setContent(value);
+    setContent(value)
   }
 
   const handleCategoryChange = (IdCategory) => {
     setSelectedCategories(prevCategories => {
       if (prevCategories.includes(IdCategory)) {
-        return prevCategories.filter(id => id !== IdCategory);
+        return prevCategories.filter(id => id !== IdCategory)
       } else {
-        return [...prevCategories, IdCategory];
+        return [...prevCategories, IdCategory]
       }
     })
   }

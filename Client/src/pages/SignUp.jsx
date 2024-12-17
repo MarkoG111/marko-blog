@@ -1,59 +1,59 @@
-import { Button, Label, Spinner, TextInput } from 'flowbite-react';
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button, Label, Spinner, TextInput } from 'flowbite-react'
 import { useError } from '../contexts/ErrorContext'
-import OAuth from '../components/OAuth';
+import OAuth from '../components/OAuth'
 
 export default function SignUp() {
-  const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { showError } = useError();
+  const [formData, setFormData] = useState({})
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+  const { showError } = useError()
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
-  };
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() })
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
-      setLoading(true);
+      setLoading(true)
 
       const res = await fetch('/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
-      });
+      })
 
-      setLoading(false);
+      setLoading(false)
 
       if (!res.ok) {
-        const data = await res.json();
+        const data = await res.json()
 
-        const fieldOrder = ['FirstName', 'LastName', 'Email', 'Username', 'Password'];
+        const fieldOrder = ['FirstName', 'LastName', 'Email', 'Username', 'Password']
         const fieldDisplayNames = {
           FirstName: 'First Name',
           LastName: 'Last Name',
           Email: 'Email',
           Username: 'Username',
           Password: 'Password',
-        };
+        }
 
-        let validationErrors = [];
+        let validationErrors = []
 
         if (Array.isArray(data.errors)) {
-          validationErrors = data.errors.map((error) => error.ErrorMessage);
+          validationErrors = data.errors.map((error) => error.ErrorMessage)
         } else if (typeof data.errors === 'object') {
           validationErrors = Object.entries(data.errors)
             .sort(([a], [b]) => fieldOrder.indexOf(a) - fieldOrder.indexOf(b))
             .map(([fieldName]) => {
-              const displayName = fieldDisplayNames[fieldName] || fieldName;
-              return `${displayName} is required`;
+              const displayName = fieldDisplayNames[fieldName] || fieldName
+              return `${displayName} is required`
             })
-            .flat();
+            .flat()
         } else {
-          validationErrors = [data.message];
+          validationErrors = [data.message]
         }
 
         validationErrors.forEach(showError)
@@ -61,12 +61,12 @@ export default function SignUp() {
         return
       }
 
-      navigate('/sign-in');
+      navigate('/sign-in')
     } catch (error) {
-      setLoading(false);
-      showError('An unexpected error occurred. Please try again later.');
+      setLoading(false)
+      showError('An unexpected error occurred. Please try again later.')
     }
-  };
+  }
 
   return (
     <div className="min-h-screen mt-20">
@@ -130,5 +130,5 @@ export default function SignUp() {
         </div>
       </div>
     </div>
-  );
+  )
 }
