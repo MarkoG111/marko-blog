@@ -19,7 +19,7 @@ export default function PostPage() {
 
   const [loading, setLoading] = useState(true)
   const [post, setPost] = useState(null)
-  const [commentsNumber, setCommentsNumber] = useState(post?.comments.length)
+  const [commentsNumber, setCommentsNumber] = useState(0)
 
   const { showError } = useError()
 
@@ -50,41 +50,39 @@ export default function PostPage() {
     fethcPost()
   }, [id, showError])
 
-  const onLikePost = async (idPost) => {
+  const handlePostVote = async (idPost, status) => {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        showError("You must be logged in to like a post.")
+        showError("You must be logged in to vote.")
         return
       }
 
-      const isAlreadyLiked = checkIfAlreadyVotedOnPost(post, idPost, currentUser.id, 1)
-
-      if (isAlreadyLiked) {
+      const isAlreadyVoted = checkIfAlreadyVotedOnPost(post, idPost, currentUser.id, status)
+      if (isAlreadyVoted) {
         return
       }
 
       const body = JSON.stringify({
         IdUser: currentUser.id,
         IdPost: idPost,
-        Status: 1
+        Status: status,
       })
 
       const response = await fetch(`/posts/${idPost}/like`, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: body
+        body,
       })
 
       if (response.ok) {
         const data = await response.json()
-
-        const updatedPost = removeDislikeOrLikeIfPresentInPost(post, idPost, currentUser.id, 2)
-        setPost(updatedPost)
+        const updatedPost = removeDislikeOrLikeIfPresentInPost(post, idPost, currentUser.id, status === 1 ? 2 : 1)
         const updatePostWithLikes = updatePostLikes(updatedPost, idPost, data, currentUser.id)
+
         setPost(updatePostWithLikes)
       } else {
         await handleApiError(response, showError)
@@ -94,48 +92,8 @@ export default function PostPage() {
     }
   }
 
-  const onDislikePost = async (idPost) => {
-    try {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        showError("You must be logged in to dislike a post.")
-        return
-      }
-
-      const isAlreadyDisliked = checkIfAlreadyVotedOnPost(post, idPost, currentUser.id, 2)
-
-      if (isAlreadyDisliked) {
-        return
-      }
-
-      const body = JSON.stringify({
-        IdUser: currentUser.id,
-        IdPost: idPost,
-        Status: 2
-      })
-
-      const response = await fetch(`/posts/${idPost}/like`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: body
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-
-        const updatedPost = removeDislikeOrLikeIfPresentInPost(post, idPost, currentUser.id, 1)
-        setPost(updatedPost)
-        const updatePostWithLikes = updatePostLikes(updatedPost, idPost, data, currentUser.id)
-        setPost(updatePostWithLikes)
-      } else {
-        await handleApiError(response, showError)
-      }
-    } catch (error) {
-      showError("An error occurred while processing your request.")
-    }
+  const handleCommentsNumberChange = (newCount) => {
+    setCommentsNumber(newCount)
   }
 
   if (loading) return (
@@ -175,13 +133,12 @@ export default function PostPage() {
         <PostLikeButtons
           post={post}
           idPost={post.id}
-          onLikePost={onLikePost}
-          onDislikePost={onDislikePost}
+          onPostVote={handlePostVote}
           commentsNumber={commentsNumber}
         />
       </div>
 
-      <CommentSection idPost={post.id} childrenComments={post.comments.filter(comment => comment.childrenComments.length > 0).flatMap(comment => comment.children)} onCommentsNumberChange={setCommentsNumber} />
+      <CommentSection idPost={post.id} childrenComments={post.comments.filter(comment => comment.childrenComments.length > 0).flatMap(comment => comment.children)} onCommentsNumberChange={handleCommentsNumberChange} />
     </main>
   )
 }
