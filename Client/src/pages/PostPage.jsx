@@ -19,6 +19,8 @@ export default function PostPage() {
 
   const [loading, setLoading] = useState(true)
   const [post, setPost] = useState(null)
+  const [commentsNumber, setCommentsNumber] = useState(post?.comments.length)
+
   const { showError } = useError()
 
   const { currentUser } = useSelector(state => state.user)
@@ -34,7 +36,7 @@ export default function PostPage() {
 
         if (response.ok) {
           const data = await response.json()
-          
+
           setPost(data)
           setLoading(false)
         } else {
@@ -175,11 +177,11 @@ export default function PostPage() {
           idPost={post.id}
           onLikePost={onLikePost}
           onDislikePost={onDislikePost}
-          commentsNumber={post.comments.length}
+          commentsNumber={commentsNumber}
         />
       </div>
 
-      <CommentSection idPost={post.id} childrenComments={post.comments.filter(comment => comment.children.length > 0).flatMap(comment => comment.children)} />
+      <CommentSection idPost={post.id} childrenComments={post.comments.filter(comment => comment.childrenComments.length > 0).flatMap(comment => comment.children)} onCommentsNumberChange={setCommentsNumber} />
     </main>
   )
 }

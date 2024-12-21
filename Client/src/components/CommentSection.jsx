@@ -13,7 +13,7 @@ import {
   updateCommentLikes,
   handleOptimisticUpdate
 } from '../utils/commentUtils'
-export default function CommentSection({ idPost }) {
+export default function CommentSection({ idPost, onCommentsNumberChange }) {
   const { currentUser } = useSelector(state => state.user)
 
   const [post, setPost] = useState({})
@@ -24,8 +24,13 @@ export default function CommentSection({ idPost }) {
   const [activeReplyIdComment, setActiveReplyIdComment] = useState(null)
   const [showModalToDeleteComment, setShowModalToDeleteComment] = useState(false)
   const [commentToDelete, setCommentToDelete] = useState(null)
-
+  
   const { showError } = useError()
+
+  const handleCommentsNumberChange = (newCommentsNumber) => {
+    setCommentsNumber(newCommentsNumber)
+    onCommentsNumberChange(newCommentsNumber)
+  }
 
   useEffect(() => {
     const fetchPostAndComments = async () => {
@@ -34,11 +39,12 @@ export default function CommentSection({ idPost }) {
 
         if (response.ok) {
           const data = await response.json()
+          const allChildComments = data.comments.flatMap(comment => comment.childrenComments || [])
 
           setPost(data)
-          setComments(data.comments.reverse())
-          setChildComments(data.childrenComments.reverse())
-          setCommentsNumber(data.comments.length + data.childrenComments.length)
+          setComments(data.comments)
+          setChildComments(allChildComments)
+          handleCommentsNumberChange(commentsNumber)
         } else {
           await handleApiError(response, showError)
         }
@@ -48,7 +54,7 @@ export default function CommentSection({ idPost }) {
     }
 
     fetchPostAndComments()
-  }, [idPost, showError])
+  }, [idPost, showError, commentsNumber])
 
   const handleSubmitComment = async (e) => {
     e.preventDefault()
@@ -87,7 +93,7 @@ export default function CommentSection({ idPost }) {
         const data = await response.json()
 
         setComments([data, ...comments])
-        setCommentsNumber(commentsNumber + 1)
+        handleCommentsNumberChange(commentsNumber + 1)
         setComment('')
       } else {
         await handleApiError(response, showError)
@@ -129,7 +135,7 @@ export default function CommentSection({ idPost }) {
 
         setChildComments([data, ...childComments])
         setActiveReplyIdComment(null)
-        setCommentsNumber(commentsNumber + 1)
+        handleCommentsNumberChange(commentsNumber + 1)
       } else {
         await handleApiError(response, showError)
       }
@@ -305,7 +311,7 @@ export default function CommentSection({ idPost }) {
         )
         setChildComments(updatedChildComments)
 
-        setCommentsNumber(commentsNumber - 1)
+        handleCommentsNumberChange(commentsNumber - 1)
       } else {
         await handleApiError(response, showError)
       }
@@ -384,4 +390,5 @@ export default function CommentSection({ idPost }) {
 
 CommentSection.propTypes = {
   idPost: PropTypes.number.isRequired,
+  onCommentsNumberChange: PropTypes.func,
 }
