@@ -1,7 +1,7 @@
 import { FaThumbsUp, FaThumbsDown, FaRegCommentDots } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 
-const PostLikeButtons = ({ post, idPost, onLikePost, onDislikePost, commentsNumber }) => {
+const PostLikeButtons = ({ post, idPost, onPostVote, commentsNumber }) => {
   return (
     <div className="text-sm mb-8 mt-12 flex items-center justify-between gap-1">
       <div className="flex">
@@ -13,7 +13,7 @@ const PostLikeButtons = ({ post, idPost, onLikePost, onDislikePost, commentsNumb
       <div className="flex ml-10">
         <button
           type="button"
-          onClick={() => onLikePost(idPost)}
+          onClick={() => onPostVote(idPost, 1)}
           className="text-gray-400 hover:text-blue-500 ml-6"
         >
           <FaThumbsUp className="text-xl" />
@@ -22,7 +22,7 @@ const PostLikeButtons = ({ post, idPost, onLikePost, onDislikePost, commentsNumb
 
         <button
           type="button"
-          onClick={() => onDislikePost(idPost)}
+          onClick={() => onPostVote(idPost, 2)}
           className="text-gray-400 hover:text-red-500 ml-2"
         >
           <FaThumbsDown className="ml-5 text-xl" />
@@ -43,8 +43,7 @@ PostLikeButtons.propTypes = {
     ).isRequired,
   }).isRequired,
   idPost: PropTypes.number.isRequired,
-  onLikePost: PropTypes.func.isRequired,
-  onDislikePost: PropTypes.func.isRequired,
+  onPostVote: PropTypes.func.isRequired,
   commentsNumber: PropTypes.number.isRequired,
 }
 
