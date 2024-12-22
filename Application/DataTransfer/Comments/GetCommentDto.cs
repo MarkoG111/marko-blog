@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.DataTransfer
+namespace Application.DataTransfer.Comments
 {
-    public class CommentDto
+    public class GetCommentDto
     {
         public int Id { get; set; }
         public string CommentText { get; set; }
@@ -19,6 +19,6 @@ namespace Application.DataTransfer
         public int? IdParent { get; set; }
         public bool IsDeleted { get; set; }
         public int LikesCount { get; set; }
-        public List<LikeCommentDto> Likes { get; set; } = new List<LikeCommentDto>();
+        public List<GetCommentLikesDto> Likes { get; set; } = new List<GetCommentLikesDto>();
     }
 }

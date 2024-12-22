@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.DataTransfer;
+using Application.DataTransfer.Posts;
 using Application.Exceptions;
 using Application.Queries.Category;
 using Application.Searches;
@@ -49,12 +50,11 @@ namespace Implementation.Queries.Category
             {
                 Id = post.Id,
                 Title = post.Title,
-                Content = post.Content,
-                DateCreated = post.CreatedAt,
-                FirstName = post.User.FirstName,
-                LastName = post.User.LastName,
-                ProfilePicture = post.User.ProfilePicture,
-                Categories = post.PostCategories.Select(y => new CategoryDto
+                // DateCreated = post.CreatedAt,
+                // FirstName = post.User.FirstName,
+                // LastName = post.User.LastName,
+                // ProfilePicture = post.User.ProfilePicture,
+                Categories = post.PostCategories.Select(y => new GetPostCategoriesDto
                 {
                     Id = y.Category.Id,
                     Name = y.Category.Name

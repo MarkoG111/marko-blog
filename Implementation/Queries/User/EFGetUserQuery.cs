@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 using Application.DataTransfer;
+using Application.DataTransfer.Posts;
 using Application.Queries.User;
 using EFDataAccess;
 
@@ -64,9 +65,8 @@ namespace Implementation.Queries.User
                 {
                     Id = p.Id,
                     Title = p.Title,
-                    DateCreated = p.CreatedAt,
                     ImageName = p.Image.ImagePath,
-                    Categories = p.PostCategories.Select(y => new CategoryDto
+                    Categories = p.PostCategories.Select(y => new GetPostCategoriesDto
                     {
                         Id = y.Category.Id,
                         Name = y.Category.Name

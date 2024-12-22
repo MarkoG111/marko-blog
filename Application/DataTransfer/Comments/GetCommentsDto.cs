@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.DataTransfer.Posts;
 
-namespace Application.DataTransfer
+namespace Application.DataTransfer.Comments
 {
-    public class SingleCommentDto
+    public class GetCommentsDto
     {
         public int Id { get; set; }
         public string CommentText { get; set; }
@@ -14,8 +15,7 @@ namespace Application.DataTransfer
         public string Username { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsDeleted { get; set; }
-        public IEnumerable<SingleCommentDto> Children { get; set; } = new List<SingleCommentDto>();
-        public int LikesCount { get; set; }
-        public List<LikeCommentDto> Likes { get; set; } = new List<LikeCommentDto>();
+        public List<GetCommentLikesDto> Likes { get; set; } = new List<GetCommentLikesDto>();
+        public IEnumerable<GetCommentsDto> ChildrenComments { get; set; } = new List<GetCommentsDto>();
     }
 }

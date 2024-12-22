@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.Posts;
 using EFDataAccess;
 using FluentValidation;
 
 namespace Implementation.Validators.Post
 {
-    public class UpdatePostValidator : AbstractValidator<UpdatePostDto>
+    public class UpdatePostValidator : AbstractValidator<UpsertPostDto>
     {
         private readonly BlogContext _context;
 
@@ -29,14 +29,10 @@ namespace Implementation.Validators.Post
             RuleFor(x => x.IdImage).Must(ImageExists)
                 .WithMessage("Image with provided ID doesn't exists.");
 
-            RuleForEach(x => x.PostCategories).ChildRules(categories =>
-            {
-                categories.RuleFor(x => x).Must(CategoryExists)
-                    .WithMessage("Category with provied ID doesn't exists");
-            });
+            RuleForEach(x => x.CategoryIds).Must(CategoryExists)
+                          .WithMessage("Category with the provided ID doesn't exist.");
 
-            // Ako postoje duplikati u kolekciji, bice generisana greska sa porukom.
-            RuleFor(x => x.PostCategories).Must(x => x.Select(y => y).Distinct().Count() == x.Count())
+            RuleFor(x => x.CategoryIds).Must(ids => ids.Distinct().Count() == ids.Count())
                 .WithMessage("Duplicate categories are not allowed.");
         }
 

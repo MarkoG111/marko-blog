@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Application;
 using Application.DataTransfer.Posts;
-using Application.DataTransfer;
+using Application.DataTransfer.Likes;
 using Application.Commands.Post;
 using Application.Queries.Post;
 using Application.Searches;

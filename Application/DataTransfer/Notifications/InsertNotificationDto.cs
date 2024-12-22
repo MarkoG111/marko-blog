@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain;
 
-namespace Application.DataTransfer
+namespace Application.DataTransfer.Notifications
 {
-    public class NotificationDto
+    public class InsertNotificationDto
     {
         public int Id { get; set; }
         public int IdUser { get; set; }

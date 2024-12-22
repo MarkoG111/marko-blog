@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.DataTransfer.Comments;
+using Application.DataTransfer.Likes;
 
 namespace Application.DataTransfer.Posts
 {

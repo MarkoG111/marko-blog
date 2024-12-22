@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain;
 
-namespace Application.DataTransfer
+namespace Application.DataTransfer.Notifications
 {
     public class GetNotificationDto
     {

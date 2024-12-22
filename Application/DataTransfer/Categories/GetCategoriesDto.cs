@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.DataTransfer.Posts;
 
-namespace Application.DataTransfer
+namespace Application.DataTransfer.Categories
 {
-    public class CategoryDto
+    public class GetCategoriesDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
