@@ -24,7 +24,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
   const [activeReplyIdComment, setActiveReplyIdComment] = useState(null)
   const [showModalToDeleteComment, setShowModalToDeleteComment] = useState(false)
   const [commentToDelete, setCommentToDelete] = useState(null)
-  
+
   const { showError } = useError()
 
   const handleCommentsNumberChange = (newCommentsNumber) => {
@@ -44,7 +44,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
           setPost(data)
           setComments(data.comments)
           setChildComments(allChildComments)
-          handleCommentsNumberChange(commentsNumber)
+          handleCommentsNumberChange(data.comments.length + allChildComments.length)
         } else {
           await handleApiError(response, showError)
         }
@@ -54,7 +54,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
     }
 
     fetchPostAndComments()
-  }, [idPost, showError, commentsNumber])
+  }, [idPost, showError])
 
   const handleSubmitComment = async (e) => {
     e.preventDefault()
@@ -90,9 +90,9 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
       })
 
       if (response.ok) {
-        const data = await response.json()
+        const newComment = await response.json()
 
-        setComments([data, ...comments])
+        setComments([newComment, ...comments])
         handleCommentsNumberChange(commentsNumber + 1)
         setComment('')
       } else {
@@ -131,9 +131,10 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
       })
 
       if (response.ok) {
-        const data = await response.json()
+        const newChildComment = await response.json()
 
-        setChildComments([data, ...childComments])
+        setChildComments([newChildComment, ...childComments])
+
         setActiveReplyIdComment(null)
         handleCommentsNumberChange(commentsNumber + 1)
       } else {

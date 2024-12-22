@@ -8,19 +8,18 @@ import { useError } from '../contexts/ErrorContext'
 import { handleApiError } from '../utils/handleApiUtils'
 import ChildComment from './ChildComment'
 export default function Comment({ comment, onLikeComment, onDislikeComment, onAddChildComment, childrenComments, onEditComment, onDeleteComment, setActiveReplyIdComment, activeReplyIdComment, comments }) {
-  const [user, setUser] = useState({})
   const { currentUser } = useSelector((state) => state.user)
-
-  const formattedTime = moment(comment.createdAt).fromNow()
-  const isFirstReply = comment.idParent === null
-
+  
+  const [user, setUser] = useState({})
   const [isEditing, setIsEditing] = useState(false)
   const [editedText, setEditedText] = useState(comment.commentText)
-
   const [childComment, setChildComment] = useState('')
+  
   const isChildComment = childrenComments.some(child => child.idParent == comment.id)
-
+  const isFirstReply = comment.idParent === null
   const isSmallScreen = window.innerWidth <= 768
+  
+  const formattedTime = moment(comment.createdAt).fromNow()
 
   const { showError } = useError()
 
@@ -130,12 +129,12 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
                     <p className="text-gray-500 pb-2">{comment.commentText}</p>
 
                     <div className="flex items-center pt-2 text-xs border-t dark:border-gray-700 max-w-fit gap-2">
-                      <button type="button" onClick={() => onLikeComment(comment.id)} className={`text-gray-400 hover:text-blue-500 ${currentUser && comment.likes && comment?.likes.some(like => like.idUser == currentUser.id && like.status == 1) && '!text-blue-500'}`}>
+                      <button type="button" onClick={() => onLikeComment(comment.id, "like")} className={`text-gray-400 hover:text-blue-500 ${currentUser && comment.likes && comment?.likes.some(like => like.idUser == currentUser.id && like.status == 1) && '!text-blue-500'}`}>
                         <FaThumbsUp className="text-sm" />
                       </button>
                       {comment.likes && comment.likes.filter((like) => like.status == 1).length}
 
-                      <button type="button" onClick={() => onDislikeComment(comment.id)} className={`text-gray-400 hover:text-red-500 ml-6 ${currentUser && comment.likes && comment.likes.some(like => like.idUser == currentUser.id && like.status == 2) && '!text-red-500'}`}>
+                      <button type="button" onClick={() => onDislikeComment(comment.id, "dislike")} className={`text-gray-400 hover:text-red-500 ml-6 ${currentUser && comment.likes && comment.likes.some(like => like.idUser == currentUser.id && like.status == 2) && '!text-red-500'}`}>
                         <FaThumbsDown className="text-sm" />
                       </button>
                       {comment.likes && comment.likes.filter((like) => like.status == 2).length}
