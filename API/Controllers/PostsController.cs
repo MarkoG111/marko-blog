@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Application;
+using Application.DataTransfer.Posts;
 using Application.DataTransfer;
 using Application.Commands.Post;
 using Application.Queries.Post;
 using Application.Searches;
 using Application.Commands.Like;
-using Microsoft.AspNetCore.SignalR;
-using API.Core;
 
 namespace API.Controllers
 {
@@ -24,10 +23,10 @@ namespace API.Controllers
         }
 
         [HttpPost("/posts")]
-        public IActionResult Post([FromBody] InsertPostDto dto, [FromServices] ICreatePostCommand command)
+        public IActionResult Post([FromBody] UpsertPostDto dto, [FromServices] ICreatePostCommand command)
         {
             _executor.ExecuteCommand(command, dto);
-            return Ok(new { idPost = dto.Id });
+            return Ok();
         }
 
         [HttpGet("/posts")]
@@ -43,7 +42,7 @@ namespace API.Controllers
         }
 
         [HttpPut("/posts/{id}")]
-        public IActionResult Put(int id, [FromBody] UpdatePostDto dto, [FromServices] IUpdatePostCommand command)
+        public IActionResult Put(int id, [FromBody] UpsertPostDto dto, [FromServices] IUpdatePostCommand command)
         {
             dto.Id = id;
             _executor.ExecuteCommand(command, dto);
@@ -66,7 +65,7 @@ namespace API.Controllers
         }
 
         [HttpPut("/posts/{id}/personal")]
-        public IActionResult UpdatePersonalPost(int id, [FromBody] UpdatePostDto dto, [FromServices] IUpdatePersonalPostCommand command)
+        public IActionResult UpdatePersonalPost(int id, [FromBody] UpsertPostDto dto, [FromServices] IUpdatePersonalPostCommand command)
         {
             dto.Id = id;
             _executor.ExecuteCommand(command, dto);

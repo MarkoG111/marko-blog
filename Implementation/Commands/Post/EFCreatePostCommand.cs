@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application;
 using Application.Commands.Post;
 using Application.DataTransfer;
+using Application.DataTransfer.Posts;
 using Application.Services;
 using Domain;
 using EFDataAccess;
@@ -33,7 +34,7 @@ namespace Implementation.Commands.Post
         public int Id => (int)UseCaseEnum.EFCreatePostCommand;
         public string Name => UseCaseEnum.EFCreatePostCommand.ToString();
 
-        public void Execute(InsertPostDto request)
+        public void Execute(UpsertPostDto request)
         {
             _validator.ValidateAndThrow(request);
 
@@ -45,13 +46,10 @@ namespace Implementation.Commands.Post
                 IdUser = _actor.Id
             };
 
-            foreach (var category in request.PostCategories)
+            post.PostCategories = request.CategoryIds.Select(categoryId => new PostCategory
             {
-                post.PostCategories.Add(new PostCategory
-                {
-                    IdCategory = category.IdCategory
-                });
-            }
+                IdCategory = categoryId
+            }).ToList();
 
             using (var transaction = _context.Database.BeginTransaction())
             {

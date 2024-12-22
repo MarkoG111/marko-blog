@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Application.DataTransfer;
+using Application.DataTransfer.Posts;
 using Application.Queries;
 using Application.Queries.Post;
 using Application.Searches;
@@ -25,7 +25,7 @@ namespace Implementation.Queries.Post
 
         public PagedResponse<GetPostDto> Execute(PostSearch search)
         {
-            var posts = _context.Posts.Include(x => x.Comments).Include(x => x.Likes).Include(x => x.PostCategories).ThenInclude(x => x.Category).AsQueryable();
+            var posts = _context.Posts.Include(x => x.PostCategories).ThenInclude(x => x.Category).AsQueryable();
 
             if (!string.IsNullOrEmpty(search.Title) || !string.IsNullOrWhiteSpace(search.Title))
             {
@@ -54,37 +54,17 @@ namespace Implementation.Queries.Post
             {
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
-                TotalCount = posts.Count(),
-
-                LastMonthCount = posts.Where(x => x.CreatedAt >= thirtyDaysAgo).Count(),
-
                 Items = posts.Skip(skipCount).Take(search.PerPage).Select(x => new GetPostDto
                 {
                     Id = x.Id,
                     Title = x.Title,
-                    Content = x.Content,
-                    DateCreated = x.CreatedAt,
                     Username = x.User.Username,
-                    IdImage = x.IdImage,
                     ImageName = x.Image.ImagePath,
-                    Categories = x.PostCategories.Select(y => new CategoryDto
+                    Categories = x.PostCategories.Select(y => new GetPostCategoriesDto
                     {
                         Id = y.Category.Id,
                         Name = y.Category.Name
                     }).ToList(),
-                    Comments = x.Comments.Select(z => new SingleCommentDto
-                    {
-                        Id = z.Id,
-                        CommentText = z.CommentText,
-                        CreatedAt = z.CreatedAt,
-                        Username = z.User.Username
-                    }).ToList(),
-                    Likes = x.Likes.Select(w => new GetLikePostDto
-                    {
-                        Id = w.Id,
-                        Status = w.Status,
-                        IdUser = w.IdUser
-                    }).ToList()
                 }).ToList()
             };
 

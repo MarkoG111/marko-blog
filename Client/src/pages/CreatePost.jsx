@@ -101,7 +101,7 @@ export default function CreatePost() {
       Title: e.target.elements.title.value,
       Content: content,
       IdImage: imagePreview?.id,
-      PostCategories: selectedCategories.map(IdCategory => ({ IdPost: 0, IdCategory: IdCategory }))
+      CategoryIds: selectedCategories
     }
 
     try {
@@ -120,12 +120,6 @@ export default function CreatePost() {
       })
 
       if (response.ok) {
-        const insertPostId = await response.json()
-
-        postData.PostCategories.forEach(postCategory => {
-          postCategory.idPost = insertPostId
-        })
-  
         showSuccess("You have successfully added a post")
   
         setContent('')

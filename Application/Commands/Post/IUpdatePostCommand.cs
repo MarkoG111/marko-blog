@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.Posts;
 
 namespace Application.Commands.Post
 {
-    public interface IUpdatePostCommand : ICommand<UpdatePostDto>
+    public interface IUpdatePostCommand : ICommand<UpsertPostDto>
     {
         
     }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application;
 using Application.Commands.Post;
 using Application.DataTransfer;
+using Application.DataTransfer.Posts;
 using Application.Exceptions;
 using EFDataAccess;
 using FluentValidation;
@@ -29,7 +30,7 @@ namespace Implementation.Commands.Post
         public int Id => (int)UseCaseEnum.EFUpdatePersonalPostCommand;
         public string Name => UseCaseEnum.EFUpdatePersonalPostCommand.ToString();
 
-        public void Execute(UpdatePostDto request)
+        public void Execute(UpsertPostDto request)
         {
             _validator.ValidateAndThrow(request);
 
@@ -50,23 +51,30 @@ namespace Implementation.Commands.Post
             post.IdImage = request.IdImage;
             post.ModifiedAt = DateTime.Now;
 
-            var categoryDelete = post.PostCategories.Where(x => !request.PostCategories.Contains(x.IdCategory));
+            // Get current category IDs associated with the post
+            var currentCategoryIds = post.PostCategories.Select(pc => pc.IdCategory).ToList();
 
-            foreach (var category in categoryDelete)
+            // Find category IDs to remove (existing IDs not in the request)
+            var categoryIdsToRemove = currentCategoryIds.Except(request.CategoryIds).ToList();
+
+            // Find category IDs to add (IDs in the request but not currently associated)
+            var categoryIdsToAdd = request.CategoryIds.Except(currentCategoryIds).ToList();
+
+            // Remove categories
+            foreach (var categoryId in categoryIdsToRemove)
             {
-                category.IsActive = false;
-                category.IsDeleted = true;
-                category.DeletedAt = DateTime.Now;
+                var postCategory = post.PostCategories.First(pc => pc.IdCategory == categoryId);
+                post.PostCategories.Remove(postCategory);
             }
 
-            var categoryIds = post.PostCategories.Select(x => x.IdCategory);
-            var categoryInsert = request.PostCategories.Where(x => !categoryIds.Contains(x));
-
-            foreach (var IdCategory in categoryInsert)
+            // Add new categories
+            foreach (var categoryId in categoryIdsToAdd)
             {
                 post.PostCategories.Add(new Domain.PostCategory
                 {
-                    IdCategory = IdCategory
+                    IdPost = post.Id,
+                    IdCategory = categoryId,
+                    IsActive = true
                 });
             }
 

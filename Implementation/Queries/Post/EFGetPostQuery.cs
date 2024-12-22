@@ -1,5 +1,6 @@
 using Application;
-using Application.DataTransfer;
+using Application.DataTransfer.Posts;
+using Application.DataTransfer.Comments;
 using Application.Queries.Post;
 using EFDataAccess;
 using Microsoft.EntityFrameworkCore;
@@ -22,10 +23,7 @@ namespace Implementation.Queries.Post
         public int Id => (int)UseCaseEnum.EFGetOnePostQuery;
         public string Name => UseCaseEnum.EFGetOnePostQuery.ToString();
 
-        public ICollection<SingleCommentDto> parentComments { get; set; } = new List<SingleCommentDto>();
-        public ICollection<SingleCommentDto> childrenComments { get; set; } = new List<SingleCommentDto>();
-
-        GetPostDto IQuery<GetPostDto, int>.Execute(int search)
+        GetPostDetailsDto IQuery<GetPostDetailsDto, int>.Execute(int search)
         {
             var post = _context.Posts.Find(search);
 
@@ -39,69 +37,58 @@ namespace Implementation.Queries.Post
                 .ThenInclude(c => c.Category)
                 .FirstOrDefault(a => a.Id == search);
 
-            var result = new GetPostDto
+            var result = new GetPostDetailsDto
             {
                 Id = query.Id,
                 Title = query.Title,
                 Content = query.Content,
                 DateCreated = query.CreatedAt,
                 ImageName = query.Image.ImagePath,
-                IdImage = query.IdImage,
                 Username = query.User?.Username,
-                Categories = query.PostCategories.Select(x => new CategoryDto
+                Categories = query.PostCategories.Select(x => new GetPostCategoriesDto
                 {
                     Id = x.Category.Id,
                     Name = x.Category.Name
                 }).ToList(),
-                Likes = query.Likes.Select(w => new GetLikePostDto
+                Likes = query.Likes.Select(w => new GetPostLikesDto
                 {
                     Id = w.Id,
                     Status = w.Status,
                     IdUser = w.IdUser
                 }).ToList(),
-                Comments = query.Comments.Select(t => new SingleCommentDto
+                Comments = query.Comments.Where(c => c.IdParent == null).Select(t => new GetCommentsDto
                 {
                     Id = t.Id,
                     CommentText = t.CommentText,
-                    CreatedAt = t.CreatedAt,
-                    IdUser = t.IdUser,
                     IdParent = t.IdParent,
+                    IdUser = t.IdUser,
                     Username = t.User?.Username,
+                    CreatedAt = t.CreatedAt,
                     IsDeleted = t.IsDeleted,
-                    LikesCount = t.Likes.Count(l => l.IdComment != null),
-                    Likes = t.Likes.Select(l => new LikeCommentDto
+                    Likes = t.Likes.Select(l => new GetCommentLikesDto
                     {
                         IdComment = l.IdComment,
                         IdUser = l.IdUser,
                         Status = l.Status,
                     }).ToList(),
-                    Children = t.ChildrenComments.Select(c => new SingleCommentDto
+                    ChildrenComments = query.Comments.Where(c => c.IdParent == t.Id).Select(c => new GetCommentsDto
                     {
                         Id = c.Id,
-                        IdParent = c.IdParent,
                         CommentText = c.CommentText,
-                        CreatedAt = c.CreatedAt,
-                        IdUser = t.IdUser,
+                        IdParent = c.IdParent,
+                        IdUser = c.IdUser,
                         Username = c.User?.Username,
-                        IsDeleted = c.IsDeleted
-                    }).ToList()
-                }).ToList()
+                        CreatedAt = c.CreatedAt,
+                        IsDeleted = c.IsDeleted,
+                        Likes = c.Likes.Select(l => new GetCommentLikesDto
+                        {
+                            IdComment = l.IdComment,
+                            IdUser = l.IdUser,
+                            Status = l.Status,
+                        }).ToList(),
+                    }).ToList(),
+                }).ToList(),
             };
-
-            foreach (var res in result.Comments)
-            {
-                if (res.IdParent == null)
-                {
-                    parentComments.Add(res);
-                }
-                else
-                {
-                    childrenComments.Add(res);
-                }
-            }
-
-            result.Comments = parentComments;
-            result.ChildrenComments = childrenComments;
 
             return result;
         }
