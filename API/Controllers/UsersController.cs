@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Application;
 using Application.Commands.User;
-using Application.DataTransfer;
+using Application.DataTransfer.Users;
 using Application.Queries.User;
 using Application.Searches;
 
@@ -19,7 +19,7 @@ namespace API.Controllers
         }
 
         [HttpPost("/users")]
-        public IActionResult Post([FromBody] InsertUserDto dto, [FromServices] ICreateUserCommand command)
+        public IActionResult Post([FromBody] UpsertUserDto dto, [FromServices] ICreateUserCommand command)
         {
             _executor.ExecuteCommand(command, dto);
             return StatusCode(StatusCodes.Status201Created);
@@ -38,7 +38,7 @@ namespace API.Controllers
         }
 
         [HttpPut("/users/{id}")]
-        public IActionResult Put(int id, [FromForm] UpdateUserDto dto, [FromServices] IUpdateUserCommand command, [FromServices] IGetUserQuery getUserQuery)
+        public IActionResult Put(int id, [FromForm] UpsertUserDto dto, [FromServices] IUpdateUserCommand command, [FromServices] IGetUserQuery getUserQuery)
         {
             dto.Id = id;
             _executor.ExecuteCommand(command, dto);

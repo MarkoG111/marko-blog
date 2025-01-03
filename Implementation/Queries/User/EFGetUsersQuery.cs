@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Application.DataTransfer;
+using Application.DataTransfer.Users;
 using Application.Queries;
 using Application.Queries.User;
 using Application.Searches;
@@ -23,7 +23,7 @@ namespace Implementation.Queries.User
         public int Id => (int)UseCaseEnum.EFGetUsersQuery;
         public string Name => UseCaseEnum.EFGetUsersQuery.ToString();
 
-        public PagedResponse<UserDto> Execute(UserSearch search)
+        public PagedResponse<GetUsersDto> Execute(UserSearch search)
         {
             var users = _context.Users.Include(x => x.Role).AsQueryable();
 
@@ -44,14 +44,14 @@ namespace Implementation.Queries.User
             var skipCount = search.PerPage * (search.Page - 1);
             DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);
 
-            var response = new PagedResponse<UserDto>
+            var response = new PagedResponse<GetUsersDto>
             {
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
                 TotalCount = users.Count(),
                 LastMonthCount = users.Where(x => x.CreatedAt >= thirtyDaysAgo).Count(),
 
-                Items = users.Skip(skipCount).Take(search.PerPage).Select(x => new UserDto
+                Items = users.Skip(skipCount).Take(search.PerPage).Select(x => new GetUsersDto
                 {
                     Id = x.Id,
                     FirstName = x.FirstName,

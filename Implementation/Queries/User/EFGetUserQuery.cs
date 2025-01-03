@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-
-using Application.DataTransfer;
+using Application.DataTransfer.Users;
 using Application.DataTransfer.Posts;
+using Application.DataTransfer.UseCases;
+using Application.DataTransfer.Likes;
+using Application.DataTransfer.Comments;
 using Application.Queries.User;
 using EFDataAccess;
 
@@ -23,7 +25,7 @@ namespace Implementation.Queries.User
         public int Id => (int)UseCaseEnum.EFGetOneUserQuery;
         public string Name => UseCaseEnum.EFGetOneUserQuery.ToString();
 
-        public SingleUserDto Execute(int idUser)
+        public GetUserDto Execute(int idUser)
         {
             var user = _context.Users
             .Include(x => x.UserUseCases)
@@ -48,7 +50,7 @@ namespace Implementation.Queries.User
             var followingCount = _context.Followers.Count(f => f.IdFollower == idUser);
             var postsCount = _context.Posts.Count(p => p.IdUser == idUser);
 
-            return new SingleUserDto
+            return new GetUserDto
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
@@ -57,7 +59,7 @@ namespace Implementation.Queries.User
                 Email = user.Email,
                 ProfilePicture = user.ProfilePicture,
                 RoleName = user.Role.Name,
-                UserUseCases = user.UserUseCases.Select(x => new UserUseCaseDto
+                UserUseCases = user.UserUseCases.Select(x => new GetUserUseCaseDto
                 {
                     IdUseCase = x.IdUseCase
                 }),
@@ -72,7 +74,7 @@ namespace Implementation.Queries.User
                         Name = y.Category.Name
                     }).ToList()
                 }).ToList(),
-                UserComments = user.Comments.Select(c => new CommentDto
+                UserComments = user.Comments.Select(c => new GetUserCommentsDto
                 {
                     Id = c.Id,
                     CommentText = c.CommentText,

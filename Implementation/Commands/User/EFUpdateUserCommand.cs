@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Application.Commands.User;
-using Application.DataTransfer;
+using Application.DataTransfer.Users;
 using Application.Exceptions;
 using EFDataAccess;
 using FluentValidation;
@@ -28,7 +28,7 @@ namespace Implementation.Commands.User
         public int Id => (int)UseCaseEnum.EFUpdateUserCommand;
         public string Name => UseCaseEnum.EFUpdateUserCommand.ToString();
 
-        public void Execute(UpdateUserDto request)
+        public void Execute(UpsertUserDto request)
         {
             if (request.Image != null)
             {

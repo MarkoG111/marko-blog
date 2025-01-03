@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.Notifications;
 using Application.Queries;
 using Application.Queries.Notification;
 using Application.Searches;

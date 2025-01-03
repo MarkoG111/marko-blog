@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.Users;
 using EFDataAccess;
 using FluentValidation;
 using System.IO;
 
 namespace Implementation.Validators.User
 {
-    public class UpdateUserWithoutImageValidator : AbstractValidator<UpdateUserDto>
+    public class UpdateUserWithoutImageValidator : AbstractValidator<UpsertUserDto>
     {
         private readonly BlogContext _context;
 

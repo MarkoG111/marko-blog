@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Application;
-using Application.DataTransfer;
+using Application.DataTransfer.Notifications;
 using Application.Commands.Notification;
 using Application.Queries.Notification;
 using Application.Searches;
@@ -25,7 +21,7 @@ namespace API.Controllers
         }
 
         [HttpPost("/notifications")]
-        public IActionResult Post([FromBody] NotificationDto dto, [FromServices] ICreateNotificationCommand command)
+        public IActionResult Post([FromBody] InsertNotificationDto dto, [FromServices] ICreateNotificationCommand command)
         {
             dto.FromIdUser = _actor.Id;
             _executor.ExecuteCommand(command, dto);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application;
-using Application.DataTransfer;
+using Application.DataTransfer.Notifications;
 using Application.Services;
 using EFDataAccess;
 using Domain;
@@ -21,7 +21,7 @@ namespace Implementation.Services
             _notificationHubService = notificationHubService;
         }
 
-        private string? GenerateNotificationLink(NotificationDto dto)
+        private string? GenerateNotificationLink(InsertNotificationDto dto)
         {
             return dto.Type switch
             {
@@ -33,7 +33,7 @@ namespace Implementation.Services
             };
         }
 
-        public void CreateNotification(NotificationDto dto)
+        public void CreateNotification(InsertNotificationDto dto)
         {
             dto.Link = GenerateNotificationLink(dto);
 

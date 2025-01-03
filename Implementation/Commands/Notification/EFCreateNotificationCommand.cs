@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application;
 using Application.Commands.Notification;
-using Application.DataTransfer;
+using Application.DataTransfer.Notifications;
 using Application.Services;
 using EFDataAccess;
 using Domain;
@@ -27,7 +27,7 @@ namespace Implementation.Commands.Notification
         public int Id => (int)UseCaseEnum.EFCreateNotificationCommand;
         public string Name => UseCaseEnum.EFCreateNotificationCommand.ToString();
 
-        public void Execute(NotificationDto request)
+        public void Execute(InsertNotificationDto request)
         {
             request.IdUser = _actor.Id;
 

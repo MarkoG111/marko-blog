@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Commands.User;
-using Application.DataTransfer;
+using Application.DataTransfer.Users;
 using Domain;
 using EFDataAccess;
 using FluentValidation;
@@ -26,7 +26,7 @@ namespace Implementation.Commands.User
         public int Id => (int)UseCaseEnum.EFCreateUserCommand;
         public string Name => UseCaseEnum.EFCreateUserCommand.ToString();
 
-        public void Execute(InsertUserDto request)
+        public void Execute(UpsertUserDto request)
         {
             _validator.ValidateAndThrow(request);
 

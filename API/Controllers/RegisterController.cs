@@ -1,6 +1,6 @@
 using Application;
 using Application.Commands.User;
-using Application.DataTransfer;
+using Application.DataTransfer.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
