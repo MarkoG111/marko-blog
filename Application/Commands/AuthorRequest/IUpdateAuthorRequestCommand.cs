@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Application.DataTransfer;
+using Application.DataTransfer.AuthorRequests;
 
 namespace Application.Commands.AuthorRequest
 {
-    public interface IUpdateAuthorRequestCommand : ICommand<UpdateAuthorRequestDto>
+    public interface IUpdateAuthorRequestCommand : ICommand<UpsertAuthorRequestDto>
     {
         
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application;
 using Application.Commands.AuthorRequest;
-using Application.DataTransfer;
+using Application.DataTransfer.AuthorRequests;
 using Application.Exceptions;
 using Domain;
 using EFDataAccess;
@@ -29,7 +29,7 @@ namespace Implementation.Commands.AuthorRequest
         public int Id => (int)UseCaseEnum.EFCreateAuthorRequestCommand;
         public string Name => UseCaseEnum.EFCreateAuthorRequestCommand.ToString();
 
-        public void Execute(AuthorRequestDto request)
+        public void Execute(UpsertAuthorRequestDto request)
         {
             _validator.ValidateAndThrow(request);
 

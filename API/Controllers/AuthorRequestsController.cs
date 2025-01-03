@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application;
 using Microsoft.AspNetCore.Mvc;
-using Application.DataTransfer;
+using Application.DataTransfer.AuthorRequests;
 using Application.Queries.AuthorRequest;
 using Application.Commands.AuthorRequest;
 using Application.Searches;
@@ -25,7 +21,7 @@ namespace API.Controllers
         }
 
         [HttpPost("/authorrequests")]
-        public IActionResult Post([FromBody] AuthorRequestDto dto, [FromServices] ICreateAuthorRequestCommand command)
+        public IActionResult Post([FromBody] UpsertAuthorRequestDto dto, [FromServices] ICreateAuthorRequestCommand command)
         {
             dto.IdUser = _actor.Id;
             _executor.ExecuteCommand(command, dto);
@@ -39,7 +35,7 @@ namespace API.Controllers
         }
 
         [HttpPut("/authorrequests/accept")]
-        public IActionResult Accept(int id, [FromBody] UpdateAuthorRequestDto request, [FromServices] IUpdateAuthorRequestCommand command)
+        public IActionResult Accept(int id, [FromBody] UpsertAuthorRequestDto request, [FromServices] IUpdateAuthorRequestCommand command)
         {
             request.Id = id;
             request.IdRole = 2;
@@ -48,7 +44,7 @@ namespace API.Controllers
         }
 
         [HttpPut("/authorrequests/reject")]
-        public IActionResult Reject(int id, [FromBody] UpdateAuthorRequestDto request, [FromServices] IUpdateAuthorRequestCommand command)
+        public IActionResult Reject(int id, [FromBody] UpsertAuthorRequestDto request, [FromServices] IUpdateAuthorRequestCommand command)
         {
             request.Id = id;
             request.IdRole = 3;

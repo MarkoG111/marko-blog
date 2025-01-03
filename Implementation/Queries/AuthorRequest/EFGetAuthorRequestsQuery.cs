@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.AuthorRequests;
 using Application.Queries;
 using Application.Queries.AuthorRequest;
 using Application.Searches;
@@ -22,7 +22,7 @@ namespace Implementation.Queries.AuthorRequest
         public int Id => (int)UseCaseEnum.EFGetAuthorRequestsQuery;
         public string Name => UseCaseEnum.EFGetAuthorRequestsQuery.ToString();
 
-        public PagedResponse<AuthorRequestDto> Execute(AuthorRequestSearch search)
+        public PagedResponse<GetAuthorRequestsDto> Execute(AuthorRequestSearch search)
         {
             var query = _context.AuthorRequests.AsQueryable();
 
@@ -35,17 +35,15 @@ namespace Implementation.Queries.AuthorRequest
 
             var skipCount = search.PerPage * (search.Page - 1);
 
-            var response = new PagedResponse<AuthorRequestDto>
+            var response = new PagedResponse<GetAuthorRequestsDto>
             {
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
                 TotalCount = query.Count(),
-                Items = query.Skip(skipCount).Take(search.PerPage).Select(x => new AuthorRequestDto
+                Items = query.Skip(skipCount).Take(search.PerPage).Select(x => new GetAuthorRequestsDto
                 {
-                    Id = x.Id,
                     DateCreated = x.CreatedAt,
                     Reason = x.Reason,
-                    IdUser = x.IdUser,
                     Username = x.User.Username,
                     ProfilePicture = x.User.ProfilePicture,
                     Status = x.Status

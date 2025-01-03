@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Commands.AuthorRequest;
-using Application.DataTransfer;
+using Application.DataTransfer.AuthorRequests;
 using Application.Exceptions;
 using EFDataAccess;
 using FluentValidation;
@@ -24,7 +24,7 @@ namespace Implementation.Commands.AuthorRequest
         public int Id => (int)UseCaseEnum.EFUpdateAuthorRequestCommand;
         public string Name => UseCaseEnum.EFUpdateAuthorRequestCommand.ToString();
 
-        public void Execute(UpdateAuthorRequestDto request)
+        public void Execute(UpsertAuthorRequestDto request)
         {
             var authorRequest = _context.AuthorRequests.Find(request.Id);
 

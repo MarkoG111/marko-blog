@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.AuthorRequests;
 using Domain;
 using FluentValidation;
 using EFDataAccess;
 
 namespace Implementation.Validators.AuthorRequest
 {
-    public class AuthorRequestValidator : AbstractValidator<AuthorRequestDto>
+    public class AuthorRequestValidator : AbstractValidator<UpsertAuthorRequestDto>
     {
         public AuthorRequestValidator(BlogContext context)
         {
