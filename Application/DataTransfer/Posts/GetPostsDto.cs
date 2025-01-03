@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Application.DataTransfer.Posts
 {
-    public class GetPostDto
+    public class GetPostsDto
     {
         public int Id { get; set; }
         public string ImageName { get; set; }

@@ -10,7 +10,7 @@ namespace Application.DataTransfer.Categories
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<GetPostDto> Posts { get; set; } = new List<GetPostDto>();
+        public IEnumerable<GetPostInCategoryDto> Posts { get; set; } = new List<GetPostInCategoryDto>();
         public int TotalCount { get; set; }
         public int ItemsPerPage { get; set; }
         public int CurrentPage { get; set; }

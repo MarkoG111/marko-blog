@@ -27,6 +27,11 @@ namespace Implementation.Queries.Category
 
         public GetCategoryDto Execute(int id)
         {
+            return Execute(new CategorySearch { Id = id, Page = 1, PerPage = 3 });
+        }
+
+        public GetCategoryDto Execute(CategorySearch search)
+        {
             var category = _context.Categories
                 .Include(x => x.CategoryPosts)
                 .ThenInclude(x => x.Post)
@@ -35,19 +40,25 @@ namespace Implementation.Queries.Category
                 .Include(x => x.CategoryPosts)
                 .ThenInclude(x => x.Post)
                 .ThenInclude(x => x.User)
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefault(x => x.Id == search.Id);
 
             if (category == null)
             {
-                throw new EntityNotFoundException(id, typeof(Domain.Category));
+                throw new EntityNotFoundException(search.Id, typeof(Domain.Category));
             }
 
             var postsQuery = category.CategoryPosts.Select(x => x.Post).AsQueryable();
 
-            var paginatedPosts = postsQuery.Select(post => new GetPostDto
+            var totalPosts = postsQuery.Count();
+
+            var paginatedPosts = postsQuery.Select(post => new GetPostInCategoryDto
             {
                 Id = post.Id,
                 Title = post.Title,
+                DateCreated = post.CreatedAt,
+                FirstName = post.User.FirstName,
+                LastName = post.User.LastName,
+                ProfilePicture = post.User.ProfilePicture,
                 Categories = post.PostCategories.Select(y => new GetPostCategoriesDto
                 {
                     Id = y.Category.Id,
@@ -59,8 +70,12 @@ namespace Implementation.Queries.Category
             {
                 Id = category.Id,
                 Name = category.Name,
-                Posts = paginatedPosts
+                Posts = paginatedPosts,
+                TotalCount = totalPosts,
+                ItemsPerPage = search.PerPage,
+                CurrentPage = search.Page
             };
         }
+
     }
 }

@@ -63,11 +63,12 @@ namespace Implementation.Queries.User
                 {
                     IdUseCase = x.IdUseCase
                 }),
-                UserPosts = user.Posts.Select(p => new GetPostDto
+                UserPosts = user.Posts.Select(p => new GetUserPostsDto
                 {
                     Id = p.Id,
                     Title = p.Title,
                     ImageName = p.Image.ImagePath,
+                    DateCreated = p.CreatedAt,
                     Categories = p.PostCategories.Select(y => new GetPostCategoriesDto
                     {
                         Id = y.Category.Id,

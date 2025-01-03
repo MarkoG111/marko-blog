@@ -7,7 +7,7 @@ using Application.Searches;
 
 namespace Application.Queries.Post
 {
-    public interface IGetPostsQuery : IQuery<PagedResponse<GetPostDto>, PostSearch>
+    public interface IGetPostsQuery : IQuery<PagedResponse<GetPostsDto>, PostSearch>
     {
         
     }

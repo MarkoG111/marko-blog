@@ -29,8 +29,6 @@ namespace Implementation.Queries.Category
             var totalItems = query.Count();
 
             var pagedCategories = query
-                .Skip((search.Page - 1) * search.PerPage)
-                .Take(search.PerPage)
                 .Select(x => new GetCategoriesDto
                 {
                     Id = x.Id,

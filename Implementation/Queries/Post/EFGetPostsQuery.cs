@@ -23,9 +23,11 @@ namespace Implementation.Queries.Post
         public int Id => (int)UseCaseEnum.EFGetPostsQuery;
         public string Name => UseCaseEnum.EFGetPostsQuery.ToString();
 
-        public PagedResponse<GetPostDto> Execute(PostSearch search)
+        public PagedResponse<GetPostsDto> Execute(PostSearch search)
         {
             var posts = _context.Posts.Include(x => x.PostCategories).ThenInclude(x => x.Category).AsQueryable();
+
+            var totalCount = posts.Count();
 
             if (!string.IsNullOrEmpty(search.Title) || !string.IsNullOrWhiteSpace(search.Title))
             {
@@ -50,11 +52,12 @@ namespace Implementation.Queries.Post
             var skipCount = search.PerPage * (search.Page - 1);
             DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);
 
-            var response = new PagedResponse<GetPostDto>
+            var response = new PagedResponse<GetPostsDto>
             {
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
-                Items = posts.Skip(skipCount).Take(search.PerPage).Select(x => new GetPostDto
+                TotalCount = totalCount,
+                Items = posts.Skip(skipCount).Take(search.PerPage).Select(x => new GetPostsDto
                 {
                     Id = x.Id,
                     Title = x.Title,

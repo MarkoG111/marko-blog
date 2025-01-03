@@ -13,7 +13,6 @@ export default function UserPage() {
 
   const [user, setUser] = useState(null)
   const [isFollowing, setIsFollowing] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const { showError } = useError()
 
@@ -31,8 +30,6 @@ export default function UserPage() {
 
           const token = localStorage.getItem("token")
           if (token) {
-            setIsLoggedIn(true)
-
             const followResponse = await fetch(`/followers/${id}/check`, {
               method: "GET",
               headers: {
@@ -42,8 +39,6 @@ export default function UserPage() {
 
             const followData = await followResponse.json()
             setIsFollowing(followData.isFollowing)
-          } else {
-            showError("You must log in")
           }
         } else {
           await handleApiError(response, showError)
@@ -135,28 +130,26 @@ export default function UserPage() {
             <FaUsers className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3" /> <span>{user && user.followersCount} {user && user.followersCount == 1 ? 'follower' : 'followers'}</span>
             <RiUserFollowLine className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3 ml-4" /> <span>{user && user.followingCount} following</span>
           </div>
-          {isLoggedIn && (
-            <div className="flex -mt-9 gap-x-4 justify-end mr-8">
-              {isFollowing ? (
-                <Button
-                  type="button"
-                  gradientDuoTone="purpleToPink"
-                  onClick={() => handleUnfollow(user.id)}
-                >
-                  <RiUserUnfollowFill className="h-6 w-6 text-white dark:text-gray-200 mr-4" />{" "}
-                  Unfollow
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  gradientDuoTone="purpleToPink"
-                  onClick={() => handleFollow(user.id)}
-                >
-                  <FaUserPlus className="h-6 w-6 text-white dark:text-gray-200 mr-4" /> Follow
-                </Button>
-              )}
-            </div>
-          )}
+          <div className="flex -mt-9 gap-x-4 justify-end mr-8">
+            {isFollowing ? (
+              <Button
+                type="button"
+                gradientDuoTone="purpleToPink"
+                onClick={() => handleUnfollow(user.id)}
+              >
+                <RiUserUnfollowFill className="h-6 w-6 text-white dark:text-gray-200 mr-4" />{" "}
+                Unfollow
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                gradientDuoTone="purpleToPink"
+                onClick={() => handleFollow(user.id)}
+              >
+                <FaUserPlus className="h-6 w-6 text-white dark:text-gray-200 mr-4" /> Follow
+              </Button>
+            )}
+          </div>
 
           <div className="flex justify-center pb-5 pt-20">
             <span className="text-2xl pr-4 pt-1"><HiOutlineMail /></span>
