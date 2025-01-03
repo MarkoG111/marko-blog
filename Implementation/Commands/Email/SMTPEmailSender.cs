@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Application.Commands.Email;
-using Application.DataTransfer;
-
+using Application.DataTransfer.Emails;
 using System.Net;
 using System.Net.Mail;
 

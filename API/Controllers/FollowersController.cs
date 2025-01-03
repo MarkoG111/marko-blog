@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application;
 using Application.Commands.Follow;
 using Application.Queries.Follow;
 using Microsoft.AspNetCore.Mvc;
-using Application.DataTransfer;
+using Application.DataTransfer.Followers;
 
 namespace API.Controllers
 {
@@ -24,7 +20,7 @@ namespace API.Controllers
         }
 
         [HttpPost("/followers")]
-        public IActionResult Post([FromBody] FollowDto dto, [FromServices] IFollowCommand command)
+        public IActionResult Post([FromBody] InsertFollowDto dto, [FromServices] IFollowCommand command)
         {
             dto.IdUser = _actor.Id;
             _executor.ExecuteCommand(command, dto);

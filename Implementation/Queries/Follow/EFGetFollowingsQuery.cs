@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.Followers;
 using Application.Queries;
 using Application.Queries.Follow;
 using Application.Searches;
@@ -23,16 +23,15 @@ namespace Implementation.Queries.Follow
         public int Id => (int)UseCaseEnum.EFGetFollowingsQuery;
         public string Name => UseCaseEnum.EFGetFollowingsQuery.ToString();
 
-        public PagedResponse<UserDto> Execute(int idUser)
+        public PagedResponse<GetFollowsDto> Execute(int idUser)
         {
             var following = _context.Followers.Where(f => f.IdFollower == idUser).Include(f => f.FollowingUser);
 
-
-            var response = new PagedResponse<UserDto>
+            var response = new PagedResponse<GetFollowsDto>
             {
                 TotalCount = following.Count(),
 
-                Items = following.Select(f => new UserDto
+                Items = following.Select(f => new GetFollowsDto
                 {
                     Id = f.FollowingUser.Id,
                     FirstName = f.FollowingUser.FirstName,

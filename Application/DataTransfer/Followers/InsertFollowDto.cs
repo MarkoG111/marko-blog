@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Application.DataTransfer.Followers
 {
-    public class FollowDto
+    public class InsertFollowDto
     {
         public int IdUser { get; set; }
         public int IdFollowing { get; set; }

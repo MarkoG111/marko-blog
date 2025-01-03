@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace Application.DataTransfer.Comments
 {
-    public class UpsertCommentDto
+    public class GetUserCommentsDto
     {
         public int Id { get; set; }
         public string CommentText { get; set; }
-        public int IdPost { get; set; }
-        public int? IdParent { get; set; }
-        public int IdUser { get; set; } 
+        public string PostTitle { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application;
 using Application.Commands.Follow;
-using Application.DataTransfer;
+using Application.DataTransfer.Followers;
+using Application.DataTransfer.Notifications;
 using Application.Services;
 using EFDataAccess;
 using Domain;
@@ -30,7 +31,7 @@ namespace Implementation.Commands.Follow
         public int Id => (int)UseCaseEnum.EFFollowCommand;
         public string Name => UseCaseEnum.EFFollowCommand.ToString();
 
-        public void Execute(FollowDto request)
+        public void Execute(InsertFollowDto request)
         {
             request.IdUser = _actor.Id;
 
@@ -41,7 +42,7 @@ namespace Implementation.Commands.Follow
                 FollowedAt = DateTime.Now
             };
 
-            var notificationDto = new NotificationDto
+            var notificationDto = new InsertNotificationDto
             {
                 IdUser = request.IdFollowing,
                 FromIdUser = _actor.Id,

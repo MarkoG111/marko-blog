@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.Comments;
 using Application.Queries;
 using Application.Queries.Comment;
 using Application.Searches;
@@ -22,7 +22,7 @@ namespace Implementation.Queries.Comment
         public int Id => (int)UseCaseEnum.EFGetCommentsQuery;
         public string Name => UseCaseEnum.EFGetCommentsQuery.ToString();
 
-        public PagedResponse<CommentDto> Execute(CommentSearch search)
+        public PagedResponse<GetCommentsDto> Execute(CommentSearch search)
         {
             var comments = _context.Comments.Include(x => x.User).Include(x => x.Likes).Include(x => x.Post).AsQueryable();
 
@@ -36,14 +36,14 @@ namespace Implementation.Queries.Comment
             var skipCount = search.PerPage * (search.Page - 1);
             DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);
 
-            var response = new PagedResponse<CommentDto>
+            var response = new PagedResponse<GetCommentsDto>
             {
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
                 TotalCount = comments.Count(),
                 LastMonthCount = comments.Where(x => x.CreatedAt >= thirtyDaysAgo).Count(),
 
-                Items = comments.Skip(skipCount).Take(search.PerPage).Select(c => new CommentDto
+                Items = comments.Skip(skipCount).Take(search.PerPage).Select(c => new GetCommentsDto
                 {
                     Id = c.Id,
                     CommentText = c.CommentText,
@@ -55,7 +55,7 @@ namespace Implementation.Queries.Comment
                     IdPost = c.Post.Id,
                     IdUser = c.User.Id,
                     LikesCount = c.Likes.Count(l => l.IdComment != null),
-                    Likes = c.Likes.Select(l => new LikeCommentDto
+                    Likes = c.Likes.Select(l => new GetCommentLikesDto
                     {
                         IdComment = l.IdComment,
                         IdUser = l.IdUser,

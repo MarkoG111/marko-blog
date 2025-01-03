@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.Comments;
 using Application.Exceptions;
 using Application.Queries.Comment;
 using EFDataAccess;
@@ -22,7 +22,7 @@ namespace Implementation.Queries.Comment
         public int Id => (int)UseCaseEnum.EFGetOneUserQuery;
         public string Name => UseCaseEnum.EFGetOneUserQuery.ToString();
 
-        public CommentDto Execute(int search)
+        public GetCommentDto Execute(int search)
         {
             var comment = _context.Comments.Include(x => x.User).Include(z => z.Post).Include(n => n.Likes).FirstOrDefault(y => y.Id == search);
 
@@ -31,7 +31,7 @@ namespace Implementation.Queries.Comment
                 throw new EntityNotFoundException(search, typeof(Domain.Comment));
             }
 
-            return new CommentDto
+            return new GetCommentDto
             {
                 Id = comment.Id,
                 CommentText = comment.CommentText,
