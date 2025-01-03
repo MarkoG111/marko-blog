@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.Comments;
 using EFDataAccess;
 using FluentValidation;
 
 namespace Implementation.Validators.Comment
 {
-    public class CreateCommentValidator : AbstractValidator<InsertCommentDto>
+    public class CreateCommentValidator : AbstractValidator<UpsertCommentDto>
     {
         private readonly BlogContext _context;
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application;
 using Application.Commands.Comment;
-using Application.DataTransfer;
+using Application.DataTransfer.Comments;
 using Application.Exceptions;
 using EFDataAccess;
 using FluentValidation;
@@ -29,7 +29,7 @@ namespace Implementation.Commands.Comment
 
         public string Name => UseCaseEnum.EFUpdatePersonalCommentCommand.ToString();
 
-        public void Execute(UpdateCommentDto request)
+        public void Execute(UpsertCommentDto request)
         {
             _validator.ValidateAndThrow(request);
 

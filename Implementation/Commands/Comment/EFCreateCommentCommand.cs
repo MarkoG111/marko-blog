@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application;
 using Application.Commands.Comment;
-using Application.DataTransfer;
+using Application.DataTransfer.Comments;
+using Application.DataTransfer.Notifications;
 using Application.Services;
 using EFDataAccess;
 using Domain;
@@ -34,7 +35,7 @@ namespace Implementation.Commands.Comment
 
         public string Name => UseCaseEnum.EFCreateCommentCommand.ToString();
 
-        public void Execute(InsertCommentDto request)
+        public void Execute(UpsertCommentDto request)
         {
             _validator.ValidateAndThrow(request);
 
@@ -63,7 +64,7 @@ namespace Implementation.Commands.Comment
             // Avoid sending a notification to the commenter themselves
             if (post.IdUser != request.IdUser)
             {
-                var postOwnerNotification = new NotificationDto
+                var postOwnerNotification = new InsertNotificationDto
                 {
                     IdUser = post.IdUser, // Post owner
                     FromIdUser = request.IdUser, // Commenter
@@ -86,7 +87,7 @@ namespace Implementation.Commands.Comment
 
                 if (parentComment != null && parentComment.IdUser != request.IdUser)
                 {
-                    var parentCommentNotification = new NotificationDto
+                    var parentCommentNotification = new InsertNotificationDto
                     {
                         IdUser = parentComment.IdUser, // Parent comment owner
                         FromIdUser = request.IdUser, // Commenter

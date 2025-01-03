@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.Comments;
 
 namespace Application.Queries.Comment
 {
-    public interface IGetCommentQuery : IQuery<CommentDto, int>
+    public interface IGetCommentQuery : IQuery<GetCommentDto, int>
     {
         
     }

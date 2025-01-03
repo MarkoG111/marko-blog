@@ -1,6 +1,6 @@
 using Application;
 using Application.Commands.Comment;
-using Application.DataTransfer;
+using Application.DataTransfer.Comments;
 using Application.DataTransfer.Likes;
 using Application.Queries.Comment;
 using Application.Searches;
@@ -23,7 +23,7 @@ namespace API.Controllers
         }
 
         [HttpPost("/comments")]
-        public IActionResult Post([FromBody] InsertCommentDto dto, [FromServices] ICreateCommentCommand command)
+        public IActionResult Post([FromBody] UpsertCommentDto dto, [FromServices] ICreateCommentCommand command)
         {
             _executor.ExecuteCommand(command, dto);
             return Ok(dto);
@@ -42,7 +42,7 @@ namespace API.Controllers
         }
 
         [HttpPut("/comments/{id}")]
-        public IActionResult Put(int id, [FromBody] UpdateCommentDto dto, [FromServices] IUpdatePersonalCommentCommand command)
+        public IActionResult Put(int id, [FromBody] UpsertCommentDto dto, [FromServices] IUpdatePersonalCommentCommand command)
         {
             dto.Id = id;
             dto.IdUser = _actor.Id;
