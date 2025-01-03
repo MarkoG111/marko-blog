@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.Categories;
 using Application.Queries;
 using Application.Queries.Category;
 using Application.Searches;
@@ -22,30 +22,28 @@ namespace Implementation.Queries.Category
         public int Id => (int)UseCaseEnum.EFGetCategoriesQuery;
         public string Name => UseCaseEnum.EFGetCategoriesQuery.ToString();
 
-        public PagedResponse<CategoryDto> Execute(CategorySearch search)
+        public PagedResponse<GetCategoriesDto> Execute(CategorySearch search)
         {
             var query = _context.Categories.AsQueryable();
 
-            if (!string.IsNullOrEmpty(search.Name) || !string.IsNullOrWhiteSpace(search.Name))
-            {
-                query = query.Where(x => x.Name.ToLower().Contains(search.Name.ToLower()));
-            }
+            var totalItems = query.Count();
 
-            query = query.Where(x => x.IsActive == true);
-
-            var response = new PagedResponse<CategoryDto>
-            {
-                CurrentPage = search.Page,
-                ItemsPerPage = search.PerPage,
-                TotalCount = query.Count(),
-                Items = query.Select(x => new CategoryDto
+            var pagedCategories = query
+                .Skip((search.Page - 1) * search.PerPage)
+                .Take(search.PerPage)
+                .Select(x => new GetCategoriesDto
                 {
                     Id = x.Id,
                     Name = x.Name
-                }).ToList()
-            };
+                }).ToList();
 
-            return response;
+            return new PagedResponse<GetCategoriesDto>
+            {
+                Items = pagedCategories,
+                TotalCount = totalItems,
+                CurrentPage = search.Page,
+                ItemsPerPage = search.PerPage
+            };
         }
     }
 }

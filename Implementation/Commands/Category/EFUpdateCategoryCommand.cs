@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Commands.Category;
-using Application.DataTransfer;
+using Application.DataTransfer.Categories;
 using Application.Exceptions;
 using EFDataAccess;
 using FluentValidation;
@@ -25,7 +25,7 @@ namespace Implementation.Commands.Category
         public int Id => (int)UseCaseEnum.EFUpdateCategoryCommand;
         public string Name => UseCaseEnum.EFUpdateCategoryCommand.ToString();
 
-        public void Execute(CategoryDto request)
+        public void Execute(UpsertCategoryDto request)
         {
             var category = _context.Categories.Find(request.Id);
 

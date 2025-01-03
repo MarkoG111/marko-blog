@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Application;
 using Application.Commands.Category;
-using Application.DataTransfer;
+using Application.DataTransfer.Categories;
 using Application.Queries.Category;
 using Application.Searches;
 
@@ -19,7 +19,7 @@ namespace API.Controllers
         }
 
         [HttpPost("/categories")]
-        public IActionResult Post([FromBody] CategoryDto dto, [FromServices] ICreateCategoryCommand command)
+        public IActionResult Post([FromBody] UpsertCategoryDto dto, [FromServices] ICreateCategoryCommand command)
         {
             _executor.ExecuteCommand(command, dto);
             return StatusCode(StatusCodes.Status201Created);
@@ -32,14 +32,13 @@ namespace API.Controllers
         }
 
         [HttpGet("/categories/{id}")]
-        public IActionResult Get(int id, [FromServices] IGetCategoryQuery query, [FromQuery] CategorySearch search)
+        public IActionResult Get(int id, [FromServices] IGetCategoryQuery query)
         {
-            search.Id = id;
-            return Ok(_executor.ExecuteQuery(query, search));
+            return Ok(_executor.ExecuteQuery(query, id));
         }
 
         [HttpPut("/categories/{id}")]
-        public IActionResult Put(int id, [FromBody] CategoryDto dto, [FromServices] IUpdateCategoryCommand command)
+        public IActionResult Put(int id, [FromBody] UpsertCategoryDto dto, [FromServices] IUpdateCategoryCommand command)
         {
             dto.Id = id;
             _executor.ExecuteCommand(command, dto);

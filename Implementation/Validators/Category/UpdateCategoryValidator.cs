@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DataTransfer;
+using Application.DataTransfer.Categories;
 using EFDataAccess;
 using FluentValidation;
 
 namespace Implementation.Validators.Category
 {
-    public class UpdateCategoryValidator : AbstractValidator<CategoryDto>
+    public class UpdateCategoryValidator : AbstractValidator<UpsertCategoryDto>
     {
         public UpdateCategoryValidator(BlogContext context)
         {
