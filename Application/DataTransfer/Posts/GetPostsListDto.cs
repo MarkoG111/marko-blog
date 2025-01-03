@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.DataTransfer.Categories;
 
 namespace Application.DataTransfer.Posts
 {
@@ -11,6 +12,6 @@ namespace Application.DataTransfer.Posts
         public string ImageName { get; set; }
         public string Title { get; set; }
         public DateTime DateCreated { get; set; }
-        public IEnumerable<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
+        public IEnumerable<GetCategoriesDto> Categories { get; set; } = new List<GetCategoriesDto>();
     }
 }

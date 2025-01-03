@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using EFDataAccess;
-using Application.DataTransfer;
+using Application.DataTransfer.UseCases;
 using Application.Queries;
 using Application.Searches;
 
@@ -22,7 +21,7 @@ namespace Implementation.Queries
         public int Id => (int)UseCaseEnum.EFGetUseCaseLogQuery;
         public string Name => UseCaseEnum.EFGetUseCaseLogQuery.ToString();
 
-        public PagedResponse<UseCaseLogDto> Execute(UseCaseLogSearch search)
+        public PagedResponse<GetUseCaseLogDto> Execute(UseCaseLogSearch search)
         {
             var query = _context.UseCaseLogs.AsQueryable();
 
@@ -48,12 +47,12 @@ namespace Implementation.Queries
 
             var skipCount = search.PerPage * (search.Page - 1);
 
-            var response = new PagedResponse<UseCaseLogDto>
+            var response = new PagedResponse<GetUseCaseLogDto>
             {
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
                 TotalCount = query.Count(),
-                Items = query.Skip(skipCount).Take(search.PerPage).Select(x => new UseCaseLogDto
+                Items = query.Skip(skipCount).Take(search.PerPage).Select(x => new GetUseCaseLogDto
                 {
                     Actor = x.Actor,
                     Data = x.Data,

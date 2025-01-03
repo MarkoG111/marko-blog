@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application;
 using Application.Commands.Post;
-using Application.DataTransfer;
+using Application.DataTransfer.Notifications;
 using Application.DataTransfer.Posts;
 using Application.Services;
 using Domain;
@@ -64,7 +64,7 @@ namespace Implementation.Commands.Post
 
                     foreach (var idFollower in followers)
                     {
-                        var notificationDto = new NotificationDto
+                        var notificationDto = new InsertNotificationDto
                         {
                             IdUser = idFollower,
                             FromIdUser = post.IdUser,

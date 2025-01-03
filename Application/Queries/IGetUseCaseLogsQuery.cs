@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Application.DataTransfer;
 using Application.Searches;
+using Application.DataTransfer.UseCases;
 
 namespace Application.Queries
 {
-    public interface IGetUseCaseLogsQuery : IQuery<PagedResponse<UseCaseLogDto>, UseCaseLogSearch>
+    public interface IGetUseCaseLogsQuery : IQuery<PagedResponse<GetUseCaseLogDto>, UseCaseLogSearch>
     {
 
     }

@@ -6,7 +6,7 @@ using Application;
 using Application.Exceptions;
 using Application.Commands.Like;
 using Application.DataTransfer.Likes;
-using Application.DataTransfer;
+using Application.DataTransfer.Notifications;
 using Application.Services;
 using EFDataAccess;
 using FluentValidation;
@@ -66,7 +66,7 @@ namespace Implementation.Commands.Like
                 throw new EntityNotFoundException(request.IdPost, typeof(Domain.Post));
             }
 
-            var notificationDto = new NotificationDto
+            var notificationDto = new InsertNotificationDto
             {
                 IdUser = post.IdUser,
                 FromIdUser = _actor.Id,

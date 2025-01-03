@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.DataTransfer
+namespace Application.DataTransfer.UseCases
 {
-    public class UserUseCaseDto
+    public class GetUserUseCaseDto
     {
         public int IdUseCase { get; set; }
     }

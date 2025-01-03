@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.DataTransfer
+namespace Application.DataTransfer.UseCases
 {
-    public class UseCaseLogDto
+    public class GetUseCaseLogDto
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

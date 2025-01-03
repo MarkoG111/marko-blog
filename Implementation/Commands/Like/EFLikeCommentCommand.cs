@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application;
 using Application.Exceptions;
-using Application.DataTransfer;
+using Application.DataTransfer.Likes;
 using Application.Commands.Like;
 using EFDataAccess;
 using FluentValidation;
