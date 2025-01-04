@@ -129,15 +129,15 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
                     <p className="text-gray-500 pb-2">{comment.commentText}</p>
 
                     <div className="flex items-center pt-2 text-xs border-t dark:border-gray-700 max-w-fit gap-2">
-                      <button type="button" onClick={() => onLikeComment(comment.id, "like")} className={`text-gray-400 hover:text-blue-500 ${currentUser && comment.likes && comment?.likes.some(like => like.idUser == currentUser.id && like.status == 1) && '!text-blue-500'}`}>
+                      <button type="button" onClick={() => onLikeComment(comment.id, "like")} className={`text-gray-400 hover:text-blue-500 ${currentUser && comment.likes && comment?.likes.some(like => like.idUser == currentUser.id && like.status == 'Liked') && '!text-blue-500'}`}>
                         <FaThumbsUp className="text-sm" />
                       </button>
-                      {comment.likes && comment.likes.filter((like) => like.status == 1).length}
+                      {comment.likes && comment.likes.filter((like) => like.status == 'Liked').length}
 
-                      <button type="button" onClick={() => onDislikeComment(comment.id, "dislike")} className={`text-gray-400 hover:text-red-500 ml-6 ${currentUser && comment.likes && comment.likes.some(like => like.idUser == currentUser.id && like.status == 2) && '!text-red-500'}`}>
+                      <button type="button" onClick={() => onDislikeComment(comment.id, "dislike")} className={`text-gray-400 hover:text-red-500 ml-6 ${currentUser && comment.likes && comment.likes.some(like => like.idUser == currentUser.id && like.status == 'Disliked') && '!text-red-500'}`}>
                         <FaThumbsDown className="text-sm" />
                       </button>
-                      {comment.likes && comment.likes.filter((like) => like.status == 2).length}
+                      {comment.likes && comment.likes.filter((like) => like.status == 'Disliked').length}
 
                       {currentUser && (currentUser.id == comment.idUser || currentUser.roleName == 'Admin') && (
                         <>

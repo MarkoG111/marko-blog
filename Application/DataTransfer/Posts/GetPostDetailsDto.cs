@@ -17,6 +17,6 @@ namespace Application.DataTransfer.Posts
         public string Username { get; set; }
         public IEnumerable<GetPostCategoriesDto> Categories { get; set; } = new List<GetPostCategoriesDto>();
         public IEnumerable<GetPostLikesDto> Likes { get; set; } = new List<GetPostLikesDto>();
-        public IEnumerable<GetCommentsDto> Comments { get; set; } = new List<GetCommentsDto>();
+        public IEnumerable<GetPostCommentsDto> Comments { get; set; } = new List<GetPostCommentsDto>();
     }
 }

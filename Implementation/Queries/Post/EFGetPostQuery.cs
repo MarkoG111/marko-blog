@@ -53,10 +53,10 @@ namespace Implementation.Queries.Post
                 Likes = query.Likes.Select(w => new GetPostLikesDto
                 {
                     Id = w.Id,
-                    Status = w.Status,
+                    Status = w.Status.ToString(),
                     IdUser = w.IdUser
                 }).ToList(),
-                Comments = query.Comments.Where(c => c.IdParent == null).Select(t => new GetCommentsDto
+                Comments = query.Comments.Where(c => c.IdParent == null).Select(t => new GetPostCommentsDto
                 {
                     Id = t.Id,
                     CommentText = t.CommentText,
@@ -65,13 +65,14 @@ namespace Implementation.Queries.Post
                     Username = t.User?.Username,
                     CreatedAt = t.CreatedAt,
                     IsDeleted = t.IsDeleted,
+                    LikesCount = t.Likes.Count(),
                     Likes = t.Likes.Select(l => new GetCommentLikesDto
                     {
                         IdComment = l.IdComment,
                         IdUser = l.IdUser,
-                        Status = l.Status,
+                        Status = l.Status.ToString(),
                     }).ToList(),
-                    ChildrenComments = query.Comments.Where(c => c.IdParent == t.Id).Select(c => new GetCommentsDto
+                    ChildrenComments = query.Comments.Where(c => c.IdParent == t.Id).Select(c => new GetPostCommentsDto
                     {
                         Id = c.Id,
                         CommentText = c.CommentText,
@@ -80,11 +81,12 @@ namespace Implementation.Queries.Post
                         Username = c.User?.Username,
                         CreatedAt = c.CreatedAt,
                         IsDeleted = c.IsDeleted,
+                        LikesCount = c.Likes.Count(),
                         Likes = c.Likes.Select(l => new GetCommentLikesDto
                         {
                             IdComment = l.IdComment,
                             IdUser = l.IdUser,
-                            Status = l.Status,
+                            Status = l.Status.ToString(),
                         }).ToList(),
                     }).ToList(),
                 }).ToList(),

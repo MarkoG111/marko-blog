@@ -18,7 +18,7 @@ const PostLikeButtons = ({ post, idPost, onPostVote, commentsNumber }) => {
         >
           <FaThumbsUp className="text-xl" />
         </button>
-        <span className="ml-2">{post.likes && post.likes.filter((like) => like.status === 1).length}</span>
+        <span className="ml-2">{post.likes && post.likes.filter((like) => like.status === 'Liked').length}</span>
 
         <button
           type="button"
@@ -27,7 +27,7 @@ const PostLikeButtons = ({ post, idPost, onPostVote, commentsNumber }) => {
         >
           <FaThumbsDown className="ml-5 text-xl" />
         </button>
-        <span className="ml-2">{post.likes && post.likes.filter((like) => like.status === 2).length}</span>
+        <span className="ml-2">{post.likes && post.likes.filter((like) => like.status === 'Disliked').length}</span>
       </div>
     </div>
   )
@@ -38,7 +38,7 @@ PostLikeButtons.propTypes = {
     likes: PropTypes.arrayOf(
       PropTypes.shape({
         idUser: PropTypes.number.isRequired,
-        status: PropTypes.number.isRequired,
+        status: PropTypes.string.isRequired,
       })
     ).isRequired,
   }).isRequired,

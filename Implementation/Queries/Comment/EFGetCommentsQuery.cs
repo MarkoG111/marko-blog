@@ -59,7 +59,7 @@ namespace Implementation.Queries.Comment
                     {
                         IdComment = l.IdComment,
                         IdUser = l.IdUser,
-                        Status = l.Status,
+                        Status = l.Status.ToString(),
                     }).ToList()
                 }).ToList()
             };

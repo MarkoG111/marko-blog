@@ -10,6 +10,6 @@ namespace Application.DataTransfer.Comments
     {
         public int IdUser { get; set; }
         public int? IdComment { get; set; }
-        public LikeStatus Status { get; set; }
+        public string Status { get; set; }
     }
 }

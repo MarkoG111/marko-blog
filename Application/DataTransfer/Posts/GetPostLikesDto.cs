@@ -9,7 +9,7 @@ namespace Application.DataTransfer.Posts
     public class GetPostLikesDto
     {
         public int Id { get; set; }
-        public LikeStatus Status { get; set; }
+        public string Status { get; set; }
         public int IdUser { get; set; }
     }
 }
