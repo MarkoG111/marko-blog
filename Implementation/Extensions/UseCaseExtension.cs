@@ -17,7 +17,9 @@ namespace Implementation
             {
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreatePostCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePostCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalPostCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePostCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalPostCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOnePostQuery });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetPostsQuery });
 

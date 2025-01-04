@@ -11,6 +11,7 @@ namespace Application.DataTransfer.Posts
         public string ImageName { get; set; }
         public string Title { get; set; }
         public string Username { get; set; }
+        public DateTime DateCreated { get; set; }
         public IEnumerable<GetPostCategoriesDto> Categories { get; set; } = new List<GetPostCategoriesDto>();
     }
 }

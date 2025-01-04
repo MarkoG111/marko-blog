@@ -152,9 +152,6 @@ export default function UpdatePost() {
       CategoryIds: selectedCategories
     }
 
-    console.log(imagePreview);
-    
-
     try {
       const token = localStorage.getItem("token")
       if (!token) {
@@ -162,8 +159,6 @@ export default function UpdatePost() {
       }
 
       const url = currentUser.id == editData.idUser ? `/posts/${editData.id}/personal` : `/posts/${editData.id}`
-      console.log(editData);
-      
 
       const response = await fetch(url, {
         method: "PUT",

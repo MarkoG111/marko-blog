@@ -61,6 +61,7 @@ namespace Implementation.Queries.Post
                 {
                     Id = x.Id,
                     Title = x.Title,
+                    DateCreated = x.CreatedAt,
                     Username = x.User.Username,
                     ImageName = x.Image.ImagePath,
                     Categories = x.PostCategories.Select(y => new GetPostCategoriesDto

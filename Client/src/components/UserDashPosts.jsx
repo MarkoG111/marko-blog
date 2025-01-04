@@ -60,7 +60,15 @@ export default function UserDashPosts() {
         return
       }
 
-      const url = currentUser.id == idPostToDelete ? `/posts/personal/${idPostToDelete}` : `/posts/${idPostToDelete}`
+      const postToDelete = userPosts.find((post) => post.id === idPostToDelete)
+      if (!postToDelete) {
+        showError("Post not found")
+        return
+      }
+
+      const { idUser } = postToDelete
+
+      const url = currentUser.id === idUser ? `/posts/${idPostToDelete}/personal` : `/posts/${idPostToDelete}`
 
       const response = await fetch(url, {
         method: "DELETE",
