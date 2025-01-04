@@ -25,17 +25,15 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    try {
-      dispatch(signInStart())
-      setLoading(true)
+    dispatch(signInStart())
+    setLoading(true)
 
+    try {
       const response = await fetch('/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
-
-      setLoading(false)
 
       if (response.ok) {
         const { token } = await response.json()
@@ -48,14 +46,18 @@ export default function SignIn() {
 
         navigate('/')
       } else {
-        const data = await response.json()
-        
-        await handleApiError(response, showError)
-        dispatch(signInFailure(data.message))
+        const errors = await handleApiError(response, showError)
+        if (errors.length > 0) {
+          dispatch(signInFailure(errors))
+        }
       }
     } catch (error) {
-      showError('An error occurred while processing your request.')
-      dispatch(signInFailure(error.message))
+      if (!loading) {
+        showError("An error occurred while processing your request.")
+        dispatch(signInFailure(error.message))
+      }
+    } finally {
+      setLoading(false)
     }
   }
 

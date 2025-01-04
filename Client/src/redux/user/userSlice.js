@@ -33,7 +33,7 @@ const userSlice = createSlice({
     },
     signInFailure: (state, action) => {
       state.loading = false
-      state.error = action.payload
+      state.error = Array.isArray(action.payload) && action.payload.length ? action.payload : typeof action.payload === 'string' ? action.payload : "An unknown error occurred"
     },
 
     updateUserSuccess: (state, action) => {

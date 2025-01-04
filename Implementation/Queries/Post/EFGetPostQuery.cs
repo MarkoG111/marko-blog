@@ -52,7 +52,7 @@ namespace Implementation.Queries.Post
                 }).ToList(),
                 Likes = query.Likes.Select(w => new GetPostLikesDto
                 {
-                    Id = w.Id,
+                    IdPost = w.Post.Id,
                     Status = w.Status.ToString(),
                     IdUser = w.IdUser
                 }).ToList(),
