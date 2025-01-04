@@ -10,10 +10,12 @@ namespace Application.DataTransfer.Posts
     public class GetPostDetailsDto
     {
         public int Id { get; set; }
+        public int IdImage { get; set; }
         public string ImageName { get; set; }
         public string Title { get; set; }
-        public DateTime DateCreated { get; set; }
         public string Content { get; set; }
+        public DateTime DateCreated { get; set; }
+        public int IdUser { get; set; }
         public string Username { get; set; }
         public IEnumerable<GetPostCategoriesDto> Categories { get; set; } = new List<GetPostCategoriesDto>();
         public IEnumerable<GetPostLikesDto> Likes { get; set; } = new List<GetPostLikesDto>();

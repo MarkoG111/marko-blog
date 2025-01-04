@@ -149,8 +149,11 @@ export default function UpdatePost() {
       Title: e.target.elements.title.value,
       Content: content ? content : editData.content,
       IdImage: imagePreview?.id ? imagePreview?.id : editData.idImage,
-      PostCategories: selectedCategories
+      CategoryIds: selectedCategories
     }
+
+    console.log(imagePreview);
+    
 
     try {
       const token = localStorage.getItem("token")
@@ -158,7 +161,9 @@ export default function UpdatePost() {
         throw new Error("Token not found")
       }
 
-      const url = currentUser.id == postId ? `/posts/personal/${editData.id}` : `/posts/${editData.id}`
+      const url = currentUser.id == editData.idUser ? `/posts/${editData.id}/personal` : `/posts/${editData.id}`
+      console.log(editData);
+      
 
       const response = await fetch(url, {
         method: "PUT",

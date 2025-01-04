@@ -44,6 +44,8 @@ namespace Implementation.Queries.Post
                 Content = query.Content,
                 DateCreated = query.CreatedAt,
                 ImageName = query.Image.ImagePath,
+                IdImage = query.Image.Id,
+                IdUser = query.User.Id,
                 Username = query.User?.Username,
                 Categories = query.PostCategories.Select(x => new GetPostCategoriesDto
                 {
