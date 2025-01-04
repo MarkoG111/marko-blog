@@ -42,8 +42,10 @@ namespace Implementation.Queries.AuthorRequest
                 TotalCount = query.Count(),
                 Items = query.Skip(skipCount).Take(search.PerPage).Select(x => new GetAuthorRequestsDto
                 {
+                    Id = x.Id,
                     DateCreated = x.CreatedAt,
                     Reason = x.Reason,
+                    IdUser = x.User.Id,
                     Username = x.User.Username,
                     ProfilePicture = x.User.ProfilePicture,
                     Status = x.Status

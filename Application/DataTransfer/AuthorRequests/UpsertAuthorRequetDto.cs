@@ -10,7 +10,7 @@ namespace Application.DataTransfer.AuthorRequests
     {
         public int Id { get; set; }
         public RequestStatus Status { get; set; }
-        public string Reason { get; set; }
+        public string? Reason { get; set; }
         public int IdUser { get; set; }
         public int IdRole { get; set; }
     }
