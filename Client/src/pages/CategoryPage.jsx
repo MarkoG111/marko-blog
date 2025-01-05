@@ -40,16 +40,22 @@ export default function CategoryPage() {
     fetchCategory()
   }, [id, currentPage, showError])
 
+  const onPageChange = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= pageCount) {
+      setCurrentPage(pageNumber)
+    }
+  }
+
   return (
     <main className="max-w-6xl mx-auto min-h-screen p-3">
       <header className="dark:bg-gray-800 border border-teal-500 rounded-lg text-center mt-12">
-        <h1 className="text-3xl p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">{category && category.name}</h1>
+        <h1 className="text-3xl p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">{category && category.categoryName}</h1>
       </header>
 
-      {category && category.posts.length > 0 ? (
+      {category && category.items && category.items.length > 0 ? (
         <div className="dark:bg-gray-800 border border-teal-500 rounded-lg  my-12 w-full px-8 pb-8">
           <div className="flex flex-wrap">
-            {category.posts.map((post) => (
+            {category.items.map((post) => (
               <div key={post.id} className="dark:bg-gray-800 border border-teal-500 rounded-lg mt-12 w-full pb-8 mr-auto">
                 <div className="flex pt-4 pl-2">
                   <div>
@@ -78,7 +84,7 @@ export default function CategoryPage() {
           <div className="flex justify-center my-12">
             <Pagination
               currentPage={currentPage}
-              onPageChange={(page) => setCurrentPage(page)}
+              onPageChange={onPageChange}
               totalPages={pageCount}
               className="text-l"
             />

@@ -32,9 +32,10 @@ namespace API.Controllers
         }
 
         [HttpGet("/categories/{id}")]
-        public IActionResult Get(int id, [FromServices] IGetCategoryQuery query)
+        public IActionResult Get(int id, [FromServices] IGetCategoryQuery query, [FromQuery] int page = 1, [FromQuery] int perPage = 3)
         {
-            return Ok(_executor.ExecuteQuery(query, id));
+            var search = new CategorySearch { Id = id, Page = page, PerPage = perPage };
+            return Ok(_executor.ExecuteQuery(query, search));
         }
 
         [HttpPut("/categories/{id}")]

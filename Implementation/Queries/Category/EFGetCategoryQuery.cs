@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.DataTransfer.Categories;
 using Application.DataTransfer.Posts;
 using Application.Exceptions;
+using Application.Queries;
 using Application.Queries.Category;
 using Application.Searches;
 using EFDataAccess;
@@ -22,16 +23,12 @@ namespace Implementation.Queries.Category
         }
 
         public int Id => (int)UseCaseEnum.EFGetOneCategoryQuery;
-
         public string Name => UseCaseEnum.EFGetOneCategoryQuery.ToString();
 
-        public GetCategoryDto Execute(int id)
+        public CategoryPostsResponse Execute(CategorySearch search)
         {
-            return Execute(new CategorySearch { Id = id, Page = 1, PerPage = 3 });
-        }
+            search.Page = search.Page > 0 ? search.Page : 1;
 
-        public GetCategoryDto Execute(CategorySearch search)
-        {
             var category = _context.Categories
                 .Include(x => x.CategoryPosts)
                 .ThenInclude(x => x.Post)
@@ -48,10 +45,15 @@ namespace Implementation.Queries.Category
             }
 
             var postsQuery = category.CategoryPosts.Select(x => x.Post).AsQueryable();
-
             var totalPosts = postsQuery.Count();
 
-            var paginatedPosts = postsQuery.Select(post => new GetPostInCategoryDto
+            int pageCount = (int)Math.Ceiling((double)totalPosts / search.PerPage);
+
+            search.Page = search.Page > pageCount ? pageCount : search.Page;
+
+            var skipCount = search.PerPage * (search.Page - 1);
+
+            var paginatedPosts = postsQuery.Skip(skipCount).Take(search.PerPage).Select(post => new GetPostInCategoryDto
             {
                 Id = post.Id,
                 Title = post.Title,
@@ -66,16 +68,15 @@ namespace Implementation.Queries.Category
                 }).ToList()
             }).ToList();
 
-            return new GetCategoryDto
+            return new CategoryPostsResponse
             {
-                Id = category.Id,
-                Name = category.Name,
-                Posts = paginatedPosts,
-                TotalCount = totalPosts,
+                CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
-                CurrentPage = search.Page
+                TotalCount = totalPosts,
+                Items = paginatedPosts,
+                CategoryName = category.Name,
+                CategoryId = category.Id
             };
         }
-
     }
 }
