@@ -39,12 +39,17 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
 
         if (response.ok) {
           const data = await response.json()
-          const allChildComments = data.comments.flatMap(comment => comment.childrenComments || [])
+          const mainComments = data.comments
+          const allChildComments = mainComments.flatMap(comment => comment.childrenComments || [])
 
           setPost(data)
-          setComments(data.comments)
+          setComments(mainComments)
           setChildComments(allChildComments)
-          handleCommentsNumberChange(data.comments.length + allChildComments.length)
+
+          const mainCommentsNotDeleted = mainComments.filter(comment => !comment.isDeleted).length
+          const childCommentsNotDeleted = allChildComments.filter(comment => !comment.isDeleted).length
+
+          handleCommentsNumberChange(mainCommentsNotDeleted + childCommentsNotDeleted)
         } else {
           await handleApiError(response, showError)
         }
@@ -306,12 +311,12 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
 
       if (response.ok) {
         const updatedComments = comments.map(comment =>
-          comment.id === comment.id ? { ...comment, isDeleted: 1 } : comment
+          comment.id === commentToDelete.id ? { ...comment, isDeleted: 1 } : comment
         )
         setComments(updatedComments)
 
         const updatedChildComments = childComments.map(comment =>
-          comment.id === comment.id ? { ...comment, isDeleted: 1 } : comment
+          comment.id === commentToDelete.id ? { ...comment, isDeleted: 1 } : comment
         )
         setChildComments(updatedChildComments)
 
