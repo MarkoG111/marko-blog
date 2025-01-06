@@ -280,7 +280,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
     )
   }
 
-  const handleDeleteComment = async (idComment) => {
+  const handleDeleteComment = async (comment) => {
     setShowModalToDeleteComment(false)
 
     try {
@@ -289,11 +289,14 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
         showError("Token not found")
         return
       }
+
       const body = JSON.stringify({
         isDeleted: 1
       })
 
-      const response = await fetch(`/comments/${idComment}`, {
+      const url = currentUser.id === comment.idUser ? `/comments/${comment.id}/personal` : `/comments/${comment.id}`
+
+      const response = await fetch(url, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -303,12 +306,12 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
 
       if (response.ok) {
         const updatedComments = comments.map(comment =>
-          comment.id === idComment ? { ...comment, isDeleted: 1 } : comment
+          comment.id === comment.id ? { ...comment, isDeleted: 1 } : comment
         )
         setComments(updatedComments)
 
         const updatedChildComments = childComments.map(comment =>
-          comment.id === idComment ? { ...comment, isDeleted: 1 } : comment
+          comment.id === comment.id ? { ...comment, isDeleted: 1 } : comment
         )
         setChildComments(updatedChildComments)
 
@@ -355,9 +358,9 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
               onAddChildComment={(e, idComment, childComment) => addChildComment(e, idComment, childComment)}
               childrenComments={childComments}
               onEditComment={handleEditComment}
-              onDeleteComment={(idComment) => {
+              onDeleteComment={(comment) => {
                 setShowModalToDeleteComment(true)
-                setCommentToDelete(idComment)
+                setCommentToDelete(comment)
               }}
               setCommentToDelete={setCommentToDelete}
               setShowModalToDeleteComment={setShowModalToDeleteComment}

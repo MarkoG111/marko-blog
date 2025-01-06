@@ -68,7 +68,7 @@ namespace API.Controllers
         public IActionResult DeletePersonalComment(int id, [FromServices] IDeletePersonalCommentCommand command)
         {
             _executor.ExecuteCommand(command, id);
-            return Ok(id);
+            return NoContent();
         }
     }
 }

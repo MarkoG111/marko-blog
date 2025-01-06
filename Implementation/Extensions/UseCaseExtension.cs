@@ -25,6 +25,8 @@ namespace Implementation
 
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateCommentCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateCommentCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalCommentCommand });
+                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalCommentCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeleteCommentCommand });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCommentQuery });
                 list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCommentsQuery });

@@ -142,7 +142,7 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
                       {currentUser && (currentUser.id == comment.idUser || currentUser.roleName == 'Admin') && (
                         <>
                           <button type="button" className="text-gray-400 hover:text-blue-500 ml-6" onClick={() => openEdit()}>Edit</button>
-                          <button type="button" className="text-gray-400 hover:text-red-500 ml-6" onClick={() => onDeleteComment(comment.id)}>Delete</button>
+                          <button type="button" className="text-gray-400 hover:text-red-500 ml-6" onClick={() => onDeleteComment(comment)}>Delete</button>
                         </>
                       )}
                     </div>
