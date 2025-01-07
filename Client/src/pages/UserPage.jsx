@@ -197,7 +197,7 @@ export default function UserPage() {
               <>
                 <div className="dark:bg-gray-800 border border-teal-500 rounded-lg text-left mt-12 w-1/2">
                   <h3 className="p-4 md:pt-3 md:pb-8 md:pl-8 sm:text-2xl md:text-3xl font-bold">Recent comments</h3>
-                  <hr className="border-t-1 border-gray-300" />
+                  <hr className="border-t-1 border-teal-300" />
                   {user && user.userComments.map((comment, index) => (
                     index < 2 &&
                     <a href={`/comment/${comment.id}`} key={comment.id}>
