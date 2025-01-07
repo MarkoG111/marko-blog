@@ -44,12 +44,3 @@ export const updateCommentLikes = (comments, idComment, data, userId) => {
     return comment
   })
 }
-
-export const handleOptimisticUpdate = (comments, setComments, idComment, type) => {
-  const updatedComments = comments.map(comment =>
-    comment.id === idComment
-      ? { ...comment, likesCount: comment.likesCount + (type === 'like' ? 1 : -1) }
-      : comment
-  )
-  setComments(updatedComments)
-}

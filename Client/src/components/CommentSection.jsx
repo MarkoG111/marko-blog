@@ -11,7 +11,6 @@ import {
   checkIfAlreadyVoted,
   removeDislikeOrLikeIfPresent,
   updateCommentLikes,
-  handleOptimisticUpdate
 } from '../utils/commentUtils'
 export default function CommentSection({ idPost, onCommentsNumberChange }) {
   const { currentUser } = useSelector(state => state.user)
@@ -45,6 +44,9 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
           setPost(data)
           setComments(mainComments)
           setChildComments(allChildComments)
+
+          console.log(allChildComments);
+          
 
           const mainCommentsNotDeleted = mainComments.filter(comment => !comment.isDeleted).length
           const childCommentsNotDeleted = allChildComments.filter(comment => !comment.isDeleted).length
@@ -151,31 +153,25 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
     }
   }
 
-  const handleLikeCommentOptimistic = (idComment) => {
-    handleOptimisticUpdate(comments, setComments, idComment, 'like')
-    handleLikeComment(idComment)
-  }
+  const handleVoteComment = async (idComment, voteType) => {
+    const token = localStorage.getItem("token")
+    if (!token) {
+      showError("Token not found")
+      return
+    }
 
-  const handleLikeComment = async (idComment) => {
+    const isAlreadyVoted = checkIfAlreadyVoted(comments, idComment, currentUser.id, voteType) || checkIfAlreadyVoted(childComments, idComment, currentUser.id, voteType)
+
+    if (isAlreadyVoted) {
+      return
+    }
+
     try {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        showError("You must be logged in to like a comment.")
-        return
-      }
-
-      const isAlreadyLiked = checkIfAlreadyVoted(comments, idComment, currentUser.id, 1)
-      const isAlreadyLikedChild = checkIfAlreadyVoted(childComments, idComment, currentUser.id, 1)
-
-      if (isAlreadyLiked || isAlreadyLikedChild) {
-        return
-      }
-
       const body = JSON.stringify({
         IdUser: currentUser.id,
         IdPost: idPost,
         IdComment: idComment,
-        Status: 1,
+        Status: voteType,
       })
 
       const response = await fetch(`/comments/${idComment}/like`, {
@@ -184,92 +180,27 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
         },
-        body: body
+        body
       })
 
       if (response.ok) {
         const data = await response.json()
 
-        // Remove dislike if present
-        const updatedComments = removeDislikeOrLikeIfPresent(comments, idComment, currentUser.id, 2)
+        const updatedComments = updateCommentLikes(removeDislikeOrLikeIfPresent(comments, idComment, currentUser.id, voteType === 1 ? 2 : 1), idComment, data, currentUser.id)
+        const updatedChildComments = updateCommentLikes(removeDislikeOrLikeIfPresent(childComments, idComment, currentUser.id, voteType === 1 ? 2 : 1), idComment, data, currentUser.id)
+        
         setComments(updatedComments)
-
-        const updatedChildComments = removeDislikeOrLikeIfPresent(childComments, idComment, currentUser.id, 2)
         setChildComments(updatedChildComments)
-
-        // Update comment likes
-        const updatedCommentsWithLikes = updateCommentLikes(updatedComments, idComment, data, currentUser.id)
-        setComments(updatedCommentsWithLikes)
-
-        const updatedChildCommentsWithLikes = updateCommentLikes(updatedChildComments, idComment, data, currentUser.id)
-        setChildComments(updatedChildCommentsWithLikes)
       } else {
         await handleApiError(response, showError)
       }
     } catch (error) {
-      showError(error.message || "An unknown error occurred.")
+      showError(error.message)
     }
   }
 
-  const handleDislikeCommentOptimistic = (idComment) => {
-    handleOptimisticUpdate(comments, setComments, idComment, 'dislike')
-    handleDislikeComment(idComment)
-  }
-
-  const handleDislikeComment = async (idComment) => {
-    try {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        showError("You must be logged in to dislike a comment.")
-        return
-      }
-
-      const isAlreadyDisliked = checkIfAlreadyVoted(comments, idComment, currentUser.id, 2)
-      const isAlreadyDislikedChild = checkIfAlreadyVoted(childComments, idComment, currentUser.id, 2)
-
-      if (isAlreadyDisliked || isAlreadyDislikedChild) {
-        return
-      }
-
-      const body = JSON.stringify({
-        IdUser: currentUser.id,
-        IdPost: idPost,
-        IdComment: idComment,
-        Status: 2
-      })
-
-      const response = await fetch(`/comments/${idComment}/like`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: body
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-
-        // Remove like if present
-        const updatedComments = removeDislikeOrLikeIfPresent(comments, idComment, currentUser.id, 1)
-        setComments(updatedComments)
-
-        const updatedChildComments = removeDislikeOrLikeIfPresent(childComments, idComment, currentUser.id, 1)
-        setChildComments(updatedChildComments)
-
-        // Update comment dislikes
-        const updatedCommentsWithLikes = updateCommentLikes(updatedComments, idComment, data, currentUser.id)
-        setComments(updatedCommentsWithLikes)
-
-        const updatedChildCommentsWithLikes = updateCommentLikes(updatedChildComments, idComment, data, currentUser.id)
-        setChildComments(updatedChildCommentsWithLikes)
-      } else {
-        await handleApiError(response, showError)
-      }
-    } catch (error) {
-      showError(error.message || "An unknown error occurred.")
-    }
-  }
+  const handleLikeComment = (idComment) => handleVoteComment(idComment, 1)
+  const handleDislikeComment = (idComment) => handleVoteComment(idComment, 2)
 
   const handleEditComment = async (comment, editedText) => {
     setComments(
@@ -358,8 +289,8 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
           {comments.map(comment => (
             <Comment key={comment.id}
               comment={comment}
-              onLikeComment={handleLikeCommentOptimistic}
-              onDislikeComment={handleDislikeCommentOptimistic}
+              onLikeComment={handleLikeComment}
+              onDislikeComment={handleDislikeComment}
               onAddChildComment={(e, idComment, childComment) => addChildComment(e, idComment, childComment)}
               childrenComments={childComments}
               onEditComment={handleEditComment}

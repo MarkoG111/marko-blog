@@ -55,7 +55,7 @@ namespace Implementation.Queries.Post
                 Likes = query.Likes.Select(w => new GetPostLikesDto
                 {
                     IdPost = w.Post.Id,
-                    Status = w.Status.ToString(),
+                    Status = w.Status,
                     IdUser = w.IdUser
                 }).ToList(),
                 Comments = query.Comments.Where(c => c.IdParent == null).Select(t => new GetPostCommentsDto
@@ -72,7 +72,7 @@ namespace Implementation.Queries.Post
                     {
                         IdComment = l.IdComment,
                         IdUser = l.IdUser,
-                        Status = l.Status.ToString(),
+                        Status = l.Status,
                     }).ToList(),
                     ChildrenComments = query.Comments.Where(c => c.IdParent == t.Id).Select(c => new GetPostCommentsDto
                     {
@@ -88,7 +88,7 @@ namespace Implementation.Queries.Post
                         {
                             IdComment = l.IdComment,
                             IdUser = l.IdUser,
-                            Status = l.Status.ToString(),
+                            Status = l.Status,
                         }).ToList(),
                     }).ToList(),
                 }).ToList(),
