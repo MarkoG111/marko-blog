@@ -43,10 +43,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
 
           setPost(data)
           setComments(mainComments)
-          setChildComments(allChildComments)
-
-          console.log(allChildComments);
-          
+          setChildComments(allChildComments)          
 
           const mainCommentsNotDeleted = mainComments.filter(comment => !comment.isDeleted).length
           const childCommentsNotDeleted = allChildComments.filter(comment => !comment.isDeleted).length

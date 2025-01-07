@@ -9,23 +9,23 @@ export const handleApiError = async (response, showError) => {
       errorData.errors.forEach((err) => {
         errors.push(err.ErrorMessage)
         showError(err.ErrorMessage)
-      });
+      })
     } else if (typeof errorData.errors === 'object') {
       Object.entries(errorData.errors).forEach(([field, fieldErrors]) => {
         fieldErrors.forEach((err) => {
           errors.push(err)
           showError(err)
-        });
-      });
+        })
+      })
     } else {
       const errorMessage = errorData.title || "Error processing the response"
       errors.push(errorMessage)
       showError(errorMessage)
     }
 
-    return errors;
+    return errors
   } catch (e) {
     showError("Error processing the response")
     return ["Error processing the response"]
   }
-};
+}
