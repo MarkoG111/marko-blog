@@ -5,6 +5,7 @@ import { Button, Modal, TextInput } from "flowbite-react"
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
+import { useSuccess } from "../contexts/SuccessContext"
 
 export default function DashProfile() {
   const { currentUser, loading } = useSelector((state) => state.user)
@@ -14,10 +15,11 @@ export default function DashProfile() {
   const [showModal, setShowModal] = useState(false)
 
   const filePickerRef = useRef()
-  
+
   const dispatch = useDispatch()
 
   const { showError } = useError()
+  const { showSuccess } = useSuccess()
 
   const handleImagechange = (e) => {
     const file = e.target.files[0]
@@ -74,6 +76,7 @@ export default function DashProfile() {
         const updatedProfilePicture = responseData.profilePicture
         dispatch(updateUserSuccess(responseData))
         dispatch(updateProfilePictureSuccess(updatedProfilePicture))
+        showSuccess("You have successfully changed profile")
       } else {
         await handleApiError(response, showError)
       }
@@ -101,6 +104,7 @@ export default function DashProfile() {
 
       if (response.ok) {
         dispatch(deleteUserSuccess())
+        showSuccess("You have successfully deleted a profile")
       } else {
         dispatch(deleteUserFailure())
         await handleApiError(response, showError)

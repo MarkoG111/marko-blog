@@ -14,9 +14,9 @@ namespace Application.DataTransfer.Users
         public string LastName { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
+        public string? Password { get; set; }
         public IFormFile? Image { get; set; }
         public int IdRole { get; set; }
-        public IEnumerable<GetUserUseCaseDto> UserUseCases { get; set; }
+        public IEnumerable<GetUserUseCaseDto>? UserUseCases { get; set; }
     }
 }

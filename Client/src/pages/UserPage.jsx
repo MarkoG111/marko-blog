@@ -8,6 +8,7 @@ import { Button } from "flowbite-react"
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from "react-redux"
 
 export default function UserPage() {
   const { id } = useParams()
@@ -18,6 +19,10 @@ export default function UserPage() {
   const { showError } = useError()
 
   const navigate = useNavigate()
+
+  const { currentUser } = useSelector((state) => state.user)
+
+  const isCurrentUser = currentUser && currentUser.id === parseInt(id)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -134,7 +139,7 @@ export default function UserPage() {
             <RiUserFollowLine className="h-6 w-6 text-gray-400 dark:text-gray-200 mb-3 ml-4" /> <span>{user && user.followingCount} following</span>
           </div>
           <div className="flex -mt-9 gap-x-4 justify-end mr-8">
-            {isFollowing ? (
+            {!isCurrentUser && (isFollowing ? (
               <Button
                 type="button"
                 gradientDuoTone="purpleToPink"
@@ -151,10 +156,10 @@ export default function UserPage() {
               >
                 <FaUserPlus className="h-6 w-6 text-white dark:text-gray-200 mr-4" /> Follow
               </Button>
-            )}
+            ))}
           </div>
 
-          <div className="flex justify-center pb-5 pt-20">
+          <div className="flex justify-center pb-5 pt-32">
             <span className="text-2xl pr-4 pt-1"><HiOutlineMail /></span>
             <p className="text-xl">{user && user.email}</p>
           </div>
