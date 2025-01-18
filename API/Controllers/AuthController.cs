@@ -58,9 +58,10 @@ namespace API.Controllers
                     Role = role
                 };
 
-                newUser.UpdateUseCasesForRole(_context);
-
                 _context.Users.Add(newUser);
+                await _context.SaveChangesAsync();
+
+                newUser.UpdateUseCasesForRole(_context);
                 await _context.SaveChangesAsync();
 
                 var token = _jwtManager.GenerateToken(_jwtManager.GenerateClaims(newUser));
