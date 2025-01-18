@@ -19,6 +19,7 @@ namespace Implementation.Commands.User
         private readonly BlogContext _context;
         private readonly RegisterUserValidator _validator;
         private readonly IEmailSender _sender;
+        private const string DefaultProfilePictureUrl = "https://i0.wp.com/florrycreativecare.com/wp-content/uploads/2020/08/blank-profile-picture-mystery-man-avatar-973460.jpg?ssl=1";
 
         public EFRegisterUserCommand(BlogContext context, IEmailSender sender, RegisterUserValidator validator)
         {
@@ -29,7 +30,7 @@ namespace Implementation.Commands.User
 
         public int Id => (int)UseCaseEnum.EFRegisterUserCommand;
         public string Name => UseCaseEnum.EFRegisterUserCommand.ToString();
-        
+
         public void Execute(RegisterUserDto request)
         {
             _validator.ValidateAndThrow(request);
@@ -40,24 +41,52 @@ namespace Implementation.Commands.User
                 LastName = request.LastName,
                 Username = request.Username,
                 Email = request.Email,
-                Password = request.Password,
-                ProfilePicture = "https://i0.wp.com/florrycreativecare.com/wp-content/uploads/2020/08/blank-profile-picture-mystery-man-avatar-973460.jpg?ssl=1",
-                IdRole = 3
+                Password = HashPassword(request.Password),
+                ProfilePicture = DefaultProfilePictureUrl,
+                IdRole = (int)RoleEnum.Admin 
             };
 
-            user.Password = EasyEncryption.SHA.ComputeSHA256Hash(request.Password);
+            using var transaction = _context.Database.BeginTransaction();
 
-            user.AddDefaultUseCasesForRole();
-
-            _context.Users.Add(user);
-            _context.SaveChanges();
-
-            _sender.Send(new SendEmailDto
+            try
             {
-                Subject = "Registration",
-                Content = "<h2>Successfully Registered</h2>",
-                SendTo = request.Email
-            });
+                _context.Users.Add(user);
+                _context.SaveChanges();
+
+                user.UpdateUseCasesForRole(_context);
+                _context.SaveChanges();
+
+                transaction.Commit();
+
+                SendRegistrationEmail(user.Email);
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception("An error occurred while registering the user.", ex);
+            }
+        }
+
+        private void SendRegistrationEmail(string email)
+        {
+            try
+            {
+                _sender.Send(new SendEmailDto
+                {
+                    Subject = "Registration",
+                    Content = "<h2>Successfully Registered</h2>",
+                    SendTo = email
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to send email to {email}: {ex.Message}");
+            }
+        }
+
+        private string HashPassword(string password)
+        {
+            return EasyEncryption.SHA.ComputeSHA256Hash(password);
         }
     }
 }

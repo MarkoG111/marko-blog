@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Implementation.Queries.Comment
 {
-    public class EFGetCommentQuery : IGetCommentQuery
+    public class EFGetOneCommentQuery : IGetCommentQuery
     {
         private readonly BlogContext _context;
 
-        public EFGetCommentQuery(BlogContext context)
+        public EFGetOneCommentQuery(BlogContext context)
         {
             _context = context;
         }

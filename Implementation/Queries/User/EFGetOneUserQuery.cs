@@ -13,11 +13,11 @@ using EFDataAccess;
 
 namespace Implementation.Queries.User
 {
-    public class EFGetUserQuery : IGetUserQuery
+    public class EFGetOneUserQuery : IGetUserQuery
     {
         private readonly BlogContext _context;
 
-        public EFGetUserQuery(BlogContext context)
+        public EFGetOneUserQuery(BlogContext context)
         {
             _context = context;
         }

@@ -1,142 +1,158 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
 using Domain;
+using EFDataAccess;
 
 namespace Implementation
 {
     public static class UseCaseExtension
     {
-        public static void AddDefaultUseCasesForRole(this User user)
+        public static void UpdateUseCasesForRole(this User user, BlogContext context)
         {
-            var list = new HashSet<UserUseCase>();
+            var currentUseCaseIds = context.UserUseCases.Where(uc => uc.IdUser == user.Id).Select(uc => uc.IdUseCase).ToHashSet();
 
-            if (user.IdRole == (int)RoleEnum.Admin)
+            var newUseCases = user.IdRole switch
             {
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreatePostCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePostCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalPostCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePostCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalPostCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOnePostQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetPostsQuery });
+                (int)RoleEnum.Admin => new HashSet<int>
+                {
+                    (int)UseCaseEnum.EFCreatePostCommand,
+                    (int)UseCaseEnum.EFUpdatePostCommand,
+                    (int)UseCaseEnum.EFUpdatePersonalPostCommand,
+                    (int)UseCaseEnum.EFDeletePostCommand,
+                    (int)UseCaseEnum.EFDeletePersonalPostCommand,
+                    (int)UseCaseEnum.EFGetOnePostQuery,
+                    (int)UseCaseEnum.EFGetPostsQuery,
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateCommentCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateCommentCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalCommentCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalCommentCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeleteCommentCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCommentQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCommentsQuery });
+                    (int)UseCaseEnum.EFCreateCommentCommand,
+                    (int)UseCaseEnum.EFUpdateCommentCommand,
+                    (int)UseCaseEnum.EFUpdatePersonalCommentCommand,
+                    (int)UseCaseEnum.EFDeletePersonalCommentCommand,
+                    (int)UseCaseEnum.EFDeleteCommentCommand,
+                    (int)UseCaseEnum.EFGetOneCommentQuery,
+                    (int)UseCaseEnum.EFGetCommentsQuery,
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalCommentCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalCommentCommand });
+                    (int)UseCaseEnum.EFCreateUserCommand,
+                    (int)UseCaseEnum.EFUpdateUserCommand,
+                    (int)UseCaseEnum.EFDeleteUserCommand,
+                    (int)UseCaseEnum.EFGetOneUserQuery,
+                    (int)UseCaseEnum.EFGetUsersQuery,
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetUseCaseLogQuery });
+                    (int)UseCaseEnum.EFLikePost,
+                    (int)UseCaseEnum.EFLikeComment,
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateUserCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateUserCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeleteUserCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneUserQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetUsersQuery });
+                    (int)UseCaseEnum.EFGetUseCaseLogQuery,
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikePost });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikeComment });
+                    (int)UseCaseEnum.EFFollowCommand,
+                    (int)UseCaseEnum.EFUnfollowCommand,
+                    (int)UseCaseEnum.EFCheckFollowStatusQuery,
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFFollowCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUnfollowCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCheckFollowStatusQuery });
+                    (int)UseCaseEnum.EFCreateCategoryCommand,
+                    (int)UseCaseEnum.EFUpdateCategoryCommand,
+                    (int)UseCaseEnum.EFDeleteCategoryCommand,
+                    (int)UseCaseEnum.EFGetOneCategoryQuery,
+                    (int)UseCaseEnum.EFGetCategoriesQuery,
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateCategoryCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateCategoryCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeleteCategoryCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCategoryQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCategoriesQuery });
+                    (int)UseCaseEnum.EFUpdateAuthorRequestCommand,
+                    (int)UseCaseEnum.EFGetAuthorRequestsQuery,
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateAuthorRequestCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetAuthorRequestsQuery });
+                    (int)UseCaseEnum.EFCreateNotificationCommand,
+                    (int)UseCaseEnum.EFGetNotificationsQuery,
+                    (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand,
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetNotificationsQuery });
+                    (int)UseCaseEnum.EFGetFollowersQuery,
+                    (int)UseCaseEnum.EFGetFollowingsQuery
+                },
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand });
+                (int)RoleEnum.Author => new HashSet<int>
+                {
+                    (int)UseCaseEnum.EFCreatePostCommand,
+                    (int)UseCaseEnum.EFGetOnePostQuery,
+                    (int)UseCaseEnum.EFGetPostsQuery,
+                    (int)UseCaseEnum.EFUpdatePersonalPostCommand,
+                    (int)UseCaseEnum.EFDeletePersonalPostCommand,
 
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowersQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowingsQuery });
+                    (int)UseCaseEnum.EFCreateCommentCommand,
+                    (int)UseCaseEnum.EFGetOneCommentQuery,
+                    (int)UseCaseEnum.EFGetCommentsQuery,
+                    (int)UseCaseEnum.EFUpdatePersonalCommentCommand,
+                    (int)UseCaseEnum.EFDeletePersonalCommentCommand,
+
+                    (int)UseCaseEnum.EFLikePost,
+                    (int)UseCaseEnum.EFLikeComment,
+
+                    (int)UseCaseEnum.EFUpdateUserCommand,
+                    (int)UseCaseEnum.EFGetOneUserQuery,
+                    (int)UseCaseEnum.EFGetUsersQuery,
+
+                    (int)UseCaseEnum.EFGetOneCategoryQuery,
+                    (int)UseCaseEnum.EFGetCategoriesQuery,
+
+                    (int)UseCaseEnum.EFUpdateAuthorRequestCommand,
+
+                    (int)UseCaseEnum.EFFollowCommand,
+                    (int)UseCaseEnum.EFUnfollowCommand,
+                    (int)UseCaseEnum.EFCheckFollowStatusQuery,
+
+                    (int)UseCaseEnum.EFCreateNotificationCommand,
+                    (int)UseCaseEnum.EFGetNotificationsQuery,
+                    (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand,
+
+                    (int)UseCaseEnum.EFGetFollowersQuery,
+                    (int)UseCaseEnum.EFGetFollowingsQuery
+                },
+
+                (int)RoleEnum.User => new HashSet<int>
+                {
+                    (int)UseCaseEnum.EFGetOnePostQuery,
+                    (int)UseCaseEnum.EFGetPostsQuery,
+
+                    (int)UseCaseEnum.EFCreateCommentCommand,
+                    (int)UseCaseEnum.EFGetOneCommentQuery,
+                    (int)UseCaseEnum.EFGetCommentsQuery,
+                    (int)UseCaseEnum.EFUpdatePersonalCommentCommand,
+                    (int)UseCaseEnum.EFDeletePersonalCommentCommand,
+
+                    (int)UseCaseEnum.EFLikePost,
+                    (int)UseCaseEnum.EFLikeComment,
+
+                    (int)UseCaseEnum.EFUpdateUserCommand,
+                    (int)UseCaseEnum.EFGetOneUserQuery,
+                    (int)UseCaseEnum.EFGetUsersQuery,
+
+                    (int)UseCaseEnum.EFGetOneCategoryQuery,
+                    (int)UseCaseEnum.EFGetCategoriesQuery,
+
+                    (int)UseCaseEnum.EFCreateAuthorRequestCommand,
+
+                    (int)UseCaseEnum.EFFollowCommand,
+                    (int)UseCaseEnum.EFUnfollowCommand,
+                    (int)UseCaseEnum.EFCheckFollowStatusQuery,
+
+                    (int)UseCaseEnum.EFCreateNotificationCommand,
+                    (int)UseCaseEnum.EFGetNotificationsQuery,
+                    (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand,
+
+                    (int)UseCaseEnum.EFGetFollowersQuery,
+                    (int)UseCaseEnum.EFGetFollowingsQuery
+                },
+            };
+
+            var useCasesToAdd = newUseCases.Where(useCaseId => !currentUseCaseIds.Contains(useCaseId)).Select(useCaseId => new UserUseCase { IdUser = user.Id, IdUseCase = useCaseId }).ToList();
+
+            if (useCasesToAdd.Any())
+            {
+                context.UserUseCases.AddRange(useCasesToAdd);
             }
 
-            else if (user.IdRole == (int)RoleEnum.Author)
+            var useCasesToRemove = context.UserUseCases.Where(uc => uc.IdUser == user.Id && !newUseCases.Contains(uc.IdUseCase)).ToList();
+
+            if (useCasesToRemove.Any())
             {
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreatePostCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalPostCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalPostCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOnePostQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetPostsQuery });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCommentsQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalCommentCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalCommentCommand });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikePost });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikeComment });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateUserCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneUserQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetUsersQuery });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCategoryQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCategoriesQuery });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFFollowCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUnfollowCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCheckFollowStatusQuery });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateNotificationCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetNotificationsQuery });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowersQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowingsQuery });
+                context.UserUseCases.RemoveRange(useCasesToRemove);
             }
 
-            else if (user.IdRole == (int)RoleEnum.User)
-            {
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOnePostQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetPostsQuery });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneCategoryQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCategoriesQuery });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateCommentCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdatePersonalCommentCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFDeletePersonalCommentCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetCommentsQuery });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUpdateUserCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetOneUserQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetUsersQuery });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikePost });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFLikeComment });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateAuthorRequestCommand });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFFollowCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFUnfollowCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCheckFollowStatusQuery });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFCreateNotificationCommand });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetNotificationsQuery });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFMarkAllNotificationsAsReadCommand });
-
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowersQuery });
-                list.Add(new UserUseCase { IdUseCase = (int)UseCaseEnum.EFGetFollowingsQuery });
-            }
-
-            user.UserUseCases = list;
+            context.SaveChanges();
         }
     }
 }

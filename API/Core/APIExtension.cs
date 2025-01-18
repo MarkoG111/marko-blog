@@ -104,12 +104,12 @@ namespace API.Core
             services.AddTransient<IGetPostQuery, EFGetPostQuery>();
 
             services.AddTransient<IGetCategoriesQuery, EFGetCategoriesQuery>();
-            services.AddTransient<IGetCategoryQuery, EFGetCategoryQuery>();
+            services.AddTransient<IGetCategoryQuery, EFGetOneCategoryQuery>();
 
-            services.AddTransient<IGetCommentQuery, EFGetCommentQuery>();
+            services.AddTransient<IGetCommentQuery, EFGetOneCommentQuery>();
             services.AddTransient<IGetCommentsQuery, EFGetCommentsQuery>();
 
-            services.AddTransient<IGetUserQuery, EFGetUserQuery>();
+            services.AddTransient<IGetUserQuery, EFGetOneUserQuery>();
             services.AddTransient<IGetUsersQuery, EFGetUsersQuery>();
 
             services.AddTransient<IGetAuthorRequestsQuery, EFGetAuthorRequestsQuery>();

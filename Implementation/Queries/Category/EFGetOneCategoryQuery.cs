@@ -13,11 +13,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Implementation.Queries.Category
 {
-    public class EFGetCategoryQuery : IGetCategoryQuery
+    public class EFGetOneCategoryQuery : IGetCategoryQuery
     {
         private readonly BlogContext _context;
 
-        public EFGetCategoryQuery(BlogContext context)
+        public EFGetOneCategoryQuery(BlogContext context)
         {
             _context = context;
         }

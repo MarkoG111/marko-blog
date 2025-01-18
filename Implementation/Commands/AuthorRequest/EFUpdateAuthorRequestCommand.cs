@@ -38,25 +38,21 @@ namespace Implementation.Commands.AuthorRequest
 
             var user = _context.Users.FirstOrDefault(x => x.Id == authorRequest.IdUser);
 
-            if (request.Status == RequestStatus.Accepted)
+            if (user != null)
             {
-                if (user != null)
+                if (request.Status == RequestStatus.Accepted)
+                {
+                    user.IdRole = request.IdRole;
+                    user.UpdateUseCasesForRole(_context);
+                }
+
+                if (request.Status == RequestStatus.Rejected)
                 {
                     user.IdRole = request.IdRole;
                 }
+
+                _context.SaveChanges();
             }
-
-            if (request.Status == RequestStatus.Rejected)
-            {
-                if (user != null)
-                {
-                    user.IdRole = request.IdRole;
-                }
-            }
-
-            user.AddDefaultUseCasesForRole();
-
-            _context.SaveChanges();
         }
     }
 }

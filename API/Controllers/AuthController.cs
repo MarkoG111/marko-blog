@@ -58,7 +58,7 @@ namespace API.Controllers
                     Role = role
                 };
 
-                newUser.AddDefaultUseCasesForRole();
+                newUser.UpdateUseCasesForRole(_context);
 
                 _context.Users.Add(newUser);
                 await _context.SaveChangesAsync();
