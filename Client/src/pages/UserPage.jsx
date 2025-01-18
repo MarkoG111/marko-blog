@@ -7,6 +7,7 @@ import { FaUserPlus } from "react-icons/fa6"
 import { Button } from "flowbite-react"
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
+import { useNavigate } from 'react-router-dom'
 
 export default function UserPage() {
   const { id } = useParams()
@@ -15,6 +16,8 @@ export default function UserPage() {
   const [isFollowing, setIsFollowing] = useState(false)
 
   const { showError } = useError()
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -55,7 +58,7 @@ export default function UserPage() {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        throw new Error("Token not found")
+        navigate("/sign-in")
       }
 
       const response = await fetch(`/followers`, {

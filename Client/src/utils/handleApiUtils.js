@@ -18,7 +18,7 @@ export const handleApiError = async (response, showError) => {
         })
       })
     } else {
-      const errorMessage = errorData.title || "Error processing the response"
+      const errorMessage = errorData.title || errorData.message || "Error processing the response"
       errors.push(errorMessage)
       showError(errorMessage)
     }
