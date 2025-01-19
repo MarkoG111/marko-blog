@@ -6,8 +6,6 @@ using Application.Exceptions;
 using FluentValidation;
 using Newtonsoft.Json;
 
-using Microsoft.Extensions.Logging;
-
 namespace API.Core
 {
     public class GlobalExceptionHandler
@@ -82,8 +80,6 @@ namespace API.Core
                         break;
                 }
 
-                LogError(ex, httpContext, statusCode);
-
                 httpContext.Response.StatusCode = statusCode;
 
                 if (response == null)
@@ -93,22 +89,6 @@ namespace API.Core
 
                 await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(response));
             }
-        }
-
-        private void LogError(Exception ex, HttpContext context, int statusCode)
-        {
-            var errorDetails = new
-            {
-                Timestamp = DateTime.UtcNow,
-                Path = context.Request.Path,
-                StatusCode = statusCode,
-                ExceptionType = ex.GetType().Name,
-                Message = ex.Message,
-                StackTrace = ex.StackTrace,
-                User = context.User.Identity?.Name
-            };
-
-            _logger.LogError($"Error: {JsonConvert.SerializeObject(errorDetails)}");
         }
     }
 }

@@ -5,7 +5,7 @@ import { signoutSuccess } from '../redux/user/userSlice'
 import { Sidebar, Button } from 'flowbite-react'
 import { HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiOutlineUserAdd } from 'react-icons/hi'
 import { RiPieChart2Fill } from "react-icons/ri"
-import { FaRegComments } from "react-icons/fa"
+import { FaFolder, FaRegComments } from "react-icons/fa"
 import { useError } from '../contexts/ErrorContext'
 import { handleApiError } from '../utils/handleApiUtils'
 
@@ -155,6 +155,14 @@ export default function DashSidebar() {
             <Link to='/dashboard?tab=posts'>
               <Sidebar.Item active={tab === 'posts'} icon={HiDocumentText} as='div'>
                 Posts
+              </Sidebar.Item>
+            </Link>
+          )}
+
+          {currentUser.roleName === 'Admin' && (
+            <Link to='/dashboard?tab=categories'>
+              <Sidebar.Item active={tab === 'categories'} icon={FaFolder} as='div'>
+                Categories
               </Sidebar.Item>
             </Link>
           )}

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import DashSidebar from '../components/DashSidebar'
 import DashProfile from '../components/DashProfile'
 import DashPosts from '../components/DashPosts'
+import DashCategories from '../components/DashCategories'
 import DashUsers from '../components/DashUsers'
 import RequestAuthorForm from '../components/RequestAuthorForm'
 import DashAuthorRequests from '../components/DashAuthorRequests'
@@ -37,6 +38,7 @@ export default function Dashboard() {
       {tab == 'comments' && <DashComments />}
       {tab == 'users' && <DashUsers />}
       {tab == 'posts' && <DashPosts />}
+      {tab == 'categories' && <DashCategories />}
       {tab == 'authorRequests' && <DashAuthorRequests />}
       {tab == 'requestAuthorForm' && <RequestAuthorForm />}
       {tab == 'userPosts' && <UserDashPosts />}

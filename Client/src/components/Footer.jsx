@@ -11,12 +11,17 @@ export default function Footer() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`/categories`, {
+        const queryParams = new URLSearchParams({
+          getAll: true
+        })
+
+        const response = await fetch(`/categories?${queryParams}`, {
           method: "GET"
         })
   
         if (response.ok) {
           const data = await response.json()
+          
           setCategories(data.items)
         } else {
           await handleApiError(response, showError)

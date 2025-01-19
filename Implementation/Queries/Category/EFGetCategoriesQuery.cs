@@ -28,12 +28,20 @@ namespace Implementation.Queries.Category
 
             var totalItems = query.Count();
 
-            var pagedCategories = query
-                .Select(x => new GetCategoriesDto
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                }).ToList();
+            var categoriesQuery = query.Select(x => new GetCategoriesDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                CreatedAt = search.IncludeCreatedAt ?? false ? x.CreatedAt : null
+            });
+
+            // If GetAll is null or false, do the pagination
+            if (!(search.GetAll ?? false))
+            {
+                categoriesQuery = categoriesQuery.Skip(search.PerPage * (search.Page - 1)).Take(search.PerPage);
+            }
+
+            var pagedCategories = categoriesQuery.ToList();
 
             return new PagedResponse<GetCategoriesDto>
             {

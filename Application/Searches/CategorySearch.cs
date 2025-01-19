@@ -9,5 +9,7 @@ namespace Application.Searches
     {
         public int Id { get; set; }
         public string? Name { get; set; }
+        public bool? IncludeCreatedAt { get; set; }
+        public bool? GetAll { get; set; } 
     }
 }
