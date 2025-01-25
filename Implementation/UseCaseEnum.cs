@@ -34,32 +34,31 @@ namespace Implementation
 
         EFGetUseCaseLogQuery = 18,
 
-        EFCreateUserCommand = 19,
-        EFUpdateUserCommand = 20,
-        EFDeleteUserCommand = 21,
-        EFGetOneUserQuery = 22,
-        EFGetUsersQuery = 23,
+        EFUpdateUserCommand = 19,
+        EFDeleteUserCommand = 20,
+        EFGetOneUserQuery = 21,
+        EFGetUsersQuery = 22,
 
-        EFCreateCategoryCommand = 24,
-        EFUpdateCategoryCommand = 25,
-        EFDeleteCategoryCommand = 26,
-        EFGetOneCategoryQuery = 27,
-        EFGetCategoriesQuery = 28,
+        EFCreateCategoryCommand = 23,
+        EFUpdateCategoryCommand = 24,
+        EFDeleteCategoryCommand = 25,
+        EFGetOneCategoryQuery = 26,
+        EFGetCategoriesQuery = 27,
 
-        EFCreateAuthorRequestCommand = 29,
-        EFUpdateAuthorRequestCommand = 30,
-        EFGetAuthorRequestsQuery = 31,
+        EFCreateAuthorRequestCommand = 28,
+        EFUpdateAuthorRequestCommand = 29,
+        EFGetAuthorRequestsQuery = 30,
 
-        EFFollowCommand = 32,
-        EFUnfollowCommand = 33,
-        EFCheckFollowStatusQuery = 34,
+        EFFollowCommand = 31,
+        EFUnfollowCommand = 32,
+        EFCheckFollowStatusQuery = 33,
 
-        EFCreateNotificationCommand = 35,
-        EFGetNotificationsQuery = 36,
+        EFCreateNotificationCommand = 34,
+        EFGetNotificationsQuery = 35,
 
-        EFMarkAllNotificationsAsReadCommand = 37,
+        EFMarkAllNotificationsAsReadCommand = 36,
         
-        EFGetFollowersQuery = 38,
-        EFGetFollowingsQuery = 39,
+        EFGetFollowersQuery = 37,
+        EFGetFollowingsQuery = 38,
     }
 }

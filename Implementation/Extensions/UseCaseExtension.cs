@@ -32,7 +32,6 @@ namespace Implementation
                     (int)UseCaseEnum.EFGetOneCommentQuery,
                     (int)UseCaseEnum.EFGetCommentsQuery,
 
-                    (int)UseCaseEnum.EFCreateUserCommand,
                     (int)UseCaseEnum.EFUpdateUserCommand,
                     (int)UseCaseEnum.EFDeleteUserCommand,
                     (int)UseCaseEnum.EFGetOneUserQuery,

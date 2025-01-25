@@ -84,7 +84,6 @@ namespace API.Core
             services.AddTransient<IDeleteCommentCommand, EFDeleteCommentCommand>();
             services.AddTransient<IDeletePersonalCommentCommand, EFDeletePersonalCommentCommand>();
 
-            services.AddTransient<ICreateUserCommand, EFCreateUserCommand>();
             services.AddTransient<IUpdateUserCommand, EFUpdateUserCommand>();
             services.AddTransient<IDeleteUserCommand, EFDeleteUserCommand>();
 

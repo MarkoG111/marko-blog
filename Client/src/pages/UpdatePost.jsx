@@ -80,7 +80,11 @@ export default function UpdatePost() {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/categories`, {
+        const queryParams = new URLSearchParams({
+          getAll: true
+        })
+
+        const response = await fetch(`/categories?${queryParams}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
