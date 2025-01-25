@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { Table, Pagination, Modal, Button } from "flowbite-react"
 import { useError } from "../contexts/ErrorContext"
 import { useSuccess } from "../contexts/SuccessContext"
 import { handleApiError } from "../utils/handleApiUtils"
+import EditableCategoryRow from "./EditableCategoryRow"
 
 export default function DashCategories() {
   const { currentUser } = useSelector((state) => state.user)
@@ -26,7 +26,7 @@ export default function DashCategories() {
         const queryParams = new URLSearchParams({
           perPage: 12,
           page: currentPage,
-          includeCreatedAt: true 
+          includeCreatedAt: true
         })
 
         const token = localStorage.getItem("token")
@@ -86,6 +86,10 @@ export default function DashCategories() {
     }
   }
 
+  const handleSaveCategoryName = (id, updatedName) => {
+    setCategories((prev) => prev.map((category) => category.id === id ? { ...category, name: updatedName } : category))
+  }
+
   return <div className="table-container-scrollbar table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
     {currentUser.roleName === 'Admin' && categories.length > 0 ? (
       <>
@@ -99,28 +103,19 @@ export default function DashCategories() {
             </Table.HeadCell>
           </Table.Head>
 
-          {categories.map((category) => (
-            <Table.Body key={category.id} className="divide-y">
-              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell>{new Date(category.createdAt).toLocaleDateString()}</Table.Cell>
-
-                <Table.Cell>
-                  <Link to={`/categories/${category.id}`} className="font-medium text-gray-900 dark:text-white">
-                    {category.name}
-                  </Link>
-                </Table.Cell>
-
-                <Table.Cell>
-                  <span onClick={() => { setShowModal(true); setCategoryIdToDelete(category.id) }} className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span>
-                </Table.Cell>
-                <Table.Cell>
-                  <Link className="text-teal-500 hover:underline">
-                    <span>Change Name</span>
-                  </Link>
-                </Table.Cell>
-              </Table.Row>
+          {categories.length === 0 ? (
+            <p>No categories found</p>
+          ) : (
+            <Table.Body>
+              {categories.map((category) => (
+                <EditableCategoryRow
+                  key={category.id}
+                  category={category}
+                  onSave={handleSaveCategoryName}
+                />
+              ))}
             </Table.Body>
-          ))}
+          )}
         </Table>
 
         <Pagination
