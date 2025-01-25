@@ -72,7 +72,10 @@ export default function UserPage() {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "Application/json"
         },
-        body: JSON.stringify({ IdFollowing: id })
+        body: JSON.stringify({
+          IdFollowing: id, 
+          FollowedAt: new Date().toISOString()
+        })
       })
 
       if (response.ok) {

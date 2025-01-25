@@ -29,6 +29,7 @@ using Implementation.Validators.User;
 using Implementation.Validators.Like;
 using Implementation.Validators.Comment;
 using Implementation.Validators.AuthorRequest;
+using Implementation.Validators.Follow;
 
 using Implementation.Commands.Post;
 using Implementation.Commands.Category;
@@ -145,6 +146,8 @@ namespace API.Core
             services.AddTransient<DeleteCommentValidator>();
 
             services.AddTransient<AuthorRequestValidator>();
+
+            services.AddTransient<FollowUserValidator>();
         }
 
         public static void AddApplicationActor(this IServiceCollection services)

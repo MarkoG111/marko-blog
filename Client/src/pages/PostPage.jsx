@@ -6,6 +6,7 @@ import PostLikeButtons from "../components/PostLikeButtons"
 import { useSelector } from "react-redux"
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
+import { useNavigate } from 'react-router-dom'
 
 import {
   removeDislikeOrLikeIfPresentInPost,
@@ -22,6 +23,8 @@ export default function PostPage() {
   const [commentsNumber, setCommentsNumber] = useState(0)
 
   const { showError } = useError()
+
+  const navigate = useNavigate()
 
   const { currentUser } = useSelector(state => state.user)
 
@@ -55,6 +58,7 @@ export default function PostPage() {
       const token = localStorage.getItem("token")
       if (!token) {
         showError("You must be logged in to vote.")
+        navigate("/sign-in")
         return
       }
 
