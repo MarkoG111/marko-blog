@@ -8,8 +8,11 @@ import { signInSuccess } from "../redux/user/userSlice"
 import { app } from "../firebase"
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
+import { useState } from "react"
 
 export default function OAuth() {
+  const [loading, setLoading] = useState(false)
+
   const auth = getAuth(app)
 
   const dispatch = useDispatch()
@@ -19,6 +22,12 @@ export default function OAuth() {
   const { showError } = useError()
 
   const handleGoogleClick = async () => {
+    if (loading) {
+      return
+    }
+
+    setLoading(true)
+
     const provider = new GoogleAuthProvider()
 
     provider.setCustomParameters({ prompt: 'select_account' })
@@ -53,13 +62,15 @@ export default function OAuth() {
       }
     } catch (error) {
       showError(error.message)
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <Button type="button" gradientDuoTone='pinkToOrange' outline onClick={handleGoogleClick}>
+    <Button type="button" gradientDuoTone='pinkToOrange' outline onClick={handleGoogleClick} disabled={loading} >
       <AiFillGoogleCircle className='w-6 h-6 mr-2' />
-      Continue with Google
+      {loading ? "Loading..." : "Continue with Google"}
     </Button>
   )
 }

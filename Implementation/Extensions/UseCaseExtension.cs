@@ -18,33 +18,29 @@ namespace Implementation
                 {
                     (int)UseCaseEnum.EFCreatePostCommand,
                     (int)UseCaseEnum.EFUpdatePostCommand,
-                    (int)UseCaseEnum.EFUpdatePersonalPostCommand,
                     (int)UseCaseEnum.EFDeletePostCommand,
-                    (int)UseCaseEnum.EFDeletePersonalPostCommand,
                     (int)UseCaseEnum.EFGetOnePostQuery,
                     (int)UseCaseEnum.EFGetPostsQuery,
+                    (int)UseCaseEnum.EFUpdatePersonalPostCommand,
+                    (int)UseCaseEnum.EFDeletePersonalPostCommand,
 
                     (int)UseCaseEnum.EFCreateCommentCommand,
                     (int)UseCaseEnum.EFUpdateCommentCommand,
-                    (int)UseCaseEnum.EFUpdatePersonalCommentCommand,
-                    (int)UseCaseEnum.EFDeletePersonalCommentCommand,
                     (int)UseCaseEnum.EFDeleteCommentCommand,
                     (int)UseCaseEnum.EFGetOneCommentQuery,
                     (int)UseCaseEnum.EFGetCommentsQuery,
-
-                    (int)UseCaseEnum.EFUpdateUserCommand,
-                    (int)UseCaseEnum.EFDeleteUserCommand,
-                    (int)UseCaseEnum.EFGetOneUserQuery,
-                    (int)UseCaseEnum.EFGetUsersQuery,
+                    (int)UseCaseEnum.EFUpdatePersonalCommentCommand,
+                    (int)UseCaseEnum.EFDeletePersonalCommentCommand,
 
                     (int)UseCaseEnum.EFLikePost,
                     (int)UseCaseEnum.EFLikeComment,
 
                     (int)UseCaseEnum.EFGetUseCaseLogQuery,
 
-                    (int)UseCaseEnum.EFFollowCommand,
-                    (int)UseCaseEnum.EFUnfollowCommand,
-                    (int)UseCaseEnum.EFCheckFollowStatusQuery,
+                    (int)UseCaseEnum.EFUpdateUserCommand,
+                    (int)UseCaseEnum.EFDeleteUserCommand,
+                    (int)UseCaseEnum.EFGetOneUserQuery,
+                    (int)UseCaseEnum.EFGetUsersQuery,
 
                     (int)UseCaseEnum.EFCreateCategoryCommand,
                     (int)UseCaseEnum.EFUpdateCategoryCommand,
@@ -54,6 +50,10 @@ namespace Implementation
 
                     (int)UseCaseEnum.EFUpdateAuthorRequestCommand,
                     (int)UseCaseEnum.EFGetAuthorRequestsQuery,
+
+                    (int)UseCaseEnum.EFFollowCommand,
+                    (int)UseCaseEnum.EFUnfollowCommand,
+                    (int)UseCaseEnum.EFCheckFollowStatusQuery,
 
                     (int)UseCaseEnum.EFCreateNotificationCommand,
                     (int)UseCaseEnum.EFGetNotificationsQuery,

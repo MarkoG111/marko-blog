@@ -40,7 +40,10 @@ export default function DashSidebar() {
         }
 
         const repsonse = await fetch(`/users/${currentUser.id}`, {
-          method: "GET"
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
         })
 
         const data = await repsonse.json()

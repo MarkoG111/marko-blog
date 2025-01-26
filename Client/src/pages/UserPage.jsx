@@ -73,7 +73,7 @@ export default function UserPage() {
           "Content-Type": "Application/json"
         },
         body: JSON.stringify({
-          IdFollowing: id, 
+          IdFollowing: id,
           FollowedAt: new Date().toISOString()
         })
       })

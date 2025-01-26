@@ -16,7 +16,7 @@ namespace Implementation.Validators.Follow
         {
             _context = context;
 
-            RuleFor(x => x.IdFollower)
+            RuleFor(x => x.IdUser)
                .NotEmpty()
                .WithMessage("User ID is required.")
                .Must(UserExists)
@@ -27,7 +27,7 @@ namespace Implementation.Validators.Follow
                 .WithMessage("Following ID is required.")
                 .Must(UserExists)
                 .WithMessage("User to follow does not exist.")
-                .Must((dto, idFollowing) => idFollowing != dto.IdFollower)
+                .Must((dto, idFollowing) => idFollowing != dto.IdUser)
                 .WithMessage("A user cannot follow themselves.");
 
             RuleFor(x => x.FollowedAt)

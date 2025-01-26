@@ -19,8 +19,8 @@ namespace Implementation.Queries.Comment
             _context = context;
         }
 
-        public int Id => (int)UseCaseEnum.EFGetOneUserQuery;
-        public string Name => UseCaseEnum.EFGetOneUserQuery.ToString();
+        public int Id => (int)UseCaseEnum.EFGetOneCommentQuery;
+        public string Name => UseCaseEnum.EFGetOneCommentQuery.ToString();
 
         public GetCommentDto Execute(int search)
         {

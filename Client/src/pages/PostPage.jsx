@@ -110,7 +110,7 @@ export default function PostPage() {
     <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen bg-slate-100 dark:bg-gray-800 my-12 rounded-2xl">
       <h1 className="text-3xl mt-2 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">{post && post.title}</h1>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center flex-wrap">
         {post && post.categories.map((category) => (
           <Link to={`/category/${category.id}`} className="self-center mt-5 ml-6" key={category.id}>
             <Button color="gray" className="p-3" pill size="s">{category.name}</Button>
