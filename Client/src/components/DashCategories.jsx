@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { HiOutlineExclamationCircle } from 'react-icons/hi'
-import { Table, Pagination, Modal, Button } from "flowbite-react"
+import { Table, Pagination } from "flowbite-react"
 import { useError } from "../contexts/ErrorContext"
 import { useSuccess } from "../contexts/SuccessContext"
 import { handleApiError } from "../utils/handleApiUtils"
@@ -12,13 +11,8 @@ export default function DashCategories() {
   const [categories, setCategories] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
-  const [showModal, setShowModal] = useState(false)
-  const [categoryIdToDelete, setCategoryIdToDelete] = useState('')
-  const [categoryDeleted, setCategoryDeleted] = useState(false)
 
   const { showError } = useError()
-  const { showSuccess } = useSuccess()
-
 
   useEffect(() => {
     const fetchAdminCategories = async () => {
@@ -54,37 +48,9 @@ export default function DashCategories() {
     }
 
     fetchAdminCategories()
-  }, [currentPage, categoryDeleted, showError])
+  }, [currentPage, showError])
 
   const onPageChange = (page) => setCurrentPage(page)
-
-  const handleDeleteCategory = async () => {
-    setShowModal(false)
-
-    try {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        throw new Error("Token not found")
-      }
-
-      const response = await fetch(`/categories/${categoryIdToDelete}`, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
-      })
-
-      if (response.ok) {
-        setCategories((prev) => prev.filter((category) => category.id !== categoryIdToDelete))
-        showSuccess("You have successfully deleted a category")
-        setCategoryDeleted(!categoryDeleted)
-      } else {
-        await handleApiError(response, showError)
-      }
-    } catch (error) {
-      showError(error.message)
-    }
-  }
 
   const handleSaveCategoryName = (id, updatedName) => {
     setCategories((prev) => prev.map((category) => category.id === id ? { ...category, name: updatedName } : category))
@@ -112,6 +78,7 @@ export default function DashCategories() {
                   key={category.id}
                   category={category}
                   onSave={handleSaveCategoryName}
+                  onDelete={(id) => setCategories((prev) => prev.filter((cat) => cat.id !== id))}
                 />
               ))}
             </Table.Body>
@@ -127,22 +94,5 @@ export default function DashCategories() {
       </>
     ) : (<p>You have no categories</p>)
     }
-
-    <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
-      <Modal.Header />
-      <Modal.Body>
-        <div className="text-center">
-          <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
-          <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">Are you sure you want to delete this category?</h3>
-
-          <div className="flex justify-center gap-4">
-            <Button color="failure" onClick={handleDeleteCategory}>
-              Yes, I&apos;m sure
-            </Button>
-            <Button color="gray" onClick={() => setShowModal(false)}>No, cancel</Button>
-          </div>
-        </div>
-      </Modal.Body>
-    </Modal>
-  </div >
+  </div>
 }

@@ -62,6 +62,11 @@ export default function Header() {
             <Button type="button" gradientDuoTone='purpleToPink' className="w-full size-18 mt-6 md:mt-2">Create Post</Button>
           </Link>
         )}
+        {currentUser && (currentUser.roleName === 'Admin') && (
+          <Link to='/create-category' className='mr-6'>
+            <Button type="button" gradientDuoTone='purpleToPink' className="w-full size-18 mt-6 md:mt-2">Add Category</Button>
+          </Link>
+        )}
 
         {/* Theme Toggle Button */}
         <Button className='w-10 md:w-12 h-10 mt-6 md:mt-2 sm:block' color='gray' pill onClick={() => dispatch(toggleTheme())}>

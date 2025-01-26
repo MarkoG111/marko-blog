@@ -17,6 +17,7 @@ import PostsPage from './pages/PostsPage'
 import CategoryPage from './pages/CategoryPage'
 import UserCommentPage from './pages/UserCommentPage'
 import NotificationsPage from './pages/NotificationsPage'
+import CreateCategory from './pages/CreateCategory'
 
 import { NotificationsProvider } from './contexts/NotificationsContext'
 import { ErrorProvider } from './contexts/ErrorContext'
@@ -41,6 +42,7 @@ export default function App() {
             </Route>
             <Route element={<OnlyRolePrivateRoute />}>
               <Route path='/create-post' element={<CreatePost />} />
+              <Route path='/create-category' element={<CreateCategory />} />
               <Route path='/update-post/:postId' element={<UpdatePost />} />
             </Route>
 
