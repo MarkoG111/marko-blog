@@ -11,6 +11,7 @@ import DashComments from '../components/DashComments'
 import AdminDashboard from '../components/AdminDashboard'
 import FollowList from '../components/FollowList'
 import UserDashPosts from '../components/UserDashPosts'
+import DashLogs from '../components/DashLogs'
 
 export default function Dashboard() {
   const location = useLocation()
@@ -39,6 +40,7 @@ export default function Dashboard() {
       {tab == 'users' && <DashUsers />}
       {tab == 'posts' && <DashPosts />}
       {tab == 'categories' && <DashCategories />}
+      {tab == 'useCaseLogs' && <DashLogs />}
       {tab == 'authorRequests' && <DashAuthorRequests />}
       {tab == 'requestAuthorForm' && <RequestAuthorForm />}
       {tab == 'userPosts' && <UserDashPosts />}

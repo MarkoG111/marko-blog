@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Table, Pagination } from "flowbite-react"
 import { useError } from "../contexts/ErrorContext"
-import { useSuccess } from "../contexts/SuccessContext"
 import { handleApiError } from "../utils/handleApiUtils"
 import EditableCategoryRow from "./EditableCategoryRow"
 

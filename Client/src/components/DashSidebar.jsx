@@ -8,6 +8,7 @@ import { RiPieChart2Fill } from "react-icons/ri"
 import { FaFolder, FaRegComments } from "react-icons/fa"
 import { useError } from '../contexts/ErrorContext'
 import { handleApiError } from '../utils/handleApiUtils'
+import { BsListColumns } from "react-icons/bs"
 
 export default function DashSidebar() {
   const location = useLocation()
@@ -166,6 +167,14 @@ export default function DashSidebar() {
             <Link to='/dashboard?tab=categories'>
               <Sidebar.Item active={tab === 'categories'} icon={FaFolder} as='div'>
                 Categories
+              </Sidebar.Item>
+            </Link>
+          )}
+
+          {currentUser.roleName === 'Admin' && (
+            <Link to='/dashboard?tab=useCaseLogs'>
+              <Sidebar.Item active={tab === 'useCaseLogs'} icon={BsListColumns} as='div'>
+                Logs
               </Sidebar.Item>
             </Link>
           )}

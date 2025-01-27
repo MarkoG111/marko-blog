@@ -25,24 +25,33 @@ namespace Implementation.Queries
         {
             var query = _context.UseCaseLogs.AsQueryable();
 
-            if (!string.IsNullOrEmpty(search.Actor) || !string.IsNullOrWhiteSpace(search.Actor))
+            if (!string.IsNullOrWhiteSpace(search.Actor))
             {
                 query = query.Where(x => x.Actor.ToLower().Contains(search.Actor.ToLower()));
             }
 
-            if (!string.IsNullOrEmpty(search.UseCaseName) || !string.IsNullOrWhiteSpace(search.UseCaseName))
+            if (!string.IsNullOrWhiteSpace(search.UseCaseName))
             {
                 query = query.Where(x => x.UseCaseName.ToLower().Contains(search.UseCaseName.ToLower()));
             }
 
-            if (search.DateFrom != null && search.DateFrom >= search.DateTo)
+            if (search.DateFrom != null)
             {
                 query = query.Where(x => x.Date >= search.DateFrom);
             }
 
-            if (search.DateTo != null && search.DateTo > search.DateFrom)
+            if (search.DateTo != null)
             {
                 query = query.Where(x => x.Date <= search.DateTo);
+            }
+
+            if (search.SortOrder?.ToLower() == "asc")
+            {
+                query = query.OrderBy(x => x.Date);
+            }
+            else
+            {
+                query = query.OrderByDescending(x => x.Date);
             }
 
             var skipCount = search.PerPage * (search.Page - 1);
@@ -54,6 +63,7 @@ namespace Implementation.Queries
                 TotalCount = query.Count(),
                 Items = query.Skip(skipCount).Take(search.PerPage).Select(x => new GetUseCaseLogDto
                 {
+                    Id = x.Id,
                     Actor = x.Actor,
                     Data = x.Data,
                     Date = x.Date,
