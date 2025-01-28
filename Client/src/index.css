@@ -76,6 +76,10 @@ footer ul a:hover {
   max-height: 90vh;
 }
 
+.react-datepicker {
+  background-color: #777;
+}
+
 @media (min-width: 1024px) {
   .table-container-scrollbar {
     overflow-x: hidden;

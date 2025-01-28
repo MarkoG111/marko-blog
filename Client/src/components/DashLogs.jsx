@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react"
 import { Button, Modal, Pagination, Table, TextInput, Spinner } from "flowbite-react"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 
 export default function DashLogs() {
   const [logs, setLogs] = useState([])
@@ -21,7 +23,7 @@ export default function DashLogs() {
   })
 
   const columns = [
-    { title: "Date", dataIndex: "date", sorter: true },
+    { title: "Datetime", dataIndex: "date", sorter: true },
     { title: "Use Case Name", dataIndex: "useCaseName" },
     { title: "Actor", dataIndex: "actor" },
     { title: "Data", dataIndex: "data" },
@@ -114,18 +116,30 @@ export default function DashLogs() {
           value={filters.useCaseName}
           onChange={(e) => setFilters(prev => ({ ...prev, useCaseName: e.target.value, page: 1 }))}
         />
-        <div className="relative">
-          <TextInput
-            type="date"
-            value={filters.dateFrom}
-            onChange={(e) => setFilters(prev => ({ ...prev, dateFrom: e.target.value, page: 1 }))}
+        <div className="relative ml-20">
+          <span>From: </span>
+          <DatePicker
+            selected={filters.dateFrom ? new Date(filters.dateFrom) : new Date()}
+            onChange={(date) => setFilters(prev => ({
+              ...prev,
+              dateFrom: date ? date.toISOString().split("T")[0] : "",
+              page: 1
+            }))}
+            dateFormat="yyyy-MM-dd"
+            className="w-full border rounded-lg p-2 bg-gray-700 cursor-pointer"
           />
         </div>
         <div className="relative">
-          <TextInput
-            type="date"
-            value={filters.dateTo}
-            onChange={(e) => setFilters(prev => ({ ...prev, dateTo: e.target.value, page: 1 }))}
+          <span>To: </span>
+          <DatePicker
+            selected={filters.dateTo ? new Date(filters.dateTo) : new Date()}
+            onChange={(date) => setFilters(prev => ({
+              ...prev,
+              dateTo: date ? date.toISOString().split("T")[0] : "",
+              page: 1
+            }))}
+            dateFormat="yyyy-MM-dd"
+            className="w-full border rounded-lg p-2 bg-gray-700 cursor-pointer"
           />
         </div>
       </div>
@@ -146,7 +160,7 @@ export default function DashLogs() {
                 >
                   {column.title}
                   {column.dataIndex === "date" && (
-                    <span className="ml-2">
+                    <span className="ml-2 text-xl">
                       {filters.sortOrder === "asc" ? "↑" : "↓"}
                     </span>
                   )}

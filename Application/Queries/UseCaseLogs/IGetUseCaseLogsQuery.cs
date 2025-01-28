@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Application.Searches;
 using Application.DataTransfer.UseCases;
 
-namespace Application.Queries
+namespace Application.Queries.UseCaseLogs
 {
     public interface IGetUseCaseLogsQuery : IQuery<PagedResponse<GetUseCaseLogDto>, UseCaseLogSearch>
     {

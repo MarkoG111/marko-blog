@@ -14,6 +14,7 @@ using Application.Commands.Follow;
 using Application.Commands.Notification;
 
 using Application.Queries;
+using Application.Queries.UseCaseLogs;
 using Application.Queries.Post;
 using Application.Queries.Category;
 using Application.Queries.User;
@@ -21,6 +22,7 @@ using Application.Queries.Comment;
 using Application.Queries.AuthorRequest;
 using Application.Queries.Follow;
 using Application.Queries.Notification;
+
 using Application.Services;
 
 using Implementation.Validators.Post;
@@ -41,6 +43,7 @@ using Implementation.Commands.Follow;
 using Implementation.Commands.Notification;
 
 using Implementation.Queries;
+using Implementation.Queries.UseCaseLogs;
 using Implementation.Queries.Post;
 using Implementation.Queries.Category;
 using Implementation.Queries.Comment;

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using EFDataAccess;
 using Application.DataTransfer.UseCases;
-using Application.Queries;
+using Application.Queries.UseCaseLogs;
 using Application.Searches;
 
-namespace Implementation.Queries
+namespace Implementation.Queries.UseCaseLogs
 {
     public class EFGetUseCaseLogsQuery : IGetUseCaseLogsQuery
     {
