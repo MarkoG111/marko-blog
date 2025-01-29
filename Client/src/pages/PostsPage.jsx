@@ -39,7 +39,7 @@ export default function PostsPage() {
 
         if (selectedCategories.length > 0) {
           selectedCategories.forEach((idCategory, index) => {
-            queryParams.append(`CategoryIds[${index}]`, idCategory)
+            queryParams.append(`categoryIds[${index}]`, idCategory)
           })
         }
 
@@ -66,7 +66,7 @@ export default function PostsPage() {
   useEffect(() => {
     const fetchPostCategories = async () => {
       try {
-        const response = await fetch(`/categories`, {
+        const response = await fetch(`/categories?getAll=true`, {
           method: "GET"
         })
 

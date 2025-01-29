@@ -163,7 +163,7 @@ export default function DashLogs() {
                   {column.title}
                   {column.dataIndex === "date" && (
                     <span className="ml-2 text-xl">
-                      {filters.sortOrder === "asc" ? "↑" : "↓"}
+                      ( {filters.sortOrder === "asc" ? "↑" : "↓"} )
                     </span>
                   )}
                 </Table.HeadCell>
