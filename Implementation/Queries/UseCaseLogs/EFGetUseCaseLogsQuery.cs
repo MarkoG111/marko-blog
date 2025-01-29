@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EFDataAccess;
+using Application.Queries;
 using Application.DataTransfer.UseCases;
 using Application.Queries.UseCaseLogs;
 using Application.Searches;

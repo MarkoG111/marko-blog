@@ -77,7 +77,71 @@ footer ul a:hover {
 }
 
 .react-datepicker {
-  background-color: #777;
+  @apply bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 
+  shadow-lg dark:shadow-xl rounded-xl p-4 backdrop-blur-lg;
+}
+
+/* Header */
+.react-datepicker__header {
+  @apply bg-gray-100 dark:bg-gray-700 border-b border-gray-300 dark:border-gray-600;
+}
+
+/* Month & Year */
+.react-datepicker__current-month {
+  @apply text-black dark:text-white font-bold text-lg;
+}
+
+/* Navigation Arrows */
+.react-datepicker__navigation {
+  @apply absolute top-4 w-9 h-9 flex items-center justify-center rounded-full
+  bg-gray-200 dark:bg-gray-600 transition-all duration-200;
+}
+
+/* Left Arrow */
+.react-datepicker__navigation--previous {
+  left: 19px;
+}
+
+/* Right Arrow */
+.react-datepicker__navigation--next {
+  right: 19px;
+}
+
+.react-datepicker__navigation-icon {
+  right: 1px;
+}
+
+.react-datepicker__navigation-icon--next {
+  left: 0;
+}
+
+/* Weekday Labels */
+.react-datepicker__day-name {
+  @apply text-gray-800 dark:text-gray-200 font-bold;
+}
+
+/* Calendar Days */
+.react-datepicker__day {
+  @apply text-gray-900 dark:text-gray-100 font-medium transition-all duration-200;
+}
+
+.react-datepicker__day:not([aria-disabled="true"]):hover {
+  @apply bg-blue-500 text-white;
+}
+
+/* Today’s Date */
+.react-datepicker__day--today {
+  @apply border border-gray-400 dark:border-gray-500 rounded-md;
+}
+
+/* Disabled Dates */
+.react-datepicker__day--disabled {
+  @apply text-gray-400 dark:text-gray-500 pointer-events-none;
+}
+
+/* Triangle Arrow */
+.react-datepicker__triangle {
+  @apply hidden;
 }
 
 @media (min-width: 1024px) {

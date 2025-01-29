@@ -125,8 +125,9 @@ export default function DashLogs() {
               dateFrom: date ? date.toISOString().split("T")[0] : "",
               page: 1
             }))}
-            dateFormat="yyyy-MM-dd"
-            className="w-full border rounded-lg p-2 bg-gray-700 cursor-pointer"
+            dateFormat="MM/dd/yyyy"
+            maxDate={new Date()}
+            className="w-full border rounded-lg p-2 dark:bg-gray-700 cursor-pointer"
           />
         </div>
         <div className="relative">
@@ -138,8 +139,9 @@ export default function DashLogs() {
               dateTo: date ? date.toISOString().split("T")[0] : "",
               page: 1
             }))}
-            dateFormat="yyyy-MM-dd"
-            className="w-full border rounded-lg p-2 bg-gray-700 cursor-pointer"
+            dateFormat="MM/dd/yyyy"
+            minDate={filters.dateFrom ? new Date(filters.dateFrom) : new Date()}
+            className="w-full border rounded-lg p-2 dark:bg-gray-700 cursor-pointer"
           />
         </div>
       </div>
