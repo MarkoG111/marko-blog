@@ -20,6 +20,7 @@ export default function UserCommentPage() {
 
       if (response.ok) {
         const data = await response.json()
+
         setComment(data)
 
         if (data.idParent != null) {
@@ -37,6 +38,7 @@ export default function UserCommentPage() {
 
       if (response.ok) {
         const parentData = await response.json()
+        
         setParentComment(parentData)
       } else {
         await handleApiError(response, showError)

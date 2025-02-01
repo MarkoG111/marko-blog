@@ -47,9 +47,9 @@ export default function PostsPage() {
           method: "GET"
         })
 
-        const data = await response.json()
-
         if (response.ok) {
+          const data = await response.json()
+
           setPosts(data.items)
           setPageCount(data.pageCount)
         } else {
@@ -72,6 +72,7 @@ export default function PostsPage() {
 
         if (response.ok) {
           const data = await response.json()
+          
           setCategories(data.items)
         } else {
           await handleApiError(response, showError)

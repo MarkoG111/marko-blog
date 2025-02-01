@@ -52,6 +52,7 @@ export default function CreatePost() {
 
         if (response.ok) {
           const data = await response.json()
+          
           setCategories(data.items)
         } else {
           await handleApiError(response, showError)

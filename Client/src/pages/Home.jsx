@@ -17,9 +17,8 @@ export default function Home() {
           method: "GET"
         })
 
-        const data = await response.json()
-
         if (response.ok) {
+          const data = await response.json()
           setPosts(data.items)
         } else {
           await handleApiError(response, showError)

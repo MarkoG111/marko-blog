@@ -40,7 +40,7 @@ namespace API.Controllers
             request.Id = id;
             request.IdRole = 2;
             _executor.ExecuteCommand(command, request);
-            return Ok(request);
+            return Ok();
         }
 
         [HttpPut("/authorrequests/reject")]
@@ -49,7 +49,7 @@ namespace API.Controllers
             request.Id = id;
             request.IdRole = 3;
             _executor.ExecuteCommand(command, request);
-            return Ok(request);
+            return Ok();
         }
     }
 }

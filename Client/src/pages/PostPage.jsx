@@ -84,6 +84,7 @@ export default function PostPage() {
 
       if (response.ok) {
         const data = await response.json()
+        
         const updatedPost = removeDislikeOrLikeIfPresentInPost(post, idPost, currentUser.id, status === 1 ? 2 : 1)
         const updatePostWithLikes = updatePostLikes(updatedPost, idPost, data, currentUser.id)
 

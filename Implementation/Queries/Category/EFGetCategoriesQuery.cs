@@ -32,7 +32,7 @@ namespace Implementation.Queries.Category
             {
                 Id = x.Id,
                 Name = x.Name,
-                CreatedAt = search.IncludeCreatedAt ?? false ? x.CreatedAt : null
+                CreatedAt = x.CreatedAt
             });
 
             // If GetAll is null or false, do the pagination

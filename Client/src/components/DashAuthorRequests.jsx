@@ -31,9 +31,9 @@ export default function DashAuthorRequests() {
           }
         })
 
-        const data = await response.json()
-
         if (response.ok) {
+          const data = await response.json()
+
           setAuthorRequests(data.items)
           setPageCount(data.pageCount)
         } else {
@@ -68,7 +68,7 @@ export default function DashAuthorRequests() {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ Status: 2, IdRole: 2 })
+        body: JSON.stringify({ status: 2, idRole: 2 })
       })
 
       if (response.ok) {
@@ -94,7 +94,7 @@ export default function DashAuthorRequests() {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ Status: 3, IdRole: 3 })
+        body: JSON.stringify({ status: 3, idRole: 3 })
       })
 
       if (response.ok) {

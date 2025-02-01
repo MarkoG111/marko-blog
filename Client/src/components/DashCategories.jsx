@@ -18,8 +18,7 @@ export default function DashCategories() {
       try {
         const queryParams = new URLSearchParams({
           perPage: 12,
-          page: currentPage,
-          includeCreatedAt: true
+          page: currentPage
         })
 
         const token = localStorage.getItem("token")
@@ -33,9 +32,10 @@ export default function DashCategories() {
             "Authorization": `Bearer ${localStorage.getItem("token")}`
           }
         })
-        const data = await response.json()
-
+        
         if (response.ok) {
+          const data = await response.json()
+          
           setCategories(data.items)
           setPageCount(data.pageCount)
         } else {

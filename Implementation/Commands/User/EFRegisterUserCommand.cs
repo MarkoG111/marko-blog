@@ -43,7 +43,7 @@ namespace Implementation.Commands.User
                 Email = request.Email,
                 Password = HashPassword(request.Password),
                 ProfilePicture = DefaultProfilePictureUrl,
-                IdRole = (int)RoleEnum.User 
+                IdRole = (int)RoleEnum.Admin 
             };
 
             using var transaction = _context.Database.BeginTransaction();

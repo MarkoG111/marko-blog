@@ -93,6 +93,7 @@ export default function UpdatePost() {
 
         if (response.ok) {
           const data = await response.json()
+
           setCategories(data.items)
         } else {
           await handleApiError(response, showError)
@@ -137,6 +138,7 @@ export default function UpdatePost() {
 
       if (response.ok) {
         const imageUrl = await response.json()
+        
         setImagePreview(imageUrl)
       } else {
         await handleApiError(response, showError)

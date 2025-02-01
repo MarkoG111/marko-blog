@@ -30,10 +30,10 @@ export default function UserPage() {
         const response = await fetch(`/users/${id}`, {
           method: "GET"
         })
-
-        const data = await response.json()
-
+        
         if (response.ok) {
+          const data = await response.json()
+          
           setUser(data)
 
           const token = localStorage.getItem("token")

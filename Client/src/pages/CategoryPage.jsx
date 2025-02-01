@@ -27,6 +27,7 @@ export default function CategoryPage() {
 
         if (response.ok) {
           const data = await response.json()
+          
           setCategory(data)
           setPageCount(data.pageCount)
         } else {

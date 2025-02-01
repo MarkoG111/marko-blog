@@ -33,9 +33,9 @@ export default function DashComments() {
           }
         })
 
-        const data = await response.json()
-
         if (response.ok) {
+          const data = await response.json()
+          
           setComments(data.items)
           setPageCount(data.pageCount)
         } else {

@@ -34,9 +34,9 @@ export default function DashUsers() {
           }
         })
 
-        const data = await response.json()
-
         if (response.ok) {
+          const data = await response.json()
+
           setUsers(data.items)
           setPageCount(data.pageCount)
         } else {
