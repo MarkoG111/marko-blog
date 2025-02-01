@@ -28,11 +28,10 @@ export default function OAuth() {
 
     setLoading(true)
 
-    const provider = new GoogleAuthProvider()
-
-    provider.setCustomParameters({ prompt: 'select_account' })
-
     try {
+      const provider = new GoogleAuthProvider()
+      provider.setCustomParameters({ prompt: 'select_account' })
+
       const resultsFromGoogle = await signInWithPopup(auth, provider)
 
       const response = await fetch('/auth', {
@@ -47,15 +46,12 @@ export default function OAuth() {
 
       if (response.ok) {
         const { token } = await response.json()
-
         const decodedToken = jwtDecode(token)
-
         const userProfile = decodedToken.ActorData
 
         localStorage.setItem('token', token)
 
         dispatch(signInSuccess(userProfile))
-
         navigate('/')
       } else {
         await handleApiError(response, showError)

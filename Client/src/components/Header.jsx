@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleTheme } from '../redux/theme/themeSlice'
 import { signoutSuccess } from '../redux/user/userSlice'
@@ -20,6 +20,7 @@ export default function Header() {
   const { currentUser } = useSelector((state) => state.user)
 
   const [headerSearchTerm, setHeaderSearchTerm] = useState('')
+  const [imageError, setImageError] = useState(false)
 
   const { notifications, hasNewNotifications } = useContext(NotificationsContext)
 
@@ -27,6 +28,11 @@ export default function Header() {
 
   const unreadNotificationCount = notifications.filter((n) => !n.isRead).length
   const isAuthor = currentUser && currentUser.roleName === 'Author'
+
+  // Reset image error state when currentUser changes
+  useEffect(() => {
+    setImageError(false)
+  }, [currentUser])
 
   const handleSignout = async () => {
     try {
@@ -36,6 +42,23 @@ export default function Header() {
     } catch (error) {
       showError(error.message)
     }
+  }
+
+  const getAvatarSrc = () => {
+    if (!currentUser?.profilePicture) {
+      return undefined
+    }
+
+    if (imageError) {
+      // If there was an error loading the image, try to use a proxied version
+      return `/images/proxy?url=${encodeURIComponent(currentUser.profilePicture)}`
+    }
+
+    if (currentUser.profilePicture.startsWith('http')) {
+      return currentUser.profilePicture
+    }
+
+    return `/users/images/${currentUser.profilePicture}`
   }
 
   const handleSearchSubmit = (e) => {
@@ -87,7 +110,16 @@ export default function Header() {
 
         {/* User Avatar or Sign In Button */}
         {currentUser ? (
-          <Dropdown arrowIcon={false} inline label={<Avatar alt='user' img={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `/users/images/${currentUser.profilePicture}`} rounded className='mt-6 md:mt-2' />}>
+          <Dropdown arrowIcon={false} inline label={
+            <Avatar
+              alt='user'
+              img={getAvatarSrc()}
+              referrerPolicy="no-referrer"
+              rounded
+              className='mt-6 md:mt-2'
+              onError={() => setImageError(true)}
+            />
+          }>
             <Dropdown.Header>
               <span className='block text-sm mb-2'>@{currentUser.username}</span>
               <span className='block text-sm font-medium truncate'>{currentUser.email}</span>
@@ -128,6 +160,6 @@ export default function Header() {
           </Link>
         </Navbar.Link>
       </Navbar.Collapse>
-    </Navbar>
+    </Navbar >
   )
 }
