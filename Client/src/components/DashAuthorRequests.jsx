@@ -6,6 +6,7 @@ import { HiOutlineClock, HiOutlineCheck, HiOutlineX } from 'react-icons/hi'
 import { Table, Pagination, Button } from "flowbite-react"
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
+import { getAvatarSrc } from '../utils/getAvatarSrc'
 
 export default function DashAuthorRequests() {
   const { currentUser } = useSelector((state) => state.user)
@@ -13,6 +14,7 @@ export default function DashAuthorRequests() {
   const [authorRequests, setAuthorRequests] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
+  const [imageError, setImageError] = useState(false)
 
   const { showError } = useError()
 
@@ -137,9 +139,11 @@ export default function DashAuthorRequests() {
                 <Table.Cell>{new Date(authorRequest.dateCreated).toLocaleString()}</Table.Cell>
                 <Table.Cell>
                   <Link to={`/user/${authorRequest.idUser}`}>
-                    {authorRequest.profilePicture.startsWith('http') ? (<img src={authorRequest.profilePicture} className="w-10 h-10 object-cover bg-gray-500 rounded-full" />
-                    ) : (<img src={`/users/images/${authorRequest.profilePicture}`} className="w-10 h-10 object-cover bg-gray-500 rounded-full" />
-                    )}
+                    <img
+                      src={getAvatarSrc(authorRequest.profilePicture)}
+                      className="w-10 h-10 object-cover bg-gray-500 rounded-full"
+                      onError={() => setImageError(true)}
+                    />
                   </Link>
                 </Table.Cell>
                 <Table.Cell>

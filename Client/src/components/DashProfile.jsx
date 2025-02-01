@@ -6,6 +6,7 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
 import { useSuccess } from "../contexts/SuccessContext"
+import { getAvatarSrc } from "../utils/getAvatarSrc"
 
 export default function DashProfile() {
   const { currentUser, loading } = useSelector((state) => state.user)
@@ -132,11 +133,11 @@ export default function DashProfile() {
         <input type="file" accept="image/*" onChange={handleImagechange} ref={filePickerRef} hidden />
 
         <div className="w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full" onClick={() => filePickerRef.current.click()}>
-          {imageFileUrl ? (
-            <img src={imageFileUrl} alt="user" className="rounded-full w-full h-full border-8 border-[lightgray] object-cover" />
-          ) : (
-            <img src={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `users/images/${currentUser.profilePicture}`} alt="user" className="rounded-full w-full h-full border-8 border-[lightgray] object-cover" />
-          )}
+          <img
+            src={imageFileUrl || getAvatarSrc(currentUser.profilePicture)}
+            alt="user"
+            className="rounded-full w-full h-full border-8 border-[lightgray] object-cover"
+          />
         </div>
 
         <TextInput type="text" id="firstName" placeholder="First name" defaultValue={currentUser.firstName} />

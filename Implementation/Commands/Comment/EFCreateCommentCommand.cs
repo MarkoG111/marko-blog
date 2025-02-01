@@ -32,7 +32,6 @@ namespace Implementation.Commands.Comment
         }
 
         public int Id => (int)UseCaseEnum.EFCreateCommentCommand;
-
         public string Name => UseCaseEnum.EFCreateCommentCommand.ToString();
 
         public void Execute(UpsertCommentDto request)

@@ -8,6 +8,7 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import { FaMoon, FaSun, FaRegBell } from 'react-icons/fa'
 import { NotificationsContext } from '../contexts/NotificationsContext'
 import { useError } from '../contexts/ErrorContext'
+import { getAvatarSrc } from '../utils/getAvatarSrc'
 
 export default function Header() {
   const path = useLocation().pathname
@@ -27,6 +28,9 @@ export default function Header() {
   const { showError } = useError()
 
   const unreadNotificationCount = notifications.filter((n) => !n.isRead).length
+
+  const avatarSrc = getAvatarSrc(currentUser?.profilePicture, imageError)
+
   const isAuthor = currentUser && currentUser.roleName === 'Author'
 
   // Reset image error state when currentUser changes
@@ -42,23 +46,6 @@ export default function Header() {
     } catch (error) {
       showError(error.message)
     }
-  }
-
-  const getAvatarSrc = () => {
-    if (!currentUser?.profilePicture) {
-      return undefined
-    }
-
-    if (imageError) {
-      // If there was an error loading the image, try to use a proxied version
-      return `/images/proxy?url=${encodeURIComponent(currentUser.profilePicture)}`
-    }
-
-    if (currentUser.profilePicture.startsWith('http')) {
-      return currentUser.profilePicture
-    }
-
-    return `/users/images/${currentUser.profilePicture}`
   }
 
   const handleSearchSubmit = (e) => {
@@ -113,7 +100,7 @@ export default function Header() {
           <Dropdown arrowIcon={false} inline label={
             <Avatar
               alt='user'
-              img={getAvatarSrc()}
+              img={avatarSrc}
               referrerPolicy="no-referrer"
               rounded
               className='mt-6 md:mt-2'
