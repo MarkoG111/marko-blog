@@ -1,4 +1,5 @@
 using Application;
+using Application.Searches;
 using Application.Commands.Follow;
 using Application.Queries.Follow;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +29,9 @@ namespace API.Controllers
         }
 
         [HttpGet("/followers/{id}/followers")]
-        public IActionResult GetFollowers(int id, [FromServices] IGetFollowersQuery query)
+        public IActionResult GetFollowers([FromServices] IGetFollowersQuery query, [FromQuery] FollowSearch search)
         {
-            var followers = _executor.ExecuteQuery(query, id);
+            var followers = _executor.ExecuteQuery(query, search);
             return Ok(followers);
         }
 

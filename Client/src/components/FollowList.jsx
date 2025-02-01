@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
+import { Pagination } from 'flowbite-react'
 
 export default function FollowList({ isFollowersTab }) {
   const [listUsers, setList] = useState([])
@@ -13,6 +14,8 @@ export default function FollowList({ isFollowersTab }) {
   const { currentUser } = useSelector((state) => state.user)
 
   const { showError } = useError()
+
+  const onPageChange = (page) => setCurrentPage(page)
 
   useEffect(() => {
     const fetchList = async () => {
@@ -24,8 +27,9 @@ export default function FollowList({ isFollowersTab }) {
         }
 
         const queryParams = new URLSearchParams({
+          idUser: currentUser.id,
           page: currentPage,
-          perPage: 3,
+          perPage: 5,
         })
 
         const url = isFollowersTab ? `/followers/${currentUser.id}/followers?${queryParams}` : `/followers/${currentUser.id}/following?${queryParams}`
@@ -76,34 +80,18 @@ export default function FollowList({ isFollowersTab }) {
               </div>
             )
           })}
+
+
         </div>
       ) : (
         <p>No users found.</p>
-      )
-      }
-
-      {
-        pageCount > 1 && (
-          <div className='flex justify-center space-x-2 mt-4'>
-            {currentPage > 1 && (
-              <button
-                className='px-2 py-1 bg-gray-200 rounded'
-                onClick={() => setCurrentPage((prev) => prev - 1)}
-              >
-                Previous
-              </button>
-            )}
-            {currentPage < pageCount && (
-              <button
-                className='px-2 py-1 bg-gray-200 rounded'
-                onClick={() => setCurrentPage((prev) => prev + 1)}
-              >
-                Next
-              </button>
-            )}
-          </div>
-        )
-      }
+      )}
+      <Pagination
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        totalPages={pageCount}
+        className="py-6 text-center"
+      />
     </div>
   )
 }
