@@ -6,6 +6,7 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { useError } from "../contexts/ErrorContext"
 import { useSuccess } from "../contexts/SuccessContext"
 import { handleApiError } from "../utils/handleApiUtils"
+import { getAvatarSrc } from "../utils/getAvatarSrc"
 
 export default function DashUsers() {
   const { currentUser } = useSelector((state) => state.user)
@@ -99,7 +100,7 @@ export default function DashUsers() {
                 <Table.Cell>{new Date(user.createdAt).toLocaleDateString()}</Table.Cell>
                 <Table.Cell>
                   <Link to={'/user/'}>
-                    {user.profilePicture.startsWith('http') ? (<img src={user.profilePicture} className="w-10 h-10 object-cover bg-gray-500 rounded-full" />) : (<img src={`/users/images/${user.profilePicture}`} className="w-10 h-10 object-cover bg-gray-500 rounded-full" />)}
+                    <img src={getAvatarSrc(user.profilePicture)} referrerPolicy="no-referrer" className="w-10 h-10 object-cover bg-gray-500 rounded-full" />
                   </Link>
                 </Table.Cell>
                 <Table.Cell>

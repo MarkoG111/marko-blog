@@ -57,6 +57,8 @@ namespace Implementation.Queries.Post
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
                 TotalCount = totalCount,
+                LastMonthCount = posts.Where(x => x.CreatedAt >= thirtyDaysAgo).Count(),
+
                 Items = posts.Skip(skipCount).Take(search.PerPage).Select(x => new GetPostsDto
                 {
                     Id = x.Id,

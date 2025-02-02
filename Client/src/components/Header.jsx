@@ -21,7 +21,6 @@ export default function Header() {
   const { currentUser } = useSelector((state) => state.user)
 
   const [headerSearchTerm, setHeaderSearchTerm] = useState('')
-  const [imageError, setImageError] = useState(false)
 
   const { notifications, hasNewNotifications } = useContext(NotificationsContext)
 
@@ -29,14 +28,9 @@ export default function Header() {
 
   const unreadNotificationCount = notifications.filter((n) => !n.isRead).length
 
-  const avatarSrc = getAvatarSrc(currentUser?.profilePicture, imageError)
+  const avatarSrc = getAvatarSrc(currentUser?.profilePicture)
 
   const isAuthor = currentUser && currentUser.roleName === 'Author'
-
-  // Reset image error state when currentUser changes
-  useEffect(() => {
-    setImageError(false)
-  }, [currentUser])
 
   const handleSignout = async () => {
     try {
@@ -104,7 +98,6 @@ export default function Header() {
               referrerPolicy="no-referrer"
               rounded
               className='mt-6 md:mt-2'
-              onError={() => setImageError(true)}
             />
           }>
             <Dropdown.Header>

@@ -7,6 +7,8 @@ import { Button, Textarea } from 'flowbite-react'
 import { useError } from '../contexts/ErrorContext'
 import { handleApiError } from '../utils/handleApiUtils'
 import ChildComment from './ChildComment'
+import { getAvatarSrc } from "../utils/getAvatarSrc"
+
 export default function Comment({ comment, onLikeComment, onDislikeComment, onAddChildComment, childrenComments, onEditComment, onDeleteComment, setActiveReplyIdComment, activeReplyIdComment, comments }) {
   const { currentUser } = useSelector((state) => state.user)
 
@@ -95,7 +97,7 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
     <>
       <div className="flex p-4 border-b dark:border-gray-600 text-sm">
         <div className="flex-shrink-0 mr-3">
-          <img className="w-10 h-10 rounded-full bg-gray-200" src={user && user.profilePicture && user.profilePicture.startsWith('http') ? user.profilePicture : `users/images/${user.profilePicture}`} alt={user.username} />
+          <img className="w-10 h-10 rounded-full bg-gray-200" src={getAvatarSrc(currentUser.profilePicture)} referrerPolicy="no-referrer" alt={user.username} />
         </div>
 
         <div className="flex-1">

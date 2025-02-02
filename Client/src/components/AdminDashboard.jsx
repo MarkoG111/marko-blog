@@ -5,6 +5,7 @@ import { FaRegComments } from "react-icons/fa"
 import { Button, Table } from "flowbite-react"
 import { Link } from "react-router-dom"
 import { useError } from "../contexts/ErrorContext"
+import { getAvatarSrc } from "../utils/getAvatarSrc"
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState([])
@@ -138,7 +139,7 @@ export default function AdminDashboard() {
               <Table.Body key={user.id} className="divide-y">
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell>
-                    <img src={user.profilePicture} alt="user" className="w-10 h-10 rounded-full bg-gray-500" />
+                    <img src={getAvatarSrc(user.profilePicture)} referrerPolicy="no-referrer" alt="user" className="w-10 h-10 rounded-full bg-gray-500" />
                   </Table.Cell>
                   <Table.Cell>{user.username}</Table.Cell>
                 </Table.Row>

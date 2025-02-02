@@ -9,7 +9,6 @@ export default function Authors() {
   const [authors, setAuthors] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
-  const [imageError, setImageError] = useState(false)
 
   const { showError } = useError()
 
@@ -54,7 +53,7 @@ export default function Authors() {
           <div key={author.id} className="flex flex-col flex-2 min-w-[250px] items-center dark:bg-gray-800 border border-teal-500 py-6 rounded-lg text-center">
             <Link to={`/user/${author.id}`}>
               <div className="flex flex-col items-center">
-                <img src={getAvatarSrc(author.profilePicture)} alt="profilePicture" className="w-32 object-cover rounded-full" onError={() => setImageError(true)} />
+                <img src={getAvatarSrc(author.profilePicture)} alt="profilePicture" referrerPolicy="no-referrer" className="w-32 object-cover rounded-full" />
                 <div className="py-8">
                   <p className="text-indigo-400 text-xl font-semibold">{author.firstName} {author.lastName}</p>
                   <p className="py-3">@{author.username}</p>

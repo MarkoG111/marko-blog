@@ -9,6 +9,7 @@ import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from "react-redux"
+import { getAvatarSrc } from "../utils/getAvatarSrc"
 
 export default function UserPage() {
   const { id } = useParams()
@@ -30,10 +31,10 @@ export default function UserPage() {
         const response = await fetch(`/users/${id}`, {
           method: "GET"
         })
-        
+
         if (response.ok) {
           const data = await response.json()
-          
+
           setUser(data)
 
           const token = localStorage.getItem("token")
@@ -131,7 +132,7 @@ export default function UserPage() {
         <header className="dark:bg-gray-800 border border-teal-500 rounded-lg text-center mt-12">
           <div className="relative mt-negative">
             <span className="inline-block relative align-middle overflow-hidden w-[90px] h-[90px]">
-              <img src={user && user.profilePicture} alt="profilePicture" className="rounded-full inline-block align-bottom w-full h-full" />
+              <img src={getAvatarSrc(user?.profilePicture)} referrerPolicy="no-referrer" alt="profilePicture" className="rounded-full inline-block align-bottom w-full h-full" />
             </span>
           </div>
 
@@ -181,7 +182,7 @@ export default function UserPage() {
                 <div className="dark:bg-gray-800 border border-teal-500 rounded-lg mt-12 w-2/5 pb-8 mr-auto">
                   <div className="flex pt-4 pl-2">
                     <div>
-                      <img src={user && user.profilePicture.startsWith('http') ? user && user.profilePicture : user && `users/images/${user.profilePicture}`} alt='user image' className='w-10 object-cover rounded-full mr-3' />
+                      <img src={getAvatarSrc(user?.profilePicture)} referrerPolicy="no-referrer" alt='user image' className='w-10 object-cover rounded-full mr-3' />
                     </div>
                     <div>
                       <span className="text-sm md:pl-3">{user && user.firstName + " " + user.lastName}</span> <br />
@@ -233,7 +234,7 @@ export default function UserPage() {
                     <div className="dark:bg-gray-800 border border-teal-500 rounded-lg mt-12 w-full pb-8 mr-auto">
                       <div className="flex pt-4 pl-2">
                         <div>
-                          <img src={user && user.profilePicture.startsWith('http') ? user && user.profilePicture : user && `users/images/${user.profilePicture}`} alt='profilePicture' className='w-10 object-cover rounded-full' />
+                          <img src={getAvatarSrc(user?.profilePicture)} alt='profilePicture' referrerPolicy="no-referrer" className='w-10 object-cover rounded-full' />
                         </div>
                         <div className="pl-4">
                           <span className="text-sm">{user && user.firstName + " " + user.lastName}</span> <br />

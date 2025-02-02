@@ -142,6 +142,7 @@ export default function DashAuthorRequests() {
                     <img
                       src={getAvatarSrc(authorRequest.profilePicture)}
                       className="w-10 h-10 object-cover bg-gray-500 rounded-full"
+                      referrerPolicy="no-referrer"
                       onError={() => setImageError(true)}
                     />
                   </Link>

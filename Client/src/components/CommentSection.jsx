@@ -7,6 +7,8 @@ import { Button, Textarea, Modal } from 'flowbite-react'
 import { handleApiError } from '../utils/handleApiUtils'
 import Comment from './Comment'
 import { useError } from '../contexts/ErrorContext'
+import { getAvatarSrc } from "../utils/getAvatarSrc"
+
 import {
   checkIfAlreadyVoted,
   removeDislikeOrLikeIfPresent,
@@ -43,7 +45,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
 
           setPost(data)
           setComments(mainComments)
-          setChildComments(allChildComments)          
+          setChildComments(allChildComments)
 
           const mainCommentsNotDeleted = mainComments.filter(comment => !comment.isDeleted).length
           const childCommentsNotDeleted = allChildComments.filter(comment => !comment.isDeleted).length
@@ -185,7 +187,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
 
         const updatedComments = updateCommentLikes(removeDislikeOrLikeIfPresent(comments, idComment, currentUser.id, voteType === 1 ? 2 : 1), idComment, data, currentUser.id)
         const updatedChildComments = updateCommentLikes(removeDislikeOrLikeIfPresent(childComments, idComment, currentUser.id, voteType === 1 ? 2 : 1), idComment, data, currentUser.id)
-        
+
         setComments(updatedComments)
         setChildComments(updatedChildComments)
       } else {
@@ -262,7 +264,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
       {currentUser ? (
         <div className='flex items-center gap-1 my-5 text-gray-500 text-sm'>
           <p>Signed in as:</p>
-          <img src={currentUser.profilePicture.startsWith('http') ? currentUser.profilePicture : `../users/images/${currentUser.profilePicture}`} alt='' className='w-10 object-cover rounded-full' />
+          <img src={getAvatarSrc(currentUser.profilePicture)} referrerPolicy="no-referrer" alt='user' className='w-10 object-cover rounded-full' />
           <Link to={'/dashboard?tab=profile'} className='text-cyan-600 hover:underline'>
             @{currentUser.username}
           </Link>

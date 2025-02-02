@@ -5,6 +5,7 @@ import { useSelector } from "react-redux"
 import { useError } from "../contexts/ErrorContext"
 import { handleApiError } from "../utils/handleApiUtils"
 import { Pagination } from 'flowbite-react'
+import { getAvatarSrc } from "../utils/getAvatarSrc"
 
 export default function FollowList({ isFollowersTab }) {
   const [listUsers, setList] = useState([])
@@ -69,7 +70,7 @@ export default function FollowList({ isFollowersTab }) {
               <div key={user.id} className="flex flex-col flex-2 min-w-[250px] items-center dark:bg-gray-800 border border-teal-500 pt-6 rounded-3xl text-center">
                 <Link to={`/user/${user.id}`}>
                   <div className="flex flex-col items-center">
-                    <img src={user.profilePicture} alt="profilePicture" className="w-32 object-cover rounded-full" />
+                    <img src={getAvatarSrc(user.profilePicture)} referrerPolicy="no-referrer" alt="profilePicture" className="w-32 object-cover rounded-full" />
                     <div className="py-8">
                       <p className="text-indigo-400 text-xl font-semibold">{user.firstName} {user.lastName}</p>
                       <p className="py-3">@{user.username}</p>
