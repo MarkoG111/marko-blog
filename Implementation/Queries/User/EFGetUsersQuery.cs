@@ -59,7 +59,7 @@ namespace Implementation.Queries.User
                     Username = x.Username,
                     Email = x.Email,
                     ProfilePicture = x.ProfilePicture,
-                    Role = x.Role.Name,
+                    RoleName = x.Role.Name,
                     CreatedAt = x.CreatedAt
                 }).ToList()
             };

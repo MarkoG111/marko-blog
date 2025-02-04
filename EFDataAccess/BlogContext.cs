@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Microsoft.EntityFrameworkCore;
 using Domain;
 using EFDataAccess.Configurations;

@@ -58,7 +58,7 @@ namespace Implementation.Queries.Post
                     Status = w.Status,
                     IdUser = w.IdUser
                 }).ToList(),
-                Comments = query.Comments.Where(c => c.IdParent == null).Select(t => new GetPostCommentsDto
+                Comments = query.Comments.Where(c => c.IdParent == null).Select(t => new GetCommentsDto
                 {
                     Id = t.Id,
                     CommentText = t.CommentText,
@@ -74,7 +74,7 @@ namespace Implementation.Queries.Post
                         IdUser = l.IdUser,
                         Status = l.Status,
                     }).ToList(),
-                    ChildrenComments = query.Comments.Where(c => c.IdParent == t.Id).Select(c => new GetPostCommentsDto
+                    ChildrenComments = query.Comments.Where(c => c.IdParent == t.Id).Select(c => new GetCommentsDto
                     {
                         Id = c.Id,
                         CommentText = c.CommentText,
