@@ -6,6 +6,7 @@ using Application;
 using Application.Commands.Notification;
 using Application.DataTransfer;
 using EFDataAccess;
+using EFCore.BulkExtensions;
 
 namespace Implementation.Commands.Notification
 {
@@ -23,14 +24,11 @@ namespace Implementation.Commands.Notification
 
         public void Execute(int IdUser)
         {
-            var unreadNotifications = _context.Notifications.Where(n => n.IdUser == IdUser && !n.IsRead).ToList();
+            var notifications = _context.Notifications.Where(n => n.IdUser == IdUser && !n.IsRead).ToList();
 
-            foreach (var unreadNotification in unreadNotifications)
-            {
-                unreadNotification.IsRead = true;
-            }
+            notifications.ForEach(n => n.IsRead = true);
 
-            _context.SaveChanges();
+            _context.BulkUpdate(notifications);
         }
     }
 }

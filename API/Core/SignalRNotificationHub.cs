@@ -20,10 +20,5 @@ namespace API.Core
         {
             await _hubContext.Clients.User(idUser.ToString()).SendAsync("ReceiveNotification", notification );
         }
-
-        public async Task BroadcastMessage(string message)
-        {
-            await _hubContext.Clients.All.SendAsync("ReceiveMessage", message);
-        }
     }
 }

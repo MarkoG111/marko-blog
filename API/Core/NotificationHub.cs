@@ -8,11 +8,6 @@ namespace API.Core
 {
     public class NotificationHub : Hub
     {
-        public async Task SendNotification(string idUser, string message)
-        {
-            await Clients.User(idUser).SendAsync("ReceiveNotification", new { content = message });
-        }
-
         // Add user to group based on their idUser
         public async Task JoinGroup(string idUser)
         {
@@ -25,17 +20,9 @@ namespace API.Core
             Console.WriteLine($"User {idUser} joined group {Context.ConnectionId}");
         }
 
-        // Send message to a specific group (idUser as group name)
         public async Task SendNotificationToUser(int idUser, string message)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, idUser.ToString());  // Join the group
-            Console.WriteLine($"Sending notification to user {idUser}: {message}");
             await Clients.Group(idUser.ToString()).SendAsync("ReceiveNotification", message);  // Send message to user group
-        }
-
-        public async Task BroadcastMessage(string message)
-        {
-            await Clients.All.SendAsync("ReceiveMessage", message);
         }
 
         public override async Task OnConnectedAsync()
@@ -47,7 +34,6 @@ namespace API.Core
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            // Optionally, remove user from the group when they disconnect
             var idUser = Context.User?.FindFirst("IdUser")?.Value;
             if (!string.IsNullOrEmpty(idUser))
             {
