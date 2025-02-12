@@ -77,7 +77,6 @@ namespace Implementation.Commands.Like
             };
 
             _notificationService.CreateNotification(notificationDto);
-            _notificationHubService.SendNotificationToUser(post.IdUser, notificationDto);
         }
     }
 }

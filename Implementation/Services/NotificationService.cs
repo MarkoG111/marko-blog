@@ -45,7 +45,7 @@ namespace Implementation.Services
                 Content = dto.Content,
                 Link = dto.Link,
                 IsRead = false,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.Notifications.Add(notification);
