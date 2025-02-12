@@ -1,17 +1,13 @@
 using API.Core;
 using Application;
 using EFDataAccess;
-using Implementation.Logging;
-
-using Microsoft.OpenApi.Models;
+using Application.Settings;
 using Application.Commands.Email;
+using Implementation.Logging;
 using Implementation.Commands.Email;
-
-using Newtonsoft.Json;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.SignalR;
-
-using Sentry;
+using DotNetEnv;
 
 namespace API
 {
@@ -19,6 +15,7 @@ namespace API
     {
         public Startup(IConfiguration configuration)
         {
+            Env.Load();
             Configuration = configuration;
         }
         public IConfiguration Configuration { get; }
@@ -88,6 +85,14 @@ namespace API
                 });
             });
 
+            services.Configure<EmailSettings>(options =>
+            {
+                options.SmtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER");
+                options.SmtpPort = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT") ?? "587");
+                options.SenderEmail = Environment.GetEnvironmentVariable("SENDER_EMAIL");
+                options.SenderPassword = Environment.GetEnvironmentVariable("SENDER_PASSWORD");
+
+            });
             services.AddTransient<IEmailSender, SMTPEmailSender>();
         }
 
