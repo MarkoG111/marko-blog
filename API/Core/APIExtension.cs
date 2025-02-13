@@ -13,7 +13,6 @@ using Application.Commands.AuthorRequest;
 using Application.Commands.Follow;
 using Application.Commands.Notification;
 
-using Application.Queries;
 using Application.Queries.UseCaseLogs;
 using Application.Queries.Post;
 using Application.Queries.Category;
@@ -23,6 +22,7 @@ using Application.Queries.AuthorRequest;
 using Application.Queries.Follow;
 using Application.Queries.Notification;
 
+using Application.Repositories;
 using Application.Services;
 
 using Implementation.Validators.Post;
@@ -42,7 +42,6 @@ using Implementation.Commands.AuthorRequest;
 using Implementation.Commands.Follow;
 using Implementation.Commands.Notification;
 
-using Implementation.Queries;
 using Implementation.Queries.UseCaseLogs;
 using Implementation.Queries.Post;
 using Implementation.Queries.Category;
@@ -51,6 +50,8 @@ using Implementation.Queries.User;
 using Implementation.Queries.AuthorRequest;
 using Implementation.Queries.Follow;
 using Implementation.Queries.Notification;
+
+using Implementation.Repositories;
 using Implementation.Services;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -68,6 +69,9 @@ namespace API.Core
             services.AddTransient<INotificationHubService, SignalRNotificationHub>();
 
             services.AddTransient<INotificationService, NotificationService>();
+
+            services.AddTransient<ILikeRepository, LikeRepository>();
+            services.AddTransient<ILikeService, LikeService>();
 
             // Commands
             services.AddTransient<IRegisterUserCommand, EFRegisterUserCommand>();

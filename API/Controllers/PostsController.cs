@@ -23,9 +23,9 @@ namespace API.Controllers
         }
 
         [HttpPost("/posts")]
-        public IActionResult Post([FromBody] UpsertPostDto dto, [FromServices] ICreatePostCommand command)
+        public async Task <IActionResult> Post([FromBody] UpsertPostDto dto, [FromServices] ICreatePostCommand command)
         {
-            _executor.ExecuteCommand(command, dto);
+            await _executor.ExecuteCommandAsync(command, dto);
             return Ok();
         }
 
@@ -57,10 +57,10 @@ namespace API.Controllers
         }
 
         [HttpPost("/posts/{id}/like")]
-        public IActionResult Like([FromBody] LikePostDto request, [FromServices] ILikePostCommand command)
+        public async Task<IActionResult> Like([FromBody] LikeDto request, [FromServices] ILikePostCommand command)
         {
             request.IdUser = _actor.Id;
-            _executor.ExecuteCommand(command, request);
+            await _executor.ExecuteCommandAsync(command, request);
             return Ok(request);
         }
 

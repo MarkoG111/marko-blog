@@ -20,4 +20,9 @@ namespace Application
     {
         TResponse Execute(TSearch search);
     }
+
+    public interface IAsyncCommand<TRequest> : IUseCase
+    {
+        Task ExecuteAsync(TRequest request);
+    }
 }

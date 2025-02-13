@@ -34,7 +34,7 @@ namespace Implementation.Commands.Post
         public int Id => (int)UseCaseEnum.EFCreatePostCommand;
         public string Name => UseCaseEnum.EFCreatePostCommand.ToString();
 
-        public void Execute(UpsertPostDto request)
+        public async Task ExecuteAsync(UpsertPostDto request)
         {
             _validator.ValidateAndThrow(request);
 
@@ -51,12 +51,12 @@ namespace Implementation.Commands.Post
                 IdCategory = categoryId
             }).ToList();
 
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    _context.Posts.Add(post);
-                    _context.SaveChanges();
+                    await _context.Posts.AddAsync(post);
+                    await _context.SaveChangesAsync();
 
                     request.Id = post.Id;
 
@@ -74,14 +74,14 @@ namespace Implementation.Commands.Post
                             IdPost = post.Id
                         };
 
-                        _notificationService.CreateNotification(notificationDto);
+                        await _notificationService.CreateNotification(notificationDto);
                     }
 
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }

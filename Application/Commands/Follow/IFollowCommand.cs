@@ -6,7 +6,7 @@ using Application.DataTransfer.Followers;
 
 namespace Application.Commands.Follow
 {
-    public interface IFollowCommand : ICommand<InsertFollowDto>
+    public interface IFollowCommand : IAsyncCommand<InsertFollowDto>
     {
 
     }

@@ -6,7 +6,7 @@ using Application.DataTransfer.Notifications;
 
 namespace Application.Commands.Notification
 {
-    public interface ICreateNotificationCommand : ICommand<InsertNotificationDto>
+    public interface ICreateNotificationCommand : IAsyncCommand<InsertNotificationDto>
     {
         
     }

@@ -35,7 +35,7 @@ namespace Implementation.Commands.Follow
         public int Id => (int)UseCaseEnum.EFFollowCommand;
         public string Name => UseCaseEnum.EFFollowCommand.ToString();
 
-        public void Execute(InsertFollowDto request)
+        public async Task ExecuteAsync(InsertFollowDto request)
         {
             _validator.ValidateAndThrow(request);
 
@@ -57,20 +57,20 @@ namespace Implementation.Commands.Follow
                 CreatedAt = DateTime.Now
             };
 
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
                     _context.Followers.Add(follow);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
-                    _notificationService.CreateNotification(notificationDto);
+                    await _notificationService.CreateNotification(notificationDto);
 
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }

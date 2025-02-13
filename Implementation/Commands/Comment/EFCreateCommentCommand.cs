@@ -34,7 +34,7 @@ namespace Implementation.Commands.Comment
         public int Id => (int)UseCaseEnum.EFCreateCommentCommand;
         public string Name => UseCaseEnum.EFCreateCommentCommand.ToString();
 
-        public void Execute(UpsertCommentDto request)
+        public async Task ExecuteAsync(UpsertCommentDto request)
         {
             _validator.ValidateAndThrow(request);
 
@@ -48,8 +48,8 @@ namespace Implementation.Commands.Comment
                 IdUser = request.IdUser
             };
 
-            _context.Comments.Add(comment);
-            _context.SaveChanges();
+            await _context.Comments.AddAsync(comment);
+            await _context.SaveChangesAsync();
 
             request.Id = comment.Id;
 
@@ -73,7 +73,7 @@ namespace Implementation.Commands.Comment
                     IdComment = comment.Id
                 };
 
-                _notificationService.CreateNotification(postOwnerNotification);
+                await _notificationService.CreateNotification(postOwnerNotification);
             }
 
             // If the comment is a reply, notify the parent comment's owner (if different from the commenter)
@@ -96,7 +96,7 @@ namespace Implementation.Commands.Comment
                         IdComment = comment.Id
                     };
 
-                    _notificationService.CreateNotification(parentCommentNotification);
+                    await _notificationService.CreateNotification(parentCommentNotification);
                 }
             }
         }

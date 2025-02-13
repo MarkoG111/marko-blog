@@ -4,6 +4,7 @@ using Application.DataTransfer.Notifications;
 using Application.Commands.Notification;
 using Application.Queries.Notification;
 using Application.Searches;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -21,10 +22,10 @@ namespace API.Controllers
         }
 
         [HttpPost("/notifications")]
-        public IActionResult Post([FromBody] InsertNotificationDto dto, [FromServices] ICreateNotificationCommand command)
+        public async Task<IActionResult> Post([FromBody] InsertNotificationDto dto, [FromServices] ICreateNotificationCommand command)
         {
             dto.FromIdUser = _actor.Id;
-            _executor.ExecuteCommand(command, dto);
+            await _executor.ExecuteCommandAsync(command, dto);
             return Ok();
         }
 

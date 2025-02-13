@@ -6,7 +6,7 @@ using Application.DataTransfer.Comments;
 
 namespace Application.Commands.Comment
 {
-    public interface ICreateCommentCommand : ICommand<UpsertCommentDto>
+    public interface ICreateCommentCommand : IAsyncCommand<UpsertCommentDto>
     {
         
     }

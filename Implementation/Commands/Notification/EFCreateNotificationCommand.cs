@@ -27,11 +27,11 @@ namespace Implementation.Commands.Notification
         public int Id => (int)UseCaseEnum.EFCreateNotificationCommand;
         public string Name => UseCaseEnum.EFCreateNotificationCommand.ToString();
 
-        public void Execute(InsertNotificationDto request)
+        public async Task ExecuteAsync(InsertNotificationDto request)
         {
             request.IdUser = _actor.Id;
 
-            _notificationService.CreateNotification(request);
+            await _notificationService.CreateNotification(request);
         }
     }
 }

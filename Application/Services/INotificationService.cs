@@ -8,6 +8,6 @@ namespace Application.Services
 {
     public interface INotificationService
     {
-        void CreateNotification(InsertNotificationDto dto);
+        Task CreateNotification(InsertNotificationDto dto);
     }
 }

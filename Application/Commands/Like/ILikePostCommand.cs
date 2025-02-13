@@ -6,8 +6,7 @@ using Application.DataTransfer.Likes;
 
 namespace Application.Commands.Like
 {
-    public interface ILikePostCommand : ICommand<LikePostDto>
+    public interface ILikePostCommand : IAsyncCommand<LikeDto>
     {
-        
     }
 }

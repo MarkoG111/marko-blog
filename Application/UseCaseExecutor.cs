@@ -40,5 +40,17 @@ namespace Application
 
             return query.Execute(data);
         }
+
+        public async Task ExecuteCommandAsync<TRequest>(IAsyncCommand<TRequest> command, TRequest data)
+        {
+            _logger.Log(command, _actor, data);
+
+            if (!_actor.AllowedUseCases.Contains(command.Id))
+            {
+                throw new UnauthorizedUseCaseException(command, _actor);
+            }
+
+            await command.ExecuteAsync(data);
+        }
     }
 }

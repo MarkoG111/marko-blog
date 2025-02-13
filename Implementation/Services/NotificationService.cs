@@ -33,7 +33,7 @@ namespace Implementation.Services
             };
         }
 
-        public void CreateNotification(InsertNotificationDto dto)
+        public async Task CreateNotification(InsertNotificationDto dto)
         {
             dto.Link = GenerateNotificationLink(dto);
 
@@ -48,8 +48,8 @@ namespace Implementation.Services
                 CreatedAt = DateTime.UtcNow
             };
 
-            _context.Notifications.Add(notification);
-            _context.SaveChanges();
+            _context.Notifications.AddAsync(notification);
+            await _context.SaveChangesAsync();
 
             _notificationHubService.SendNotificationToUser(dto.IdUser, dto);
         }
