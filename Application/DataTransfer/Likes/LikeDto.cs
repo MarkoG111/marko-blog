@@ -6,10 +6,11 @@ using Domain;
 
 namespace Application.DataTransfer.Likes
 {
-    public class LikePostDto
+    public class LikeDto
     {
         public int IdUser { get; set; }
         public int IdPost { get; set; }
+        public int? IdComment { get; set; }
         public LikeStatus Status { get; set; }
     }
 }

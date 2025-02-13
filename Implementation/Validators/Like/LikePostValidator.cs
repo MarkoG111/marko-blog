@@ -8,7 +8,7 @@ using FluentValidation;
 
 namespace Implementation.Validators.Like
 {
-    public class LikePostValidator : AbstractValidator<LikePostDto>
+    public class LikePostValidator : AbstractValidator<LikeDto>
     {
         public LikePostValidator()
         {

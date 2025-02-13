@@ -11,6 +11,7 @@ using Application.Services;
 using EFDataAccess;
 using FluentValidation;
 using Implementation.Validators.Like;
+using Implementation.Services;
 using Domain;
 
 namespace Implementation.Commands.Like
@@ -20,14 +21,16 @@ namespace Implementation.Commands.Like
         private readonly BlogContext _context;
         private readonly LikePostValidator _validator;
         private readonly IApplicationActor _actor;
+        private readonly ILikeService _likeService;
         private readonly INotificationHubService _notificationHubService;
         private readonly INotificationService _notificationService;
 
-        public EFLikePostCommand(LikePostValidator validator, BlogContext context, IApplicationActor actor, INotificationHubService notificationHubService, INotificationService notificationService)
+        public EFLikePostCommand(ILikeService likeService, LikePostValidator validator, BlogContext context, IApplicationActor actor, INotificationHubService notificationHubService, INotificationService notificationService)
         {
             _validator = validator;
             _context = context;
             _actor = actor;
+            _likeService = likeService;
             _notificationHubService = notificationHubService;
             _notificationService = notificationService;
         }
@@ -35,48 +38,44 @@ namespace Implementation.Commands.Like
         public int Id => (int)UseCaseEnum.EFLikePost;
         public string Name => UseCaseEnum.EFLikePost.ToString();
 
-        public void Execute(LikePostDto request)
+        public async Task ExecuteAsync(LikeDto request)
         {
             _validator.ValidateAndThrow(request);
 
-            var findLike = _context.Likes.Where(x => x.IdPost == request.IdPost && x.IdUser == request.IdUser).FirstOrDefault();
-
-            if (findLike == null)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                var like = new Domain.Like
+                try
                 {
-                    IdUser = request.IdUser,
-                    IdPost = request.IdPost,
-                    Status = request.Status
-                };
+                    var like = await _likeService.ToggleLike(request);
 
-                _context.Likes.Add(like);
-                _context.SaveChanges();
+                    if (like != null)
+                    {
+                        var post = await _context.Posts.FindAsync(request.IdPost);
+
+                        if (post != null)
+                        {
+                            await _notificationService.CreateNotification(new InsertNotificationDto
+                            {
+                                IdUser = post.IdUser,
+                                FromIdUser = _actor.Id,
+                                Type = NotificationType.Like,
+                                Content = $"{_actor.Identity} liked your post.",
+                                IdPost = request.IdPost,
+                                CreatedAt = DateTime.Now
+                            });
+                        }
+                    }
+
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
             }
-            else
-            {
-                findLike.Status = request.Status;
-                _context.SaveChanges();
-            }
-
-            var post = _context.Posts.Find(request.IdPost);
-
-            if (post == null)
-            {
-                throw new EntityNotFoundException(request.IdPost, typeof(Domain.Post));
-            }
-
-            var notificationDto = new InsertNotificationDto
-            {
-                IdUser = post.IdUser,
-                FromIdUser = _actor.Id,
-                Type = NotificationType.Like,
-                Content = $"{_actor.Identity} liked your post.",
-                IdPost = request.IdPost,
-                CreatedAt = DateTime.Now
-            };
-
-            _notificationService.CreateNotification(notificationDto);
         }
+
+
     }
 }

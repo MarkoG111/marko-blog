@@ -5,10 +5,14 @@ using System.Threading.Tasks;
 using Application;
 using Application.Exceptions;
 using Application.DataTransfer.Likes;
+using Application.DataTransfer.Notifications;
 using Application.Commands.Like;
+using Application.Services;
 using EFDataAccess;
 using FluentValidation;
 using Implementation.Validators.Like;
+using Implementation.Services;
+using Domain;
 
 namespace Implementation.Commands.Like
 {
@@ -17,54 +21,57 @@ namespace Implementation.Commands.Like
         private readonly BlogContext _context;
         private readonly LikeCommentValidator _validator;
         private readonly IApplicationActor _actor;
+        private readonly ILikeService _likeService; 
+        private readonly INotificationHubService _notificationHubService;
+        private readonly INotificationService _notificationService;
 
-        public EFLikeCommentCommand(LikeCommentValidator validator, BlogContext context, IApplicationActor actor)
+        public EFLikeCommentCommand(LikeCommentValidator validator, BlogContext context, IApplicationActor actor, ILikeService likeService, INotificationHubService notificationHubService, INotificationService notificationService)
         {
             _validator = validator;
             _context = context;
             _actor = actor;
+            _likeService = likeService;
+            _notificationHubService = notificationHubService;
+            _notificationService = notificationService;
         }
 
         public int Id => (int)UseCaseEnum.EFLikeComment;
         public string Name => UseCaseEnum.EFLikeComment.ToString();
 
-        public void Execute(LikeCommentDto request)
+        public async Task ExecuteAsync(LikeDto request)
         {
             _validator.ValidateAndThrow(request);
 
-            var comment = _context.Comments.FirstOrDefault(x => x.Id == request.IdComment);
-
-            if (comment == null)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                throw new EntityNotFoundException(comment.Id, typeof(Domain.Comment));
-            }
-
-            if (comment.IdUser == request.IdUser)
-            {
-                throw new UserLikeException(_actor);
-            }
-
-            var existingLike = _context.Likes.FirstOrDefault(x => x.IdPost == request.IdPost && x.IdUser == request.IdUser && x.IdComment == request.IdComment);
-
-            if (existingLike != null)
-            {
-                // If the user already liked/disliked the comment, update the status
-                existingLike.Status = request.Status;
-            }
-            else
-            {
-                var like = new Domain.Like
+                try
                 {
-                    IdUser = request.IdUser,
-                    IdPost = request.IdPost,
-                    IdComment = request.IdComment,
-                    Status = request.Status
-                };
+                    var like = _likeService.ToggleLike(request);
 
-                _context.Likes.Add(like);
+                    if (like != null)
+                    {
+                        var comment = _context.Comments.FirstOrDefault(x => x.Id == request.IdComment);
+
+                        await _notificationService.CreateNotification(new InsertNotificationDto
+                        {
+                            IdUser = comment.IdUser,
+                            FromIdUser = _actor.Id,
+                            Type = NotificationType.Like,
+                            Content = $"{_actor.Identity} liked your comment.",
+                            IdPost = request.IdPost,
+                            IdComment = request.IdComment,
+                            CreatedAt = DateTime.Now
+                        });
+                    }
+
+                    await transaction.CommitAsync();
+                }
+                catch (System.Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
             }
-
-            _context.SaveChanges();
         }
     }
 }

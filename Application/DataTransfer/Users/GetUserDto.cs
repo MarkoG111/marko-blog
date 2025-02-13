@@ -22,7 +22,7 @@ namespace Application.DataTransfer.Users
         public int FollowingCount { get; set; }
         public int PostsCount { get; set; }
         public IEnumerable<GetUserUseCaseDto> UserUseCases { get; set; }
-        public IEnumerable<LikeCommentDto> CommentLikes { get; set; }
+        public IEnumerable<LikeDto> CommentLikes { get; set; }
         public IEnumerable<GetUserPostsDto> UserPosts { get; set; }
         public IEnumerable<GetUserCommentsDto> UserComments { get; set; }
     }

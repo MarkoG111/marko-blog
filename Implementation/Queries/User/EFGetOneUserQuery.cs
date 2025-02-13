@@ -83,7 +83,7 @@ namespace Implementation.Queries.User
                     PostTitle = c.Post.Title,
                     CreatedAt = c.CreatedAt
                 }).ToList(),
-                CommentLikes = user.Likes.Select(l => new LikeCommentDto
+                CommentLikes = user.Likes.Select(l => new LikeDto
                 {
                     IdUser = l.IdUser,
                     IdPost = l.IdPost,
