@@ -45,8 +45,8 @@ export default function Notifications() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-800 px-96">
-      <div className="flex flex-col h-full p-4 md:w-1/4 bg-white dark:bg-gray-800 shadow-lg border-r border-gray-300 dark:border-gray-700">
+    <div className="flex flex-col h-[100%] md:flex-row md:h-screen bg-gray-100 dark:bg-gray-800 px-4 lg:px-96 pt-2 pb-24 md:pt-0 md:pb-0">
+      <div className="flex flex-col h-full p-4 md:w-1/4 bg-white dark:bg-gray-800 shadow-lg border-r border-gray-300 dark:border-gray-700 rounded-md">
         <h1 className="text-2xl font-bold mb-4 mt-1">Notifications</h1>
         <ul className="space-y-2">
           <li onClick={() => handleTypeChange(null)} className={`cursor-pointer hover:bg-gray-200 dark:hover:bg-indigo-600 hover:rounded-md p-2 ${type === null ? 'bg-gray-100 dark:bg-indigo-700 text-gray-600 dark:text-blue-300 rounded-md' : ''}`}
@@ -61,14 +61,14 @@ export default function Notifications() {
       </div>
 
       {/* Notifications container without overflow control */}
-      <div className="notifications-container flex-1 h-full pr-6 pl-6 bg-white dark:bg-gray-800 overflow-y-auto">
+      <div className="notifications-container flex-1 h-full px-6 bg-white overflow-y-auto mt-6 md:mt-0 rounded-md pb-8 pt-2 dark:bg-gray-800">
         <div className="space-y-4 mt-4">
           {filteredNotifications.length == 0 ? (
             <p>No notifications...</p>
           ) : (
             filteredNotifications.map((notification) => (
               <div key={notification.id}
-                className={`p-4 border-b rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer
+                className={`p-4 border-b rounded-lg shadow-sm dark:shadow-emerald-900 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer
                 ${notification.isNew ? "border-blue-500 dark:border-blue-500" : "border-gray-300 dark:border-gray-400"}
               `}
                 onClick={() => handleNotificationClick(notification)}
