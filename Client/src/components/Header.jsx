@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleTheme } from '../redux/theme/themeSlice'
 import { signoutSuccess } from '../redux/user/userSlice'
@@ -48,7 +48,7 @@ export default function Header() {
   }
 
   return (
-    <Navbar className='border-b-2'>
+    <Navbar className='border-b-2 pb-8 md:pb-4'>
       {/* Logo */}
       <Link to='/' className='self-center whitespace-nowrap mt-4 md:mt-0 text-2xl md:text-xl font-semibold dark:text-white mx-auto'>
         <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>Marko&apos;s</span>Blog
@@ -63,7 +63,7 @@ export default function Header() {
       <div className='flex gap-4 md:gap-2 md:order-2 mx-auto'>
         {currentUser && (currentUser.roleName === 'Admin' || currentUser.roleName === 'Author') && (
           <Link to='/create-post' className='mr-6'>
-            <Button type="button" gradientDuoTone='purpleToPink' className="w-full size-18 mt-6 md:mt-2">Create Post</Button>
+            <Button type="button" gradientDuoTone='purpleToPink' className="w-full size-15 md:size-18 mt-6 md:mt-2">Create Post</Button>
           </Link>
         )}
         {currentUser && (currentUser.roleName === 'Admin') && (
@@ -123,7 +123,7 @@ export default function Header() {
       </div>
 
       {/* Navbar Links */}
-      <Navbar.Collapse className='md:ml-16'>
+      <Navbar.Collapse className='md:ml-16 py-4'>
         <Navbar.Link active={path === '/'} as={'div'}>
           <Link to='/'>
             Home

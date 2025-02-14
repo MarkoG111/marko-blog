@@ -43,8 +43,11 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
           const mainComments = data.comments
           const allChildComments = mainComments.flatMap(comment => comment.childrenComments || [])
 
+          mainComments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+
           setPost(data)
           setComments(mainComments)
+
           setChildComments(allChildComments)
 
           const mainCommentsNotDeleted = mainComments.filter(comment => !comment.isDeleted).length

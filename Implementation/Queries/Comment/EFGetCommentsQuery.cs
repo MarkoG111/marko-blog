@@ -31,8 +31,6 @@ namespace Implementation.Queries.Comment
                 comments = comments.Where(c => c.User.Username.ToLower().Contains(search.Username.ToLower()));
             }
 
-            comments = comments.OrderByDescending(c => c.CreatedAt);
-
             var skipCount = search.PerPage * (search.Page - 1);
             DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);
 

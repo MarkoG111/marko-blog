@@ -21,7 +21,7 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
   const isFirstReply = comment.idParent === null
   const isSmallScreen = window.innerWidth <= 768
 
-  const formattedTime = moment(comment.createdAt).fromNow()
+  const formattedTime = moment.utc(comment.createdAt).fromNow()
 
   const { showError } = useError()
 
@@ -97,7 +97,7 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
     <>
       <div className="flex p-4 border-b dark:border-gray-600 text-sm">
         <div className="flex-shrink-0 mr-3">
-          <img className="w-10 h-10 rounded-full bg-gray-200" src={getAvatarSrc(currentUser.profilePicture)} referrerPolicy="no-referrer" alt={user.username} />
+          <img className="w-10 h-10 rounded-full bg-gray-200" src={getAvatarSrc(user.profilePicture)} referrerPolicy="no-referrer" alt={user.username} />
         </div>
 
         <div className="flex-1">

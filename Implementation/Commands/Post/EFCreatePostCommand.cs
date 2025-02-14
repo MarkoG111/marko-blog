@@ -43,6 +43,7 @@ namespace Implementation.Commands.Post
                 Title = request.Title,
                 Content = request.Content,
                 IdImage = request.IdImage,
+                CreatedAt = DateTime.UtcNow,
                 IdUser = _actor.Id
             };
 

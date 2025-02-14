@@ -11,6 +11,7 @@ using EFDataAccess;
 using Domain;
 using FluentValidation;
 using Implementation.Validators.Comment;
+using Microsoft.EntityFrameworkCore;
 
 namespace Implementation.Commands.Comment
 {
@@ -40,64 +41,91 @@ namespace Implementation.Commands.Comment
 
             request.IdUser = _actor.Id;
 
-            var comment = new Domain.Comment
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                CommentText = request.CommentText,
-                IdPost = request.IdPost,
-                IdParent = request.IdParent,
-                IdUser = request.IdUser
-            };
-
-            await _context.Comments.AddAsync(comment);
-            await _context.SaveChangesAsync();
-
-            request.Id = comment.Id;
-
-            var post = _context.Posts.Where(x => x.Id == request.IdPost).Select(x => new { x.IdUser, x.Title }).FirstOrDefault();
-
-            if (post == null)
-            {
-                throw new Exception("Post not found");
-            }
-
-            // Avoid sending a notification to the commenter themselves
-            if (post.IdUser != request.IdUser)
-            {
-                var postOwnerNotification = new InsertNotificationDto
+                var comment = new Domain.Comment
                 {
-                    IdUser = post.IdUser, // Post owner
-                    FromIdUser = request.IdUser, // Commenter
-                    Type = NotificationType.Comment,
-                    Content = $"{_actor.Identity} has commented on your post.",
-                    CreatedAt = DateTime.Now,
-                    IdComment = comment.Id
+                    CommentText = request.CommentText,
+                    IdPost = request.IdPost,
+                    IdParent = request.IdParent,
+                    IdUser = request.IdUser,
+                    CreatedAt = DateTime.UtcNow,
                 };
 
-                await _notificationService.CreateNotification(postOwnerNotification);
-            }
+                await _context.Comments.AddAsync(comment);
+                await _context.SaveChangesAsync();
 
-            // If the comment is a reply, notify the parent comment's owner (if different from the commenter)
-            if (request.IdParent.HasValue)
-            {
-                var parentComment = _context.Comments
-                    .Where(c => c.Id == request.IdParent.Value)
-                    .Select(c => new { c.IdUser, c.CommentText })
-                    .FirstOrDefault();
+                request.Id = comment.Id;
 
-                if (parentComment != null && parentComment.IdUser != request.IdUser)
+                var post = await _context.Posts.Where(x => x.Id == request.IdPost).Select(x => new { x.IdUser, x.Title }).FirstOrDefaultAsync();
+                if (post == null)
                 {
-                    var parentCommentNotification = new InsertNotificationDto
-                    {
-                        IdUser = parentComment.IdUser, // Parent comment owner
-                        FromIdUser = request.IdUser, // Commenter
-                        Type = NotificationType.Comment,
-                        Content = $"{_actor.Identity} has replied to your comment: \"{parentComment.CommentText}\"",
-                        CreatedAt = DateTime.Now,
-                        IdComment = comment.Id
-                    };
-
-                    await _notificationService.CreateNotification(parentCommentNotification);
+                    await transaction.RollbackAsync();
+                    return;
                 }
+
+                var notifications = new List<InsertNotificationDto>();
+
+                // Notifikacija vlasniku posta
+                if (post.IdUser != request.IdUser)
+                {
+                    notifications.Add(new InsertNotificationDto
+                    {
+                        IdUser = post.IdUser,
+                        FromIdUser = request.IdUser,
+                        Type = NotificationType.Comment,
+                        Content = $"{_actor.Identity} has commented on your post.",
+                        CreatedAt = DateTime.UtcNow,
+                        IdComment = comment.Id
+                    });
+                }
+
+                // Notifikacija vlasniku parent komentara
+                if (request.IdParent.HasValue)
+                {
+                    var parentComment = await _context.Comments
+                        .Where(c => c.Id == request.IdParent.Value)
+                        .Select(c => new { c.IdUser, c.CommentText })
+                        .FirstOrDefaultAsync();
+
+                    if (parentComment != null && parentComment.IdUser != request.IdUser)
+                    {
+                        notifications.Add(new InsertNotificationDto
+                        {
+                            IdUser = parentComment.IdUser,
+                            FromIdUser = request.IdUser,
+                            Type = NotificationType.Comment,
+                            Content = $"{_actor.Identity} has replied to your comment: \"{parentComment.CommentText}\"",
+                            CreatedAt = DateTime.UtcNow,
+                            IdComment = comment.Id
+                        });
+                    }
+                }
+
+                await transaction.CommitAsync();
+
+                // Slanje notifikacija u pozadini
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        foreach (var notification in notifications)
+                        {
+                            await _notificationService.CreateNotification(notification);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error sending notifications: {ex.Message}");
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw;
             }
         }
     }

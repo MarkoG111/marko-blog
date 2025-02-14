@@ -28,7 +28,7 @@ export default function Authors() {
         if (response.ok) {
           const data = await response.json()
 
-          const authors = data.items.filter((author) => author.role == 'Author')
+          const authors = data.items.filter((author) => author.roleName == 'Author')
 
           setAuthors(authors)
           setPageCount(data.pageCount)

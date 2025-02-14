@@ -1,5 +1,5 @@
 export function timeAgo(timestamp) {
-  const date = new Date(timestamp)
+  const date = new Date(timestamp + "Z") // Forces UTC interpretation
   const now = new Date()
   const diffInSeconds = Math.floor((now - date) / 1000)
 
@@ -13,13 +13,13 @@ export function timeAgo(timestamp) {
     return `${hours} hour${hours > 1 ? 's' : ''} ago`
   } else {
     const days = Math.floor(diffInSeconds / 86400)
-    return `${days} day${days > 1 ?'s' : ''} ago`
+    return `${days} day${days > 1 ? 's' : ''} ago`
   }
 }
 
 export function hoverActualDate(timestamp) {
   const date = new Date(timestamp)
-  const day =  date.getDate()
+  const day = date.getDate()
   const month = date.toLocaleDateString('en-US', { month: 'long' })
   const year = date.getFullYear()
 

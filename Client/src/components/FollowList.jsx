@@ -81,11 +81,9 @@ export default function FollowList({ isFollowersTab }) {
               </div>
             )
           })}
-
-
         </div>
       ) : (
-        <p>No users found.</p>
+        <p className='text-center'>No users found.</p>
       )}
       <Pagination
         currentPage={currentPage}
