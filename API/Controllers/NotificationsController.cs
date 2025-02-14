@@ -22,10 +22,10 @@ namespace API.Controllers
         }
 
         [HttpPost("/notifications")]
-        public async Task<IActionResult> Post([FromBody] InsertNotificationDto dto, [FromServices] ICreateNotificationCommand command)
+        public async Task<IActionResult> Post([FromBody] InsertNotificationDto dtoRequest, [FromServices] ICreateNotificationCommand command)
         {
-            dto.FromIdUser = _actor.Id;
-            await _executor.ExecuteCommandAsync(command, dto);
+            dtoRequest.FromIdUser = _actor.Id;
+            await _executor.ExecuteCommandAsync(command, dtoRequest);
             return Ok();
         }
 

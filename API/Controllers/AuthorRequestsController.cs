@@ -21,11 +21,11 @@ namespace API.Controllers
         }
 
         [HttpPost("/authorrequests")]
-        public IActionResult Post([FromBody] UpsertAuthorRequestDto dto, [FromServices] ICreateAuthorRequestCommand command)
+        public IActionResult Post([FromBody] UpsertAuthorRequestDto dtoRequest, [FromServices] ICreateAuthorRequestCommand command)
         {
-            dto.IdUser = _actor.Id;
-            _executor.ExecuteCommand(command, dto);
-            return Ok(dto);
+            dtoRequest.IdUser = _actor.Id;
+            _executor.ExecuteCommand(command, dtoRequest);
+            return Ok(dtoRequest);
         }
 
         [HttpGet("/authorrequests")]
@@ -35,20 +35,20 @@ namespace API.Controllers
         }
 
         [HttpPut("/authorrequests/accept")]
-        public IActionResult Accept(int id, [FromBody] UpsertAuthorRequestDto request, [FromServices] IUpdateAuthorRequestCommand command)
+        public IActionResult Accept(int id, [FromBody] UpsertAuthorRequestDto dtoRequest, [FromServices] IUpdateAuthorRequestCommand command)
         {
-            request.Id = id;
-            request.IdRole = 2;
-            _executor.ExecuteCommand(command, request);
+            dtoRequest.Id = id;
+            dtoRequest.IdRole = 2;
+            _executor.ExecuteCommand(command, dtoRequest);
             return Ok();
         }
 
         [HttpPut("/authorrequests/reject")]
-        public IActionResult Reject(int id, [FromBody] UpsertAuthorRequestDto request, [FromServices] IUpdateAuthorRequestCommand command)
+        public IActionResult Reject(int id, [FromBody] UpsertAuthorRequestDto dtoRequest, [FromServices] IUpdateAuthorRequestCommand command)
         {
-            request.Id = id;
-            request.IdRole = 3;
-            _executor.ExecuteCommand(command, request);
+            dtoRequest.Id = id;
+            dtoRequest.IdRole = 3;
+            _executor.ExecuteCommand(command, dtoRequest);
             return Ok();
         }
     }

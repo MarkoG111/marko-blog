@@ -21,10 +21,10 @@ namespace API.Controllers
         }
 
         [HttpPost("/followers")]
-        public async Task <IActionResult> Post([FromBody] InsertFollowDto dto, [FromServices] IFollowCommand command)
+        public async Task <IActionResult> Post([FromBody] InsertFollowDto dtoRequest, [FromServices] IFollowCommand command)
         {
-            dto.IdUser = _actor.Id;
-            await _executor.ExecuteCommandAsync(command, dto);
+            dtoRequest.IdUser = _actor.Id;
+            await _executor.ExecuteCommandAsync(command, dtoRequest);
             return Ok();
         }
 

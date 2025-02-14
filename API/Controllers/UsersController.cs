@@ -19,9 +19,9 @@ namespace API.Controllers
         }
 
         [HttpPost("/users")]
-        public IActionResult Post([FromBody] UpsertUserDto dto, [FromServices] ICreateUserCommand command)
+        public IActionResult Post([FromBody] UpsertUserDto dtoRequest, [FromServices] ICreateUserCommand command)
         {
-            _executor.ExecuteCommand(command, dto);
+            _executor.ExecuteCommand(command, dtoRequest);
             return StatusCode(StatusCodes.Status201Created);
         }
 
@@ -38,10 +38,10 @@ namespace API.Controllers
         }
 
         [HttpPut("/users/{id}")]
-        public IActionResult Put(int id, [FromForm] UpsertUserDto dto, [FromServices] IUpdateUserCommand command, [FromServices] IGetUserQuery getUserQuery)
+        public IActionResult Put(int id, [FromForm] UpsertUserDto dtoRequest, [FromServices] IUpdateUserCommand command, [FromServices] IGetUserQuery getUserQuery)
         {
-            dto.Id = id;
-            _executor.ExecuteCommand(command, dto);
+            dtoRequest.Id = id;
+            _executor.ExecuteCommand(command, dtoRequest);
 
             var updatedUser = _executor.ExecuteQuery(getUserQuery, id);
 

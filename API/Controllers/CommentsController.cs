@@ -23,10 +23,10 @@ namespace API.Controllers
         }
 
         [HttpPost("/comments")]
-        public async Task <IActionResult> Post([FromBody] UpsertCommentDto dto, [FromServices] ICreateCommentCommand command)
+        public async Task <IActionResult> Post([FromBody] UpsertCommentDto dtoRequest, [FromServices] ICreateCommentCommand command)
         {
-            await _executor.ExecuteCommandAsync(command, dto);
-            return Ok(dto);
+            await _executor.ExecuteCommandAsync(command, dtoRequest);
+            return Ok(dtoRequest);
         }
 
         [HttpGet("/comments")]
@@ -42,11 +42,11 @@ namespace API.Controllers
         }
 
         [HttpPut("/comments/{id}")]
-        public IActionResult Put(int id, [FromBody] UpsertCommentDto dto, [FromServices] IUpdatePersonalCommentCommand command)
+        public IActionResult Put(int id, [FromBody] UpsertCommentDto dtoRequest, [FromServices] IUpdatePersonalCommentCommand command)
         {
-            dto.Id = id;
-            dto.IdUser = _actor.Id;
-            _executor.ExecuteCommand(command, dto);
+            dtoRequest.Id = id;
+            dtoRequest.IdUser = _actor.Id;
+            _executor.ExecuteCommand(command, dtoRequest);
             return NoContent();
         }
 
@@ -58,10 +58,10 @@ namespace API.Controllers
         }
 
         [HttpPost("/comments/{id}/like")]
-        public async Task <IActionResult> Like([FromBody] LikeDto request, [FromServices] ILikeCommentCommand command)
+        public async Task <IActionResult> Like([FromBody] LikeDto dtoRequest, [FromServices] ILikeCommentCommand command)
         {
-            await _executor.ExecuteCommandAsync(command, request);
-            return Ok(request);
+            await _executor.ExecuteCommandAsync(command, dtoRequest);
+            return Ok(dtoRequest);
         }
 
         [HttpDelete("/comments/{id}/personal")]

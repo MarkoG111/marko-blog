@@ -17,9 +17,9 @@ namespace API.Controllers
         }
 
         [HttpPost("/register")]
-        public IActionResult Post([FromBody] RegisterUserDto dto, [FromServices] IRegisterUserCommand command)
+        public IActionResult Post([FromBody] RegisterUserDto dtoRequest, [FromServices] IRegisterUserCommand command)
         {
-            _executor.ExecuteCommand(command, dto);
+            _executor.ExecuteCommand(command, dtoRequest);
             return StatusCode(StatusCodes.Status201Created);
         }
     }

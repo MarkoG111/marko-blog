@@ -19,9 +19,9 @@ namespace API.Controllers
         }
 
         [HttpPost("/categories")]
-        public IActionResult Post([FromBody] UpsertCategoryDto dto, [FromServices] ICreateCategoryCommand command)
+        public IActionResult Post([FromBody] UpsertCategoryDto dtoRequest, [FromServices] ICreateCategoryCommand command)
         {
-            _executor.ExecuteCommand(command, dto);
+            _executor.ExecuteCommand(command, dtoRequest);
             return StatusCode(StatusCodes.Status201Created);
         }
 
@@ -39,10 +39,10 @@ namespace API.Controllers
         }
 
         [HttpPut("/categories/{id}")]
-        public IActionResult Put(int id, [FromBody] UpsertCategoryDto dto, [FromServices] IUpdateCategoryCommand command)
+        public IActionResult Put(int id, [FromBody] UpsertCategoryDto dtoRequest, [FromServices] IUpdateCategoryCommand command)
         {
-            dto.Id = id;
-            _executor.ExecuteCommand(command, dto);
+            dtoRequest.Id = id;
+            _executor.ExecuteCommand(command, dtoRequest);
             return NoContent();
         }
 

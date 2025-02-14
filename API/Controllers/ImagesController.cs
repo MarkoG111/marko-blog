@@ -18,10 +18,10 @@ namespace API.Controllers
         }
 
         [HttpPost("/images")]
-        public IActionResult Post([FromForm] UploadImageDto dto)
+        public IActionResult Post([FromForm] UploadImageDto dtoRequest)
         {
             var guid = Guid.NewGuid();
-            var extension = Path.GetExtension(dto.Image.FileName);
+            var extension = Path.GetExtension(dtoRequest.Image.FileName);
             var newFileName = guid + extension;
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
             var filePath = Path.Combine(uploadsFolder, newFileName);
@@ -30,7 +30,7 @@ namespace API.Controllers
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-                dto.Image.CopyTo(fileStream);
+                dtoRequest.Image.CopyTo(fileStream);
             }
 
             var image = new Image

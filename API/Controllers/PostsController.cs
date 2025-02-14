@@ -23,9 +23,9 @@ namespace API.Controllers
         }
 
         [HttpPost("/posts")]
-        public async Task <IActionResult> Post([FromBody] UpsertPostDto dto, [FromServices] ICreatePostCommand command)
+        public async Task <IActionResult> Post([FromBody] UpsertPostDto dtoRequest, [FromServices] ICreatePostCommand command)
         {
-            await _executor.ExecuteCommandAsync(command, dto);
+            await _executor.ExecuteCommandAsync(command, dtoRequest);
             return Ok();
         }
 
@@ -42,10 +42,10 @@ namespace API.Controllers
         }
 
         [HttpPut("/posts/{id}")]
-        public IActionResult Put(int id, [FromBody] UpsertPostDto dto, [FromServices] IUpdatePostCommand command)
+        public IActionResult Put(int id, [FromBody] UpsertPostDto dtoRequest, [FromServices] IUpdatePostCommand command)
         {
-            dto.Id = id;
-            _executor.ExecuteCommand(command, dto);
+            dtoRequest.Id = id;
+            _executor.ExecuteCommand(command, dtoRequest);
             return NoContent();
         }
 
@@ -57,18 +57,18 @@ namespace API.Controllers
         }
 
         [HttpPost("/posts/{id}/like")]
-        public async Task<IActionResult> Like([FromBody] LikeDto request, [FromServices] ILikePostCommand command)
+        public async Task<IActionResult> Like([FromBody] LikeDto dtoRequest, [FromServices] ILikePostCommand command)
         {
-            request.IdUser = _actor.Id;
-            await _executor.ExecuteCommandAsync(command, request);
-            return Ok(request);
+            dtoRequest.IdUser = _actor.Id;
+            await _executor.ExecuteCommandAsync(command, dtoRequest);
+            return Ok(dtoRequest);
         }
 
         [HttpPut("/posts/{id}/personal")]
-        public IActionResult UpdatePersonalPost(int id, [FromBody] UpsertPostDto dto, [FromServices] IUpdatePersonalPostCommand command)
+        public IActionResult UpdatePersonalPost(int id, [FromBody] UpsertPostDto dtoRequest, [FromServices] IUpdatePersonalPostCommand command)
         {
-            dto.Id = id;
-            _executor.ExecuteCommand(command, dto);
+            dtoRequest.Id = id;
+            _executor.ExecuteCommand(command, dtoRequest);
             return NoContent();
         }
 
