@@ -4,12 +4,12 @@ export const getAvatarSrc = (profilePicture, imageError = false) => {
   }
 
   if (imageError) {
-    return `/images/proxy?url=${encodeURIComponent(profilePicture)}`
+    return `/api/images/proxy?url=${encodeURIComponent(profilePicture)}`
   }
 
   if (profilePicture.startsWith("http")) {
     return profilePicture
   }
 
-  return `/users/images/${profilePicture}`
+  return `/api/users/images/${profilePicture}`
 }

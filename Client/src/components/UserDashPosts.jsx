@@ -112,8 +112,8 @@ export default function UserDashPosts() {
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                 <Table.Cell>{new Date(post.dateCreated).toLocaleDateString()}</Table.Cell>
                 <Table.Cell>
-                  <Link to={`/post/${post.id}`}>
-                    <img src={`/images/${post.imageName}`} alt={post.title} className="w-20 h-10 object-contain bg-gray-500" />
+                  <Link to={`/api/post/${post.id}`}>
+                    <img src={`/api/images/${post.imageName}`} alt={post.title} className="w-20 h-10 object-contain bg-gray-500" />
                   </Link>
                 </Table.Cell>
                 <Table.Cell>
@@ -130,7 +130,7 @@ export default function UserDashPosts() {
                   <span onClick={() => { setShowModal(true); setIdPostToDelete(post.id) }} className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span>
                 </Table.Cell>
                 <Table.Cell>
-                  <Link to={`/update-post/${post.id}`} className="text-teal-500 hover:underline">
+                  <Link to={`/api/update-post/${post.id}`} className="text-teal-500 hover:underline">
                     <span>Edit</span>
                   </Link>
                 </Table.Cell>

@@ -170,7 +170,7 @@ export default function CreatePost() {
 
           {imagePreview && (
             <div>
-              <img src={`/images/${imagePreview.imagePath}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
+              <img src={`/api/images/${imagePreview.imagePath}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
             </div>
           )}
         </div>

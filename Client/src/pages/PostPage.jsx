@@ -123,7 +123,7 @@ export default function PostPage() {
         <p className="text-xl">Author: {post.username}</p>
       </div>
 
-      <img src={post && `/images/${post.imageName}`} alt={post && post.title} className="mt-10 p-3 max-h-[300px] w-full object-contain" />
+      <img src={post && `/api/images/${post.imageName}`} alt={post && post.title} className="mt-10 p-3 max-h-[300px] w-full object-contain" />
 
       <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl">
         <span>{post && new Date(post.dateCreated).toLocaleDateString()}</span>

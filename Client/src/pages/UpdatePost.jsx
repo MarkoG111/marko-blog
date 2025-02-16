@@ -128,7 +128,7 @@ export default function UpdatePost() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/images`, {
+      const response = await fetch(`/api/images`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -164,7 +164,7 @@ export default function UpdatePost() {
         throw new Error("Token not found")
       }
 
-      const url = currentUser.id == editData.idUser ? `/posts/${editData.id}/personal` : `/posts/${editData.id}`
+      const url = currentUser.id == editData.idUser ? `/api/posts/${editData.id}/personal` : `/api/posts/${editData.id}`
 
       const response = await fetch(url, {
         method: "PUT",
@@ -215,13 +215,13 @@ export default function UpdatePost() {
 
           {editData.imageName && !imagePreview && (
             <div>
-              <img src={`/images/${editData.imageName}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
+              <img src={`/api/images/${editData.imageName}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
             </div>
           )}
 
           {imagePreview && (
             <div>
-              <img src={`/images/${imagePreview.imagePath}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
+              <img src={`/api/images/${imagePreview.imagePath}`} alt="Uploaded" className="max-w-full h-auto mb-4" />
             </div>
           )}
         </div>

@@ -188,7 +188,7 @@ export default function AdminDashboard() {
               <Table.Body key={post.id} className="divide-y">
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell>
-                    <img src={`/images/${post.imageName}`} alt={post.title} className="w-16 h-14 rounded-md " />
+                    <img src={`/api/images/${post.imageName}`} alt={post.title} className="w-16 h-14 rounded-md " />
                   </Table.Cell>
                   <Table.Cell className="">{post.title}</Table.Cell>
                   <Table.Cell className="">
