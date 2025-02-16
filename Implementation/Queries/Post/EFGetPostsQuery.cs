@@ -29,12 +29,12 @@ namespace Implementation.Queries.Post
 
             var totalCount = posts.Count();
 
-            if (!string.IsNullOrEmpty(search.Title) || !string.IsNullOrWhiteSpace(search.Title))
+            if (!string.IsNullOrWhiteSpace(search.Title))
             {
                 posts = posts.Where(x => x.Title.ToLower().Contains(search.Title.ToLower()));
             }
 
-            if (!string.IsNullOrEmpty(search.Content) || !string.IsNullOrWhiteSpace(search.Content))
+            if (!string.IsNullOrWhiteSpace(search.Content))
             {
                 posts = posts.Where(x => x.Content.ToLower().Contains(search.Content.ToLower()));
             }

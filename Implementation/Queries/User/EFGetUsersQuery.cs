@@ -31,12 +31,12 @@ namespace Implementation.Queries.User
                 users = users.Where(x => x.Role.Name == "Author");
             }
 
-            if (!string.IsNullOrEmpty(search.Username) || !string.IsNullOrWhiteSpace(search.Username))
+            if (!string.IsNullOrWhiteSpace(search.Username))
             {
                 users = users.Where(x => x.Username.ToLower().Contains(search.Username.ToLower()));
             }
 
-            if (!string.IsNullOrEmpty(search.Email) || !string.IsNullOrWhiteSpace(search.Email))
+            if (!string.IsNullOrWhiteSpace(search.Email))
             {
                 users = users.Where(x => x.Email.ToLower().Contains(search.Email.ToLower()));
             }

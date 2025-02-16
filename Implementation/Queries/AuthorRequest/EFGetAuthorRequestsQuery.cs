@@ -26,7 +26,7 @@ namespace Implementation.Queries.AuthorRequest
         {
             var query = _context.AuthorRequests.AsQueryable();
 
-            if (!string.IsNullOrEmpty(search.Reason) || !string.IsNullOrWhiteSpace(search.Reason))
+            if (!string.IsNullOrWhiteSpace(search.Reason))
             {
                 query = query.Where(x => x.Reason.ToLower().Contains(search.Reason.ToLower()));
             }
