@@ -28,9 +28,10 @@ namespace Implementation.Queries.User
         public GetUserDto Execute(int idUser)
         {
             var user = _context.Users
+            .AsNoTracking()
             .Include(x => x.UserUseCases)
             .Include(u => u.Role)
-            .Include(p => p.Posts.OrderByDescending(p => p.CreatedAt))
+            .Include(p => p.Posts)
                 .ThenInclude(bc => bc.PostCategories)
                 .ThenInclude(cat => cat.Category)
             .Include(p => p.Posts)
@@ -39,35 +40,40 @@ namespace Implementation.Queries.User
                 .ThenInclude(pos => pos.Post)
                 .ThenInclude(i => i.Image)
             .Include(l => l.Likes)
-            .FirstOrDefault(x => x.Id == idUser);
+            .Where(x => x.Id == idUser)
+            .Select(user => new
+            {
+                User = user,
+                FollowersCount = _context.Followers.Count(f => f.IdFollowing == idUser),
+                FollowingCount = _context.Followers.Count(f => f.IdFollower == idUser),
+                PostsCount = user.Posts.Count
+            })
+            .FirstOrDefault();
 
             if (user == null)
             {
                 return null;
             }
 
-            var followersCount = _context.Followers.Count(f => f.IdFollowing == idUser);
-            var followingCount = _context.Followers.Count(f => f.IdFollower == idUser);
-            var postsCount = _context.Posts.Count(p => p.IdUser == idUser);
-
             return new GetUserDto
             {
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Username = user.Username,
-                Email = user.Email,
-                ProfilePicture = user.ProfilePicture,
-                RoleName = user.Role.Name,
-                UserUseCases = user.UserUseCases.Select(x => new GetUserUseCaseDto
+                Id = user.User.Id,
+                FirstName = user.User.FirstName,
+                LastName = user.User.LastName,
+                Username = user.User.Username,
+                Email = user.User.Email,
+                ProfilePicture = user.User.ProfilePicture,
+                RoleName = user.User.Role.Name,
+                UserUseCases = user.User.UserUseCases.Select(x => new GetUserUseCaseDto
                 {
-                    IdUseCase = x.IdUseCase
-                }),
-                UserPosts = user.Posts.Select(p => new GetUserPostsDto
+                    IdUseCase = x.IdUseCase,
+                    UseCaseName = Enum.GetName(typeof(UseCaseEnum), x.IdUseCase)
+                }).ToList(),
+                UserPosts = user.User.Posts.OrderByDescending(p => p.CreatedAt).Select(p => new GetUserPostsDto
                 {
                     Id = p.Id,
                     Title = p.Title,
-                    ImageName = p.Image.ImagePath,
+                    ImageName = p.Image?.ImagePath,
                     DateCreated = p.CreatedAt,
                     IdUser = p.IdUser,
                     Categories = p.PostCategories.Select(y => new GetPostCategoriesDto
@@ -76,23 +82,23 @@ namespace Implementation.Queries.User
                         Name = y.Category.Name
                     }).ToList()
                 }).ToList(),
-                UserComments = user.Comments.Select(c => new GetUserCommentsDto
+                UserComments = user.User.Comments.Select(c => new GetUserCommentsDto
                 {
                     Id = c.Id,
                     CommentText = c.CommentText,
                     PostTitle = c.Post.Title,
                     CreatedAt = c.CreatedAt
                 }).ToList(),
-                CommentLikes = user.Likes.Select(l => new LikeDto
+                CommentLikes = user.User.Likes.Select(l => new LikeDto
                 {
                     IdUser = l.IdUser,
                     IdPost = l.IdPost,
                     IdComment = l.IdComment,
                     Status = l.Status
                 }).ToList(),
-                FollowersCount = followersCount,
-                FollowingCount = followingCount,
-                PostsCount = postsCount
+                FollowersCount = user.FollowersCount,
+                FollowingCount = user.FollowingCount,
+                PostsCount = user.PostsCount
             };
         }
     }
