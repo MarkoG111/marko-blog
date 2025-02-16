@@ -25,13 +25,14 @@ namespace Implementation.Queries.Follow
 
         public PagedResponse<GetFollowsDto> Execute(FollowSearch search)
         {
-            var followers = _context.Followers.Where(f => f.IdFollowing == search.IdUser).Include(f => f.FollowerUser).ToList();
+            var followers = _context.Followers.Where(f => f.IdFollowing == search.IdUser).Include(f => f.FollowerUser).AsQueryable();
 
             var response = new PagedResponse<GetFollowsDto>
             {
                 TotalCount = followers.Count(),
                 CurrentPage = search.Page,
                 ItemsPerPage = search.PerPage,
+                
                 Items = followers.Skip(search.PerPage * (search.Page - 1)).Take(search.PerPage).Select(f => new GetFollowsDto
                 {
                     Id = f.FollowerUser.Id,

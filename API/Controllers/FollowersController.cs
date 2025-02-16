@@ -36,9 +36,9 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}/following")]
-        public IActionResult GetFollowing(int id, [FromServices] IGetFollowingQuery query)
+        public IActionResult GetFollowing([FromServices] IGetFollowingQuery query, [FromQuery] FollowSearch search)
         {
-            var following = _executor.ExecuteQuery(query, id);
+            var following = _executor.ExecuteQuery(query, search);
             return Ok(following);
         }
 

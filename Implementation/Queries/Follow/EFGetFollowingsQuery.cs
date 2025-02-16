@@ -23,15 +23,17 @@ namespace Implementation.Queries.Follow
         public int Id => (int)UseCaseEnum.EFGetFollowingsQuery;
         public string Name => UseCaseEnum.EFGetFollowingsQuery.ToString();
 
-        public PagedResponse<GetFollowsDto> Execute(int idUser)
+        public PagedResponse<GetFollowsDto> Execute(FollowSearch search)
         {
-            var following = _context.Followers.Where(f => f.IdFollower == idUser).Include(f => f.FollowingUser);
+            var following = _context.Followers.Where(f => f.IdFollower == search.IdUser).Include(f => f.FollowingUser).AsQueryable();
 
             var response = new PagedResponse<GetFollowsDto>
             {
                 TotalCount = following.Count(),
-
-                Items = following.Select(f => new GetFollowsDto
+                CurrentPage = search.Page,
+                ItemsPerPage = search.PerPage,
+                
+                Items = following.Skip(search.PerPage * (search.Page - 1)).Take(search.PerPage).Select(f => new GetFollowsDto
                 {
                     Id = f.FollowingUser.Id,
                     FirstName = f.FollowingUser.FirstName,

@@ -7,7 +7,7 @@ using Application.Searches;
 
 namespace Application.Queries.Follow
 {
-    public interface IGetFollowingQuery : IQuery<PagedResponse<GetFollowsDto>, int>
+    public interface IGetFollowingQuery : IQuery<PagedResponse<GetFollowsDto>, FollowSearch>
     {
 
     }
