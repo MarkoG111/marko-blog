@@ -2,6 +2,7 @@ using Application;
 using Application.DataTransfer.Posts;
 using Application.DataTransfer.Comments;
 using Application.Queries.Post;
+using Application.Exceptions;
 using EFDataAccess;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,19 +24,50 @@ namespace Implementation.Queries.Post
         public int Id => (int)UseCaseEnum.EFGetOnePostQuery;
         public string Name => UseCaseEnum.EFGetOnePostQuery.ToString();
 
-        GetPostDetailsDto IQuery<GetPostDetailsDto, int>.Execute(int search)
+        GetPostDetailsDto IQuery<GetPostDetailsDto, int>.Execute(int idPost)
         {
-            var post = _context.Posts.Find(search);
-
             var query = _context.Posts
                 .Include(l => l.Likes)
                 .Include(up => up.User)
                 .Include(i => i.Image)
                 .Include(com => com.Comments)
-                .ThenInclude(u => u.User)
+                    .ThenInclude(u => u.User)
+                .Include(com => com.Comments)
+                    .ThenInclude(l => l.Likes)
                 .Include(bc => bc.PostCategories)
-                .ThenInclude(c => c.Category)
-                .FirstOrDefault(a => a.Id == search);
+                    .ThenInclude(c => c.Category)
+                .FirstOrDefault(a => a.Id == idPost);
+
+            if (query == null)
+            {
+                throw new EntityNotFoundException(idPost, typeof(Domain.Post));
+            }
+
+            var comments = (query.Comments ?? new List<Domain.Comment>()).ToList();
+
+            var commentsLookup = comments.GroupBy(c => c.IdParent ?? 0).ToDictionary(g => g.Key, g => g.ToList());
+
+            List<GetCommentsDto> BuildCommentTree(int? idParent)
+            {
+                return commentsLookup.ContainsKey(idParent ?? 0) ? commentsLookup[idParent ?? 0].Select(c => new GetCommentsDto
+                {
+                    Id = c.Id,
+                    CommentText = c.CommentText,
+                    IdParent = c.IdParent,
+                    IdUser = c.IdUser,
+                    Username = c.User?.Username,
+                    CreatedAt = c.CreatedAt,
+                    IsDeleted = c.IsDeleted,
+                    LikesCount = c.Likes.Count,
+                    Likes = c.Likes.Select(l => new GetCommentLikesDto
+                    {
+                        IdComment = l.IdComment,
+                        IdUser = l.IdUser,
+                        Status = l.Status,
+                    }).ToList(),
+                    ChildrenComments = BuildCommentTree(c.Id)
+                }).ToList() : new List<GetCommentsDto>();
+            }
 
             var result = new GetPostDetailsDto
             {
@@ -58,40 +90,7 @@ namespace Implementation.Queries.Post
                     Status = w.Status,
                     IdUser = w.IdUser
                 }).ToList(),
-                Comments = query.Comments.Where(c => c.IdParent == null).Select(t => new GetCommentsDto
-                {
-                    Id = t.Id,
-                    CommentText = t.CommentText,
-                    IdParent = t.IdParent,
-                    IdUser = t.IdUser,
-                    Username = t.User?.Username,
-                    CreatedAt = t.CreatedAt,
-                    IsDeleted = t.IsDeleted,
-                    LikesCount = t.Likes.Count(),
-                    Likes = t.Likes.Select(l => new GetCommentLikesDto
-                    {
-                        IdComment = l.IdComment,
-                        IdUser = l.IdUser,
-                        Status = l.Status,
-                    }).ToList(),
-                    ChildrenComments = query.Comments.Where(c => c.IdParent == t.Id).Select(c => new GetCommentsDto
-                    {
-                        Id = c.Id,
-                        CommentText = c.CommentText,
-                        IdParent = c.IdParent,
-                        IdUser = c.IdUser,
-                        Username = c.User?.Username,
-                        CreatedAt = c.CreatedAt,
-                        IsDeleted = c.IsDeleted,
-                        LikesCount = c.Likes.Count(),
-                        Likes = c.Likes.Select(l => new GetCommentLikesDto
-                        {
-                            IdComment = l.IdComment,
-                            IdUser = l.IdUser,
-                            Status = l.Status,
-                        }).ToList(),
-                    }).ToList(),
-                }).ToList(),
+                Comments = BuildCommentTree(null)
             };
 
             return result;
