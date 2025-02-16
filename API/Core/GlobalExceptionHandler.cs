@@ -42,11 +42,6 @@ namespace API.Core
                         errorMessage = alreadyAddedException.Message;
                         response = new { message = errorMessage };
                         break;
-                    case UserLikeException userLikeException:
-                        statusCode = StatusCodes.Status400BadRequest;
-                        errorMessage = userLikeException.Message;
-                        response = new { message = errorMessage };
-                        break;
                     case UnauthorizedUseCaseException _:
                         statusCode = StatusCodes.Status403Forbidden;
                         errorMessage = "You are not allowed to execute this operation.";

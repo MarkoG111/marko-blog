@@ -46,11 +46,6 @@ namespace Implementation.Commands.AuthorRequest
                     user.UpdateUseCasesForRole(_context);
                 }
 
-                if (request.Status == RequestStatus.Rejected)
-                {
-                    user.IdRole = request.IdRole;
-                }
-
                 _context.SaveChanges();
             }
         }

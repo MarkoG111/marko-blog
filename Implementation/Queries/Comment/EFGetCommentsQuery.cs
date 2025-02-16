@@ -26,7 +26,7 @@ namespace Implementation.Queries.Comment
         {
             var comments = _context.Comments.Include(x => x.User).Include(x => x.Likes).Include(x => x.Post).AsQueryable();
 
-            if (!string.IsNullOrEmpty(search.Username) || !string.IsNullOrWhiteSpace(search.Username))
+            if (!string.IsNullOrWhiteSpace(search.Username))
             {
                 comments = comments.Where(c => c.User.Username.ToLower().Contains(search.Username.ToLower()));
             }
