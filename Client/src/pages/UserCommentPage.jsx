@@ -14,7 +14,7 @@ export default function UserCommentPage() {
 
   useEffect(() => {
     const fetchComment = async () => {
-      const response = await fetch(`/comments/${id}`, {
+      const response = await fetch(`/api/comments/${id}`, {
         method: "GET"
       })
 
@@ -32,7 +32,7 @@ export default function UserCommentPage() {
     }
 
     const fetchParentComment = async (idParent) => {
-      const response = await fetch(`/comments/${idParent}`, {
+      const response = await fetch(`/api/comments/${idParent}`, {
         method: "GET"
       })
 

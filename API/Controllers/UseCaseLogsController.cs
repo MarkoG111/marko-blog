@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/usecaselogs")]
     public class UseCaseLogsController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
@@ -17,7 +17,7 @@ namespace API.Controllers
             _executor = executor;
         }
 
-        [HttpGet("/usecaselogs/use-case-logs")]
+        [HttpGet("use-case-logs")]
         public IActionResult Get([FromQuery] UseCaseLogSearch search, [FromServices] IGetUseCaseLogsQuery query)
         {
             return Ok(_executor.ExecuteQuery(query, search));

@@ -28,7 +28,7 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await fetch(`/users/${comment.idUser}`, {
+        const response = await fetch(`/api/users/${comment.idUser}`, {
           method: "GET"
         })
 
@@ -59,7 +59,7 @@ export default function Comment({ comment, onLikeComment, onDislikeComment, onAd
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/comments/${comment.id}`, {
+      const response = await fetch(`/api/comments/${comment.id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,

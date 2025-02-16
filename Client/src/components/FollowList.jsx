@@ -33,7 +33,7 @@ export default function FollowList({ isFollowersTab }) {
           perPage: 5,
         })
 
-        const url = isFollowersTab ? `/followers/${currentUser.id}/followers?${queryParams}` : `/followers/${currentUser.id}/following?${queryParams}`
+        const url = isFollowersTab ? `/api/followers/${currentUser.id}/followers?${queryParams}` : `/api/followers/${currentUser.id}/following?${queryParams}`
 
         const response = await fetch(url, {
           method: "GET",

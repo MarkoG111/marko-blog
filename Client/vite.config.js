@@ -2,31 +2,30 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 
 const proxyPaths = [
-  '/posts',
-  '/categories',
-  '/notifications',
-  '/auth',
-  '/users',
-  '/comments',
-  '/images',
-  '/followers',
-  '/authorrequests',
-  '/usecaselogs',
-  '/register',
-  '/login',
-  '/notificationsHub'
+  '/api/posts',
+  '/api/categories',
+  '/api/notifications',
+  '/api/auth',
+  '/api/users',
+  '/api/comments',
+  '/api/images',
+  '/api/followers',
+  '/api/authorrequests',
+  '/api/usecaselogs',
+  '/api/register',
+  '/api/login'
 ]
 
 const createProxyConfig = (path) => ({
   target: 'http://localhost:5207',
   secure: false,
-  ws: path === '/notificationsHub', // Enable WebSocket proxy for notificationsHub only
+  changeOrigin: true,
+  ws: path === '/api/notificationsHub',
 })
 
-// https://vitejs.dev/config/
 export default defineConfig({
+  plugins: [react()],
   server: {
     proxy: Object.fromEntries(proxyPaths.map((path) => [path, createProxyConfig(path)])),
   },
-  plugins: [react()],
 })

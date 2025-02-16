@@ -36,7 +36,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
   useEffect(() => {
     const fetchPostAndComments = async () => {
       try {
-        const response = await fetch(`/posts/${idPost}`)
+        const response = await fetch(`/api/posts/${idPost}`)
 
         if (response.ok) {
           const data = await response.json()
@@ -89,7 +89,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
         Username: currentUser.username
       })
 
-      const response = await fetch(`/comments`, {
+      const response = await fetch(`/api/comments`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -130,7 +130,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
         Username: currentUser.username
       })
 
-      const response = await fetch(`/comments`, {
+      const response = await fetch(`/api/comments`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -176,7 +176,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
         Status: voteType,
       })
 
-      const response = await fetch(`/comments/${idComment}/like`, {
+      const response = await fetch(`/api/comments/${idComment}/like`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -232,7 +232,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
         isDeleted: 1
       })
 
-      const url = currentUser.id === comment.idUser ? `/comments/${comment.id}/personal` : `/comments/${comment.id}`
+      const url = currentUser.id === comment.idUser ? `/api/comments/${comment.id}/personal` : `/api/comments/${comment.id}`
 
       const response = await fetch(url, {
         method: "DELETE",

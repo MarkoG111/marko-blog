@@ -21,7 +21,7 @@ export default function Authors() {
           page: currentPage
         })
 
-        const response = await fetch(`/users?${queryParams}`, {
+        const response = await fetch(`/api/users?${queryParams}`, {
           method: "GET"
         })
 

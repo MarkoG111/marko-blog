@@ -21,7 +21,7 @@ export default function EditableCategoryRow({ category, onSave, onDelete }) {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/categories/${category.id}`, {
+      const response = await fetch(`/api/categories/${category.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export default function EditableCategoryRow({ category, onSave, onDelete }) {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/categories/${category.id}`, {
+      const response = await fetch(`/api/categories/${category.id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

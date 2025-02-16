@@ -43,7 +43,7 @@ export default function CreatePost() {
           getAll: true
         })
 
-        const response = await fetch(`/categories?${queryParams}`, {
+        const response = await fetch(`/api/categories?${queryParams}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -80,7 +80,7 @@ export default function CreatePost() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/images`, {
+      const response = await fetch(`/api/images`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -115,7 +115,7 @@ export default function CreatePost() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch('/posts', {
+      const response = await fetch('/api/posts', {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,

@@ -54,7 +54,7 @@ export default function DashLogs() {
         SortOrder: filters.sortOrder
       })
 
-      const response = await fetch(`/usecaselogs/use-case-logs?${params.toString()}`, {
+      const response = await fetch(`/api/usecaselogs/use-case-logs?${params.toString()}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`

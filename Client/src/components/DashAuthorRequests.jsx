@@ -26,7 +26,7 @@ export default function DashAuthorRequests() {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/authorrequests?page=${currentPage}`, {
+        const response = await fetch(`/api/authorrequests?page=${currentPage}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -64,7 +64,7 @@ export default function DashAuthorRequests() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/authorrequests/accept?id=${idRequest}`, {
+      const response = await fetch(`/api/authorrequests/accept?id=${idRequest}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -90,7 +90,7 @@ export default function DashAuthorRequests() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/authorrequests/reject?id=${idRequest}`, {
+      const response = await fetch(`/api/authorrequests/reject?id=${idRequest}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,

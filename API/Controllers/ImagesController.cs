@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/images")]
     public class ImagesController : ControllerBase
     {
         private readonly BlogContext _context;
@@ -17,7 +17,7 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpPost("/images")]
+        [HttpPost]
         public IActionResult Post([FromForm] UploadImageDto dtoRequest)
         {
             var guid = Guid.NewGuid();
@@ -44,7 +44,7 @@ namespace API.Controllers
             return Ok(image);
         }
 
-        [HttpGet("/images/{image-name}")]
+        [HttpGet("{image-name}")]
         public IActionResult GetImage([FromRoute(Name = "image-name")] string imageName)
         {
             var imagePath = Path.Combine("wwwroot", "Images", imageName);

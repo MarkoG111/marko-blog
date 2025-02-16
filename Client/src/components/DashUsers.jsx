@@ -28,7 +28,7 @@ export default function DashUsers() {
           return
         }
 
-        const response = await fetch(`/users?page=${currentPage}`, {
+        const response = await fetch(`/api/users?page=${currentPage}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -62,7 +62,7 @@ export default function DashUsers() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`users/${idUserToDelete}`, {
+      const response = await fetch(`/api/users/${idUserToDelete}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`

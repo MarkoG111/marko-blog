@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     const fetchHomePagePosts = async () => {
       try {
-        const response = await fetch(`/posts?perPage=4`, {
+        const response = await fetch(`/api/posts?perPage=4`, {
           method: "GET"
         })
 

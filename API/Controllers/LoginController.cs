@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/login")]
     [ApiController]
     public class LoginController : ControllerBase
     {
@@ -15,7 +15,7 @@ namespace Api.Controllers
             _manager = manager;
         }
 
-        [HttpPost("/login")]
+        [HttpPost]
         public IActionResult Post([FromBody] LoginRequest request)
         {
             var token = _manager.MakeToken(request.Username, EasyEncryption.SHA.ComputeSHA256Hash(request.Password));

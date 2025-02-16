@@ -15,7 +15,7 @@ export default function Footer() {
           getAll: true
         })
 
-        const response = await fetch(`/categories?${queryParams}`, {
+        const response = await fetch(`/api/categories?${queryParams}`, {
           method: "GET"
         })
   

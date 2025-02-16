@@ -8,7 +8,7 @@ using Application.Searches;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/categories")]
     public class CategoriesController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
@@ -18,27 +18,27 @@ namespace API.Controllers
             _executor = executor;
         }
 
-        [HttpPost("/categories")]
+        [HttpPost]
         public IActionResult Post([FromBody] UpsertCategoryDto dtoRequest, [FromServices] ICreateCategoryCommand command)
         {
             _executor.ExecuteCommand(command, dtoRequest);
             return StatusCode(StatusCodes.Status201Created);
         }
 
-        [HttpGet("/categories")]
+        [HttpGet]
         public IActionResult Get([FromServices] IGetCategoriesQuery query, [FromQuery] CategorySearch search)
         {
             return Ok(_executor.ExecuteQuery(query, search));
         }
 
-        [HttpGet("/categories/{id}")]
+        [HttpGet("{id}")]
         public IActionResult Get(int id, [FromServices] IGetCategoryQuery query, [FromQuery] int page = 1, [FromQuery] int perPage = 3)
         {
             var search = new CategorySearch { Id = id, Page = page, PerPage = perPage };
             return Ok(_executor.ExecuteQuery(query, search));
         }
 
-        [HttpPut("/categories/{id}")]
+        [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] UpsertCategoryDto dtoRequest, [FromServices] IUpdateCategoryCommand command)
         {
             dtoRequest.Id = id;
@@ -46,7 +46,7 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("/categories/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id, [FromServices] IDeleteCategoryCommand command)
         {
             _executor.ExecuteCommand(command, id);

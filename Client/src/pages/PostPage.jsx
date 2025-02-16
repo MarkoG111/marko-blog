@@ -33,7 +33,7 @@ export default function PostPage() {
       try {
         setLoading(true)
 
-        const response = await fetch(`/posts/${id}`, {
+        const response = await fetch(`/api/posts/${id}`, {
           method: "GET"
         })
 
@@ -73,7 +73,7 @@ export default function PostPage() {
         Status: status,
       })
 
-      const response = await fetch(`/posts/${idPost}/like`, {
+      const response = await fetch(`/api/posts/${idPost}/like`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

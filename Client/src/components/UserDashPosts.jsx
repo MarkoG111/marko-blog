@@ -23,7 +23,7 @@ export default function UserDashPosts() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const repsonse = await fetch(`/users/${currentUser.id}`, {
+        const repsonse = await fetch(`/api/users/${currentUser.id}`, {
           method: "GET"
         })
 
@@ -68,7 +68,7 @@ export default function UserDashPosts() {
 
       const { idUser } = postToDelete
 
-      const url = currentUser.id === idUser ? `/posts/${idPostToDelete}/personal` : `/posts/${idPostToDelete}`
+      const url = currentUser.id === idUser ? `/api/posts/${idPostToDelete}/personal` : `/api/posts/${idPostToDelete}`
 
       const response = await fetch(url, {
         method: "DELETE",

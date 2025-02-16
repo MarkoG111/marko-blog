@@ -9,7 +9,7 @@ var vite_config_default = defineConfig({
         target: "http://localhost:5207",
         secure: false
       },
-      "/notificationsHub": {
+      "/api/notificationsHub": {
         target: "http://localhost:5207",
         secure: false,
         ws: true

@@ -26,7 +26,7 @@ export default function DashCategories() {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/categories?${queryParams}`, {
+        const response = await fetch(`/api/categories?${queryParams}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`

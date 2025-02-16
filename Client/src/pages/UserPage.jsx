@@ -28,7 +28,7 @@ export default function UserPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`/users/${id}`, {
+        const response = await fetch(`/api/users/${id}`, {
           method: "GET"
         })
 
@@ -39,7 +39,7 @@ export default function UserPage() {
 
           const token = localStorage.getItem("token")
           if (token) {
-            const followResponse = await fetch(`/followers/${id}/check`, {
+            const followResponse = await fetch(`/api/followers/${id}/check`, {
               method: "GET",
               headers: {
                 "Authorization": `Bearer ${token}`
@@ -67,7 +67,7 @@ export default function UserPage() {
         navigate("/sign-in")
       }
 
-      const response = await fetch(`/followers`, {
+      const response = await fetch(`/api/followers`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -101,7 +101,7 @@ export default function UserPage() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/followers/${id}/unfollow`, {
+      const response = await fetch(`/api/followers/${id}/unfollow`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`,

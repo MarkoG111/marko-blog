@@ -8,7 +8,7 @@ using Application.Searches;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/authorrequests")]
     public class AuthorRequestsController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
@@ -20,7 +20,7 @@ namespace API.Controllers
             _actor = actor;
         }
 
-        [HttpPost("/authorrequests")]
+        [HttpPost]
         public IActionResult Post([FromBody] UpsertAuthorRequestDto dtoRequest, [FromServices] ICreateAuthorRequestCommand command)
         {
             dtoRequest.IdUser = _actor.Id;
@@ -28,13 +28,13 @@ namespace API.Controllers
             return Ok(dtoRequest);
         }
 
-        [HttpGet("/authorrequests")]
+        [HttpGet]
         public IActionResult Get([FromServices] IGetAuthorRequestsQuery query, [FromQuery] AuthorRequestSearch search)
         {
             return Ok(_executor.ExecuteQuery(query, search));
         }
 
-        [HttpPut("/authorrequests/accept")]
+        [HttpPut("accept")]
         public IActionResult Accept(int id, [FromBody] UpsertAuthorRequestDto dtoRequest, [FromServices] IUpdateAuthorRequestCommand command)
         {
             dtoRequest.Id = id;
@@ -43,7 +43,7 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpPut("/authorrequests/reject")]
+        [HttpPut("reject")]
         public IActionResult Reject(int id, [FromBody] UpsertAuthorRequestDto dtoRequest, [FromServices] IUpdateAuthorRequestCommand command)
         {
             dtoRequest.Id = id;

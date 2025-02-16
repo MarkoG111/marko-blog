@@ -8,6 +8,7 @@ using Implementation.Commands.Email;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.SignalR;
 using DotNetEnv;
+using Microsoft.Extensions.FileProviders;
 
 namespace API
 {
@@ -94,6 +95,17 @@ namespace API
 
             });
             services.AddTransient<IEmailSender, SMTPEmailSender>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin", builder =>
+                {
+                    builder.WithOrigins("http://localhost:5173")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                });
+            });
         }
 
 
@@ -105,32 +117,23 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            // Adds middleware for routing, which enables the application to determine which code to execute based on the incoming HTTP request.
-            app.UseRouting();
-
+            app.UseDefaultFiles();
             // Adds middleware that allows the server to serve static files, such as HTML, CSS, JavaScript, and images.
             app.UseStaticFiles();
 
+            // Adds middleware for routing, which enables the application to determine which code to execute based on the incoming HTTP request.
+            app.UseRouting();
+
+            // Adds middleware for handling Cross-Origin Resource Sharing (CORS) requests. This middleware allows defining CORS policies that determine which origin domains are allowed to access resources on the server.
+            app.UseCors("AllowSpecificOrigin");
+
             // Adds middleware for authentication, which allows the application to authenticate users based on incoming credentials or tokens.
             app.UseAuthentication();
-
             // Adds middleware for authorization, which allows the application to check if the user has the necessary permissions to access a particular resource.
             app.UseAuthorization();
 
-            app.UseDefaultFiles();
-
-            // Adds middleware for handling Cross-Origin Resource Sharing (CORS) requests. This middleware allows defining CORS policies that determine which origin domains are allowed to access resources on the server.
-            app.UseCors(x =>
-            {
-                x.AllowAnyMethod();
-                x.AllowAnyHeader();
-                x.AllowCredentials();
-                x.AllowAnyMethod();
-            });
-
             // Adds middleware for Swagger support, which generates API documentation based on route and controller definitions in the application.
             app.UseSwagger();
-
             // Adds middleware that generates an HTML interface for the Swagger documentation, allowing the API specifications to be viewed in a web browser.
             app.UseSwaggerUI(c =>
             {
@@ -146,7 +149,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<NotificationHub>("/notificationsHub");
+                endpoints.MapHub<NotificationHub>("/api/notificationsHub");
             });
         }
     }

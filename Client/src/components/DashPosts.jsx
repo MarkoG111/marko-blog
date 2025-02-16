@@ -27,7 +27,7 @@ export default function DashPosts() {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/posts?page=${currentPage}`, {
+        const response = await fetch(`/api/posts?page=${currentPage}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`
@@ -61,7 +61,7 @@ export default function DashPosts() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/posts/${postIdToDelete}`, {
+      const response = await fetch(`/api/posts/${postIdToDelete}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`

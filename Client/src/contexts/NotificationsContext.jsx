@@ -42,7 +42,7 @@ export const NotificationsProvider = ({ children }) => {
           return
         }
 
-        const response = await fetch(`/notifications`, {
+        const response = await fetch(`/api/notifications`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -105,7 +105,7 @@ export const NotificationsProvider = ({ children }) => {
         }
 
         const hubConnection = new signalR.HubConnectionBuilder()
-          .withUrl("/notificationsHub", {
+          .withUrl("/api/notificationsHub", {
             accessTokenFactory: () => token,
           })
           .configureLogging(signalR.LogLevel.Information)
@@ -159,7 +159,7 @@ export const NotificationsProvider = ({ children }) => {
             return
           }
 
-          await fetch(`/notifications/mark-as-read`, {
+          await fetch(`/api/notifications/mark-as-read`, {
             method: "PATCH",
             headers: {
               Authorization: `Bearer ${token}`,

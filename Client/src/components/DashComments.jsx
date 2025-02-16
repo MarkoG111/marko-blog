@@ -26,7 +26,7 @@ export default function DashComments() {
           throw new Error("Token not found")
         }
 
-        const response = await fetch(`/comments?page=${currentPage}`, {
+        const response = await fetch(`/api/comments?page=${currentPage}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -60,7 +60,7 @@ export default function DashComments() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch(`/comments/${idCommentToDelete}`, {
+      const response = await fetch(`/api/comments/${idCommentToDelete}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`

@@ -12,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly BlogContext _context;
@@ -24,7 +24,7 @@ namespace API.Controllers
             _jwtManager = jWTManager;
         }
 
-        [HttpPost("/auth")]
+        [HttpPost]
         public async Task<IActionResult> GoogleLogin(UserLoginModel model)
         {
             var user = _context.Users.Include(u => u.UserUseCases).Include(u => u.Role)

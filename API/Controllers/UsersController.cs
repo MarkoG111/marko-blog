@@ -8,7 +8,7 @@ using Application.Searches;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/users")]
     public class UsersController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
@@ -18,26 +18,26 @@ namespace API.Controllers
             _executor = executor;
         }
 
-        [HttpPost("/users")]
+        [HttpPost]
         public IActionResult Post([FromBody] UpsertUserDto dtoRequest, [FromServices] ICreateUserCommand command)
         {
             _executor.ExecuteCommand(command, dtoRequest);
             return StatusCode(StatusCodes.Status201Created);
         }
 
-        [HttpGet("/users")]
+        [HttpGet]
         public IActionResult Get([FromServices] IGetUsersQuery query, [FromQuery] UserSearch search)
         {
             return Ok(_executor.ExecuteQuery(query, search));
         }
 
-        [HttpGet("/users/{id}")]
+        [HttpGet("{id}")]
         public IActionResult Get(int id, [FromServices] IGetUserQuery query)
         {
             return Ok(_executor.ExecuteQuery(query, id));
         }
 
-        [HttpPut("/users/{id}")]
+        [HttpPut("{id}")]
         public IActionResult Put(int id, [FromForm] UpsertUserDto dtoRequest, [FromServices] IUpdateUserCommand command, [FromServices] IGetUserQuery getUserQuery)
         {
             dtoRequest.Id = id;
@@ -53,14 +53,14 @@ namespace API.Controllers
             return Ok(updatedUser);
         }
 
-        [HttpDelete("/users/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id, [FromServices] IDeleteUserCommand command)
         {
             _executor.ExecuteCommand(command, id);
             return NoContent();
         }
 
-        [HttpGet("/users/images/{image-name}")]
+        [HttpGet("images/{image-name}")]
         public IActionResult GetImage([FromRoute(Name = "image-name")] string imageName)
         {
             var imagePath = Path.Combine("wwwroot", "UserImages", imageName);

@@ -10,7 +10,7 @@ using Application.Commands.Like;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/posts")]
     public class PostsController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
@@ -22,26 +22,26 @@ namespace API.Controllers
             _actor = actor;
         }
 
-        [HttpPost("/posts")]
+        [HttpPost]
         public async Task <IActionResult> Post([FromBody] UpsertPostDto dtoRequest, [FromServices] ICreatePostCommand command)
         {
             await _executor.ExecuteCommandAsync(command, dtoRequest);
             return Ok();
         }
 
-        [HttpGet("/posts")]
+        [HttpGet]
         public IActionResult Get([FromQuery] PostSearch search, [FromServices] IGetPostsQuery query)
         {
             return Ok(_executor.ExecuteQuery(query, search));
         }
 
-        [HttpGet("/posts/{id}")]
+        [HttpGet("{id}")]
         public IActionResult Get(int id, [FromServices] IGetPostQuery query)
         {
             return Ok(_executor.ExecuteQuery(query, id));
         }
 
-        [HttpPut("/posts/{id}")]
+        [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] UpsertPostDto dtoRequest, [FromServices] IUpdatePostCommand command)
         {
             dtoRequest.Id = id;
@@ -49,14 +49,14 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("/posts/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id, [FromServices] IDeletePostCommand command)
         {
             _executor.ExecuteCommand(command, id);
             return NoContent();
         }
 
-        [HttpPost("/posts/{id}/like")]
+        [HttpPost("{id}/like")]
         public async Task<IActionResult> Like([FromBody] LikeDto dtoRequest, [FromServices] ILikePostCommand command)
         {
             dtoRequest.IdUser = _actor.Id;
@@ -64,7 +64,7 @@ namespace API.Controllers
             return Ok(dtoRequest);
         }
 
-        [HttpPut("/posts/{id}/personal")]
+        [HttpPut("{id}/personal")]
         public IActionResult UpdatePersonalPost(int id, [FromBody] UpsertPostDto dtoRequest, [FromServices] IUpdatePersonalPostCommand command)
         {
             dtoRequest.Id = id;
@@ -72,7 +72,7 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("/posts/{id}/personal")]
+        [HttpDelete("{id}/personal")]
         public IActionResult DeletePersonalPost(int id, [FromServices] IDeletePersonalPostCommand command)
         {
             _executor.ExecuteCommand(command, id);

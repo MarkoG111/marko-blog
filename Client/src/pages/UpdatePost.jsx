@@ -33,7 +33,7 @@ export default function UpdatePost() {
         }
 
         try {
-          const response = await fetch(`/posts/${postId}`, {
+          const response = await fetch(`/api/posts/${postId}`, {
             method: "GET",
             headers: {
               "Authorization": `Bearer ${token}`
@@ -84,7 +84,7 @@ export default function UpdatePost() {
           getAll: true
         })
 
-        const response = await fetch(`/categories?${queryParams}`, {
+        const response = await fetch(`/api/categories?${queryParams}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`

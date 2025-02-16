@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/comments")]
     public class CommentsController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
@@ -22,26 +22,26 @@ namespace API.Controllers
             _actor = actor;
         }
 
-        [HttpPost("/comments")]
+        [HttpPost]
         public async Task <IActionResult> Post([FromBody] UpsertCommentDto dtoRequest, [FromServices] ICreateCommentCommand command)
         {
             await _executor.ExecuteCommandAsync(command, dtoRequest);
             return Ok(dtoRequest);
         }
 
-        [HttpGet("/comments")]
+        [HttpGet]
         public IActionResult Get([FromServices] IGetCommentsQuery query, [FromQuery] CommentSearch search)
         {
             return Ok(_executor.ExecuteQuery(query, search));
         }
 
-        [HttpGet("/comments/{id}")]
+        [HttpGet("{id}")]
         public IActionResult Get(int id, [FromServices] IGetCommentQuery query)
         {
             return Ok(_executor.ExecuteQuery(query, id));
         }
 
-        [HttpPut("/comments/{id}")]
+        [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] UpsertCommentDto dtoRequest, [FromServices] IUpdatePersonalCommentCommand command)
         {
             dtoRequest.Id = id;
@@ -50,21 +50,21 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("/comments/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id, [FromServices] IDeleteCommentCommand command)
         {
             _executor.ExecuteCommand(command, id);
             return NoContent();
         }
 
-        [HttpPost("/comments/{id}/like")]
+        [HttpPost("{id}/like")]
         public async Task <IActionResult> Like([FromBody] LikeDto dtoRequest, [FromServices] ILikeCommentCommand command)
         {
             await _executor.ExecuteCommandAsync(command, dtoRequest);
             return Ok(dtoRequest);
         }
 
-        [HttpDelete("/comments/{id}/personal")]
+        [HttpDelete("{id}/personal")]
         public IActionResult DeletePersonalComment(int id, [FromServices] IDeletePersonalCommentCommand command)
         {
             _executor.ExecuteCommand(command, id);

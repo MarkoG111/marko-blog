@@ -21,7 +21,7 @@ export default function CreateCategory() {
         throw new Error("Token not found")
       }
 
-      const response = await fetch('/categories', {
+      const response = await fetch('/api/categories', {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,

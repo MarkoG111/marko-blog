@@ -33,7 +33,7 @@ export default function RequestAuthorForm() {
         reason: reason
       })
 
-      const response = await fetch(`/authorrequests`, {
+      const response = await fetch(`/api/authorrequests`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,

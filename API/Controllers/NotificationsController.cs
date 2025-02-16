@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/notifications")]
     public class NotificationsController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
@@ -21,7 +21,7 @@ namespace API.Controllers
             _actor = actor;
         }
 
-        [HttpPost("/notifications")]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] InsertNotificationDto dtoRequest, [FromServices] ICreateNotificationCommand command)
         {
             dtoRequest.FromIdUser = _actor.Id;
@@ -29,14 +29,14 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpGet("/notifications")]
+        [HttpGet]
         public IActionResult Get([FromQuery] NotificationsSearch search, [FromServices] IGetNotificationsQuery query)
         {
             search.IdUser = _actor.Id;
             return Ok(_executor.ExecuteQuery(query, search));
         }
 
-        [HttpPatch("/notifications/mark-as-read")]
+        [HttpPatch("mark-as-read")]
         public IActionResult MarkAllAsRead([FromServices] IMarkAllNotificationsAsReadCommand command)
         {
             _executor.ExecuteCommand(command, _actor.Id);

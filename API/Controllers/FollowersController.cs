@@ -8,7 +8,7 @@ using Application.DataTransfer.Followers;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/followers")]
     public class FollowersController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
@@ -20,7 +20,7 @@ namespace API.Controllers
             _actor = actor;
         }
 
-        [HttpPost("/followers")]
+        [HttpPost]
         public async Task <IActionResult> Post([FromBody] InsertFollowDto dtoRequest, [FromServices] IFollowCommand command)
         {
             dtoRequest.IdUser = _actor.Id;
@@ -28,28 +28,28 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpGet("/followers/{id}/followers")]
+        [HttpGet("{id}/followers")]
         public IActionResult GetFollowers([FromServices] IGetFollowersQuery query, [FromQuery] FollowSearch search)
         {
             var followers = _executor.ExecuteQuery(query, search);
             return Ok(followers);
         }
 
-        [HttpGet("/followers/{id}/following")]
+        [HttpGet("{id}/following")]
         public IActionResult GetFollowing(int id, [FromServices] IGetFollowingQuery query)
         {
             var following = _executor.ExecuteQuery(query, id);
             return Ok(following);
         }
 
-        [HttpDelete("/followers/{id}/unfollow")]
+        [HttpDelete("{id}/unfollow")]
         public IActionResult Delete(int id, [FromServices] IUnfollowCommand command)
         {
             _executor.ExecuteCommand(command, id);
             return Ok();
         }
 
-        [HttpGet("/followers/{id}/check")]
+        [HttpGet("{id}/check")]
         public IActionResult CheckFollowStatus(int id, [FromServices] ICheckFollowStatusQuery query)
         {
             var isFollowing = _executor.ExecuteQuery(query, id);
