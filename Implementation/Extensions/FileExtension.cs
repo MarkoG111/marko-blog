@@ -9,8 +9,17 @@ namespace Implementation.Extensions
 {
     public static class FileExtension
     {
-        public static string UploadImage(this IFormFile image, string folder)
+        public static async Task<string> UploadImage(this IFormFile image, string folder, string oldFileName = null)
         {
+            if (!string.IsNullOrEmpty(oldFileName))
+            {
+                var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", folder, oldFileName);
+                if (File.Exists(oldFilePath))
+                {
+                    File.Delete(oldFilePath);
+                }
+            }
+
             var guid = Guid.NewGuid();
             var extension = Path.GetExtension(image.FileName);
             var newFileName = guid + extension;
@@ -20,7 +29,7 @@ namespace Implementation.Extensions
 
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
-                image.CopyTo(fileStream);
+                await image.CopyToAsync(fileStream);
             }
 
             return newFileName;

@@ -6,7 +6,7 @@ using Application.DataTransfer.Users;
 
 namespace Application.Commands.User
 {
-    public interface IUpdateUserCommand : ICommand<UpsertUserDto>
+    public interface IUpdateUserCommand : IAsyncCommand<UpsertUserDto>
     {
         
     }

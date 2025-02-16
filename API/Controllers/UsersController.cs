@@ -4,6 +4,7 @@ using Application.Commands.User;
 using Application.DataTransfer.Users;
 using Application.Queries.User;
 using Application.Searches;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -38,10 +39,10 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromForm] UpsertUserDto dtoRequest, [FromServices] IUpdateUserCommand command, [FromServices] IGetUserQuery getUserQuery)
+        public async Task<IActionResult> Put(int id, [FromForm] UpsertUserDto dtoRequest, [FromServices] IUpdateUserCommand command, [FromServices] IGetUserQuery getUserQuery)
         {
             dtoRequest.Id = id;
-            _executor.ExecuteCommand(command, dtoRequest);
+            await _executor.ExecuteCommandAsync(command, dtoRequest);
 
             var updatedUser = _executor.ExecuteQuery(getUserQuery, id);
 

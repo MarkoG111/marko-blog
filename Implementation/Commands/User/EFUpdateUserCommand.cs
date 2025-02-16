@@ -28,18 +28,18 @@ namespace Implementation.Commands.User
         public int Id => (int)UseCaseEnum.EFUpdateUserCommand;
         public string Name => UseCaseEnum.EFUpdateUserCommand.ToString();
 
-        public void Execute(UpsertUserDto request)
+        public async Task ExecuteAsync(UpsertUserDto request)
         {
             if (request.Image != null)
             {
-                _validator.ValidateAndThrow(request);
+                await _validator.ValidateAndThrowAsync(request);
             }
             else
             {
-                _validatorWithoutImage.ValidateAndThrow(request);
+                await _validatorWithoutImage.ValidateAndThrowAsync(request);
             }
 
-            var user = _context.Users.Include(x => x.UserUseCases).FirstOrDefault(x => x.Id == request.Id);
+            var user = await _context.Users.Include(x => x.UserUseCases).FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (user == null)
             {
@@ -53,7 +53,7 @@ namespace Implementation.Commands.User
 
             if (request.Image != null)
             {
-                user.ProfilePicture = request.Image.UploadImage("UserImages");
+                user.ProfilePicture = await request.Image.UploadImage("UserImages");
             }
 
             if (!string.IsNullOrEmpty(request.Password) || !string.IsNullOrWhiteSpace(request.Password))
@@ -61,7 +61,7 @@ namespace Implementation.Commands.User
                 user.Password = EasyEncryption.SHA.ComputeSHA256Hash(request.Password);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
