@@ -10,6 +10,11 @@ namespace Api.Controllers
     {
         private readonly JWTManager _manager;
 
+        private string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
         public LoginController(JWTManager manager)
         {
             _manager = manager;
@@ -18,7 +23,9 @@ namespace Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] LoginRequest request)
         {
-            var token = _manager.MakeToken(request.Username, EasyEncryption.SHA.ComputeSHA256Hash(request.Password));
+            var hashedPassword = HashPassword(request.Password);
+
+            var token = _manager.MakeToken(request.Username, hashedPassword);
 
             if (token == null)
             {
