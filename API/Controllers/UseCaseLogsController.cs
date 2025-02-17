@@ -17,7 +17,7 @@ namespace API.Controllers
             _executor = executor;
         }
 
-        [HttpGet("use-case-logs")]
+        [HttpGet]
         public IActionResult Get([FromQuery] UseCaseLogSearch search, [FromServices] IGetUseCaseLogsQuery query)
         {
             return Ok(_executor.ExecuteQuery(query, search));

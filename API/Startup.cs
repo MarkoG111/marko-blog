@@ -8,24 +8,29 @@ using Implementation.Commands.Email;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.SignalR;
 using DotNetEnv;
-using Microsoft.Extensions.FileProviders;
 
 namespace API
 {
     public class Startup
     {
+        public IConfiguration _configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Env.Load();
-            Configuration = configuration;
+            _configuration = configuration;
         }
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var appSettings = new AppSettings();
+            var jwtSettings = new JWTSettings();
+            var emailSettings = new EmailSettings();
 
-            Configuration.Bind(appSettings);
+            _configuration.Bind(nameof(JWTSettings), jwtSettings);
+            _configuration.Bind(nameof(EmailSettings), emailSettings);
+
+            services.AddSingleton(jwtSettings);
+            services.AddSingleton(emailSettings);
 
             services.AddControllers();
 
@@ -40,16 +45,16 @@ namespace API
 
             services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
-            services.AddTransient<BlogContext>();
+            services.AddScoped<BlogContext>();
 
             services.LoadUseCases();
 
-            services.AddTransient<IUseCaseLogger, EFDatabaseLogger>();
+            services.AddScoped<IUseCaseLogger, EFDatabaseLogger>();
 
             services.AddHttpContextAccessor();
             services.AddApplicationActor();
 
-            services.AddJWT(appSettings);
+            services.AddJWT(jwtSettings);
 
             services.AddSignalR();
 
@@ -86,14 +91,6 @@ namespace API
                 });
             });
 
-            services.Configure<EmailSettings>(options =>
-            {
-                options.SmtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER");
-                options.SmtpPort = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT") ?? "587");
-                options.SenderEmail = Environment.GetEnvironmentVariable("SENDER_EMAIL");
-                options.SenderPassword = Environment.GetEnvironmentVariable("SENDER_PASSWORD");
-
-            });
             services.AddTransient<IEmailSender, SMTPEmailSender>();
 
             services.AddCors(options =>
@@ -107,7 +104,6 @@ namespace API
                 });
             });
         }
-
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

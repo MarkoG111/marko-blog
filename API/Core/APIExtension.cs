@@ -177,35 +177,35 @@ namespace API.Core
             });
         }
 
-        public static void AddJWT(this IServiceCollection services, AppSettings appSettings)
+        public static void AddJWT(this IServiceCollection services, JWTSettings jwtSettings)
         {
-            services.AddTransient<JWTManager>(x =>
-            {
-                var context = x.GetService<BlogContext>();
-                return new JWTManager(context, appSettings.JwtIssuer, appSettings.JwtSecretKey);
-            });
+            services.AddScoped<JWTService>(x => new JWTService(jwtSettings.JwtIssuer, jwtSettings.JwtSecretKey));
+            
+            services.AddScoped<JWTManager>();
 
             services.AddAuthentication(options =>
             {
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(cfg =>
+            })
+            .AddJwtBearer(options =>
             {
-                cfg.RequireHttpsMetadata = false;
-                cfg.SaveToken = true;
-                cfg.TokenValidationParameters = new TokenValidationParameters
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = appSettings.JwtIssuer,
+                    ValidIssuer = jwtSettings.JwtIssuer,
                     ValidateIssuer = true,
-                    ValidAudience = "Any",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.JwtSecretKey)),
+                    ValidAudience = jwtSettings.JwtAudience,
+                    ValidateAudience = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.JwtSecretKey)),
                     ValidateIssuerSigningKey = true,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
 
-                cfg.Events = new JwtBearerEvents
+                options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
                     {

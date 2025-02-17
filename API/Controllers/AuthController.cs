@@ -16,12 +16,12 @@ namespace API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly BlogContext _context;
-        private readonly JWTManager _jwtManager;
+        private readonly JWTService _jwtService;
 
-        public AuthController(BlogContext context, JWTManager jWTManager)
+        public AuthController(BlogContext context, JWTService jwtService)
         {
             _context = context;
-            _jwtManager = jWTManager;
+            _jwtService = jwtService;
         }
 
         [HttpPost]
@@ -58,20 +58,20 @@ namespace API.Controllers
                     Role = role
                 };
 
-                _context.Users.Add(newUser);
+                await _context.Users.AddAsync(newUser);
                 await _context.SaveChangesAsync();
 
                 newUser.UpdateUseCasesForRole(_context);
                 await _context.SaveChangesAsync();
 
-                var token = _jwtManager.GenerateToken(_jwtManager.GenerateClaims(newUser));
+                var token = _jwtService.GenerateToken(_jwtService.GenerateClaims(newUser));
                 return Ok(new { token });
             }
             else
             {
                 try
                 {
-                    var token = _jwtManager.GenerateToken(_jwtManager.GenerateClaims(user));
+                    var token = _jwtService.GenerateToken(_jwtService.GenerateClaims(user));
                     return Ok(new { token });
                 }
                 catch (Exception ex)
