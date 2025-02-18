@@ -6,9 +6,9 @@ using Application.DataTransfer.Users;
 using Application.Exceptions;
 using EFDataAccess;
 using FluentValidation;
-using Implementation.Extensions;
 using Implementation.Validators.User;
 using Implementation.Extensions;
+using BCrypt.Net;
 
 namespace Implementation.Commands.User
 {
@@ -58,7 +58,7 @@ namespace Implementation.Commands.User
 
             if (!string.IsNullOrEmpty(request.Password) || !string.IsNullOrWhiteSpace(request.Password))
             {
-                user.Password = EasyEncryption.SHA.ComputeSHA256Hash(request.Password);
+                user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
             }
 
             await _context.SaveChangesAsync();

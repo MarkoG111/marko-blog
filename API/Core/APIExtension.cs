@@ -1,7 +1,5 @@
 using System.Text;
 
-using EFDataAccess;
-
 using Application;
 
 using Application.Commands.Post;
@@ -57,6 +55,8 @@ using Implementation.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+
+using API.Services;
 
 namespace API.Core
 {

@@ -8,6 +8,7 @@ using Implementation.Commands.Email;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.SignalR;
 using DotNetEnv;
+using API.Services;
 
 namespace API
 {
@@ -45,7 +46,15 @@ namespace API
 
             services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
-            services.AddScoped<BlogContext>();
+            services.AddDbContext<BlogContext>();
+
+            services.AddScoped<JWTService>(provider =>
+            {
+                var settings = provider.GetRequiredService<JWTSettings>();
+                return new JWTService(settings.JwtIssuer, settings.JwtSecretKey);
+            });
+
+            services.AddScoped<OAuthService>();
 
             services.LoadUseCases();
 

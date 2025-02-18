@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Commands.Email;
 using Application.Commands.User;
-using Application.DataTransfer.Users;
+using Application.DataTransfer.Auth;
 using Application.DataTransfer.Emails;
 using Domain;
 using EFDataAccess;
 using FluentValidation;
 using Implementation.Extensions;
 using Implementation.Validators.User;
+using BCrypt.Net;
 
 namespace Implementation.Commands.User
 {
@@ -31,19 +32,19 @@ namespace Implementation.Commands.User
         public int Id => (int)UseCaseEnum.EFRegisterUserCommand;
         public string Name => UseCaseEnum.EFRegisterUserCommand.ToString();
 
-        public void Execute(RegisterUserDto request)
+        public void Execute(RegisterUserDto requestDto)
         {
-            _validator.ValidateAndThrow(request);
+            _validator.ValidateAndThrow(requestDto);
 
             var user = new Domain.User
             {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Username = request.Username,
-                Email = request.Email,
-                Password = HashPassword(request.Password),
+                FirstName = requestDto.FirstName,
+                LastName = requestDto.LastName,
+                Username = requestDto.Username,
+                Email = requestDto.Email,
+                Password = BCrypt.Net.BCrypt.HashPassword(requestDto.Password),
                 ProfilePicture = DefaultProfilePictureUrl,
-                IdRole = (int)RoleEnum.User 
+                IdRole = (int)RoleEnum.Admin
             };
 
             using var transaction = _context.Database.BeginTransaction();
@@ -82,11 +83,6 @@ namespace Implementation.Commands.User
             {
                 Console.WriteLine($"Failed to send email to {email}: {ex.Message}");
             }
-        }
-
-        private string HashPassword(string password)
-        {
-            return EasyEncryption.SHA.ComputeSHA256Hash(password);
         }
     }
 }

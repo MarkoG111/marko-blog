@@ -8,8 +8,9 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Domain;
+using API.Core;
 
-namespace API.Core
+namespace API.Services
 {
     public class JWTService
     {

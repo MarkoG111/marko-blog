@@ -1,6 +1,7 @@
 using EFDataAccess;
 using Microsoft.EntityFrameworkCore;
 using Domain;
+using API.Services;
 
 namespace API.Core
 {
@@ -8,7 +9,6 @@ namespace API.Core
     {
         private readonly BlogContext _context;
         private readonly JWTService _jwtService;
-
 
         public JWTManager(BlogContext context, JWTService jwtService)
         {
@@ -22,17 +22,27 @@ namespace API.Core
 
             if (user == null)
             {
-                return null;
+                throw new ArgumentException("User not found.");
             }
 
             var claims = _jwtService.GenerateClaims(user);
-            
+
             return _jwtService.GenerateToken(claims);
         }
 
         public User FetchUser(string username, string password)
         {
-            return _context.Users.Include(u => u.UserUseCases).Include(u => u.Role).FirstOrDefault(u => u.Username == username && u.Password == password);
+            var user = _context.Users
+                .Include(u => u.UserUseCases)
+                .Include(u => u.Role)
+                .FirstOrDefault(u => u.Username == username);
+
+            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
+            {
+                throw new ArgumentException("User not found.");
+            }
+
+            return user;
         }
     }
 }

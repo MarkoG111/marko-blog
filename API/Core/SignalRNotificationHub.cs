@@ -18,7 +18,7 @@ namespace API.Core
 
         public async Task SendNotificationToUser(int idUser, object notification)
         {
-            await _hubContext.Clients.User(idUser.ToString()).SendAsync("ReceiveNotification", notification );
+            await _hubContext.Clients.User(idUser.ToString()).SendAsync("ReceiveNotification", notification);
         }
     }
 }
