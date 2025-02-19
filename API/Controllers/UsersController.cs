@@ -4,6 +4,7 @@ using Application.Commands.User;
 using Application.DataTransfer.Users;
 using Application.Queries.User;
 using Application.Searches;
+using Application.Services;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -13,10 +14,12 @@ namespace API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
+        private readonly IImageService _imageService;
 
-        public UsersController(UseCaseExecutor executor)
+        public UsersController(UseCaseExecutor executor, IImageService imageService)
         {
             _executor = executor;
+            _imageService = imageService;
         }
 
         [HttpPost]
@@ -61,36 +64,20 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpGet("images/{image-name}")]
-        public IActionResult GetImage([FromRoute(Name = "image-name")] string imageName)
+        [HttpGet("{idUser}/profile-image")]
+        public IActionResult GetUserImage(int idUser)
         {
-            var imagePath = Path.Combine("wwwroot", "UserImages", imageName);
+            var imageName = $"{idUser}.jpg";
+            var image = _imageService.GetImage("UserImages", imageName);
 
-            if (!System.IO.File.Exists(imagePath))
+            if (image == null)
             {
-                return NotFound();
+                return NotFound("User image not found.");
             }
 
-            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            var mimeType = _imageService.GetMimeType(imageName);
 
-            var mimeType = GetMimeType(imagePath);
-
-            return File(imageBytes, mimeType);
-        }
-
-        private string GetMimeType(string filePath)
-        {
-            var extension = Path.GetExtension(filePath).ToLowerInvariant();
-
-            return extension switch
-            {
-                ".jpg" or ".jpeg" => "image/jpeg",
-                ".png" => "image/png",
-                ".gif" => "image/gif",
-                ".bmp" => "image/bmp",
-                ".webp" => "image/webp",
-                _ => "application/octet-stream",
-            };
+            return File(image, mimeType);
         }
     }
 }

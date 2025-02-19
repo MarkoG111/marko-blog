@@ -58,6 +58,7 @@ namespace Implementation.Queries.Category
                 Id = post.Id,
                 Title = post.Title,
                 DateCreated = post.CreatedAt,
+                IdUser = post.User.Id,
                 FirstName = post.User.FirstName,
                 LastName = post.User.LastName,
                 ProfilePicture = post.User.ProfilePicture,

@@ -31,7 +31,6 @@ namespace Implementation.Validators.Post
             RuleFor(x => x.IdImage).NotEmpty()
                 .WithMessage("Image is required.");
 
-
             RuleFor(x => x.Content).NotEmpty()
                 .WithMessage("Content is required.");
         }

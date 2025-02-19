@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Application.DataTransfer;
 using Domain;
 using EFDataAccess;
-using System.ComponentModel.DataAnnotations;
+using Application.DataTransfer.Images;
+using Application.Services;
 
 namespace API.Controllers
 {
@@ -11,10 +12,12 @@ namespace API.Controllers
     public class ImagesController : ControllerBase
     {
         private readonly BlogContext _context;
+        private readonly IImageService _imageService;
 
-        public ImagesController(BlogContext context)
+        public ImagesController(BlogContext context, IImageService imageService)
         {
             _context = context;
+            _imageService = imageService;
         }
 
         [HttpPost]
@@ -47,15 +50,22 @@ namespace API.Controllers
         [HttpGet("{image-name}")]
         public IActionResult GetImage([FromRoute(Name = "image-name")] string imageName)
         {
-            var imagePath = Path.Combine("wwwroot", "Images", imageName);
-            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
-            return File(imageBytes, "image/jpeg");
+            var image = _imageService.GetImage("Images", imageName);
+
+            if (image == null)
+            {
+                return NotFound("Image not found.");
+            }
+
+            var mimeType = _imageService.GetMimeType(imageName);
+
+            return File(image, mimeType);
         }
 
         [HttpPost("proxy")]
-        public async Task<IActionResult> ProxyImage([FromBody] ImageProxyRequest request)
+        public async Task<IActionResult> ProxyImage([FromBody] ImageProxyDto requestDto)
         {
-            if (string.IsNullOrEmpty(request.ImageUrl))
+            if (string.IsNullOrEmpty(requestDto.ImageUrl))
             {
                 return BadRequest("Image URL is required");
             }
@@ -63,12 +73,12 @@ namespace API.Controllers
             try
             {
                 using var httpClient = new HttpClient();
-                
+
                 // Add headers to mimic a browser request
                 httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
                 httpClient.DefaultRequestHeaders.Add("Accept", "image/*");
 
-                var response = await httpClient.GetAsync(request.ImageUrl);
+                var response = await httpClient.GetAsync(requestDto.ImageUrl);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -98,6 +108,16 @@ namespace API.Controllers
                 return BadRequest("URL is required");
             }
 
+            var hashedFileName = Convert.ToBase64String(System.Security.Cryptography.MD5.HashData(System.Text.Encoding.UTF8.GetBytes(url))).Replace("/", "_").Replace("+", "-");
+            var cacheFolder = Path.Combine("wwwroot", "ProxyImages");
+            var cachedFilePath = Path.Combine(cacheFolder, $"{hashedFileName}.jpg");
+
+            if (System.IO.File.Exists(cachedFilePath))
+            {
+                var imageBytes = await System.IO.File.ReadAllBytesAsync(cachedFilePath);
+                return File(imageBytes, "image/jpeg");
+            }
+
             try
             {
                 using var httpClient = new HttpClient();
@@ -120,18 +140,17 @@ namespace API.Controllers
                 }
 
                 var imageBytes = await response.Content.ReadAsByteArrayAsync();
+
+                Directory.CreateDirectory(cacheFolder);
+
+                await System.IO.File.WriteAllBytesAsync(cachedFilePath, imageBytes);
+
                 return File(imageBytes, contentType);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Failed to proxy image: {ex.Message}");
             }
-        }
-
-        public class ImageProxyRequest
-        {
-            [Required]
-            public string ImageUrl { get; set; }
         }
     }
 }

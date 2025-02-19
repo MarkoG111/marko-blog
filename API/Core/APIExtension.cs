@@ -72,6 +72,7 @@ namespace API.Core
 
             services.AddTransient<ILikeRepository, LikeRepository>();
             services.AddTransient<ILikeService, LikeService>();
+            services.AddTransient<IImageService, ImageService>();
 
             // Commands
             services.AddTransient<IRegisterUserCommand, EFRegisterUserCommand>();
