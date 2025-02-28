@@ -22,13 +22,6 @@ namespace API.Controllers
             _imageService = imageService;
         }
 
-        [HttpPost]
-        public IActionResult Post([FromBody] UpsertUserDto dtoRequest, [FromServices] ICreateUserCommand command)
-        {
-            _executor.ExecuteCommand(command, dtoRequest);
-            return StatusCode(StatusCodes.Status201Created);
-        }
-
         [HttpGet]
         public IActionResult Get([FromServices] IGetUsersQuery query, [FromQuery] UserSearch search)
         {

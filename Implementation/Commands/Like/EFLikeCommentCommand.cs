@@ -21,17 +21,15 @@ namespace Implementation.Commands.Like
         private readonly BlogContext _context;
         private readonly LikeCommentValidator _validator;
         private readonly IApplicationActor _actor;
-        private readonly ILikeService _likeService; 
-        private readonly INotificationHubService _notificationHubService;
+        private readonly ILikeService _likeService;
         private readonly INotificationService _notificationService;
 
-        public EFLikeCommentCommand(LikeCommentValidator validator, BlogContext context, IApplicationActor actor, ILikeService likeService, INotificationHubService notificationHubService, INotificationService notificationService)
+        public EFLikeCommentCommand(LikeCommentValidator validator, BlogContext context, IApplicationActor actor, ILikeService likeService, INotificationService notificationService)
         {
             _validator = validator;
             _context = context;
             _actor = actor;
             _likeService = likeService;
-            _notificationHubService = notificationHubService;
             _notificationService = notificationService;
         }
 

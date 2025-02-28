@@ -15,32 +15,34 @@ namespace EFDataAccess.Configurations
             builder.Property(x => x.FirstName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.LastName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Username).IsRequired().HasMaxLength(40);
-            builder.Property(x => x.Password).IsRequired();
+            builder.Property(x => x.Password).IsRequired().HasMaxLength(255);
             builder.Property(x => x.Email).IsRequired().HasMaxLength(100);
             builder.HasIndex(x => x.Email).IsUnique();
             builder.HasIndex(x => x.Username).IsUnique();
 
             builder.HasMany(x => x.Posts)
-                   .WithOne(y => y.User)
-                   .HasForeignKey(x => x.IdUser)
-                   .OnDelete(DeleteBehavior.NoAction);
+                .WithOne(y => y.User)
+                .HasForeignKey(x => x.IdUser)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.Comments)
                 .WithOne(y => y.User)
-                .HasForeignKey(x => x.IdUser);
+                .HasForeignKey(x => x.IdUser)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.Likes)
                 .WithOne(y => y.User)
-                .HasForeignKey(x => x.IdUser);
-            
+                .HasForeignKey(x => x.IdUser)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasOne(x => x.Role)
                 .WithMany(y => y.Users)
-                .HasForeignKey(x => x.IdRole)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(x => x.IdRole);
 
             builder.HasMany(x => x.UserUseCases)
                 .WithOne(y => y.User)
-                .HasForeignKey(x => x.IdUser);
+                .HasForeignKey(x => x.IdUser)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -20,15 +20,13 @@ namespace Implementation.Commands.Follow
         private readonly BlogContext _context;
         private readonly IApplicationActor _actor;
         private readonly FollowUserValidator _validator;
-        private readonly INotificationHubService _notificationHubService;
         private readonly INotificationService _notificationService;
 
-        public EFFollowCommand(BlogContext context, IApplicationActor actor, INotificationHubService notificationHubService, INotificationService notificationService, FollowUserValidator validator)
+        public EFFollowCommand(BlogContext context, IApplicationActor actor, INotificationService notificationService, FollowUserValidator validator)
         {
             _context = context;
             _actor = actor;
             _validator = validator;
-            _notificationHubService = notificationHubService;
             _notificationService = notificationService;
         }
 

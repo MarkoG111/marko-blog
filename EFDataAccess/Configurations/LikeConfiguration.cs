@@ -14,7 +14,7 @@ namespace EFDataAccess.Configurations
             builder.Property(x => x.IdUser).IsRequired();
             builder.Property(x => x.IdPost).IsRequired();
             builder.Property(x => x.IdComment).IsRequired(false);
-            builder.Property(x => x.Status).HasColumnType("bigint");
+            builder.Property(x => x.Status).HasColumnType("tinyint");
         }
     }
 }

@@ -18,7 +18,7 @@ namespace EFDataAccess.Configurations
             builder.Property(x => x.IsRead).IsRequired().HasDefaultValue(false);
 
             builder.HasOne(x => x.UserReceiver).WithMany().HasForeignKey(x => x.IdUser).OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(x => x.FromUser).WithMany().HasForeignKey(x => x.FromIdUser).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(x => x.FromUser).WithMany().HasForeignKey(x => x.FromIdUser).OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

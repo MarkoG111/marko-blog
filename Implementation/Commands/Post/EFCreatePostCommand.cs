@@ -19,15 +19,13 @@ namespace Implementation.Commands.Post
         private readonly BlogContext _context;
         private readonly IApplicationActor _actor;
         private readonly CreatePostValidator _validator;
-        private readonly INotificationHubService _notificationHubService;
         private readonly INotificationService _notificationService;
 
-        public EFCreatePostCommand(CreatePostValidator validator, IApplicationActor actor, BlogContext context, INotificationHubService notificationHubService, INotificationService notificationService)
+        public EFCreatePostCommand(CreatePostValidator validator, IApplicationActor actor, BlogContext context, INotificationService notificationService)
         {
             _validator = validator;
             _actor = actor;
             _context = context;
-            _notificationHubService = notificationHubService;
             _notificationService = notificationService;
         }
 

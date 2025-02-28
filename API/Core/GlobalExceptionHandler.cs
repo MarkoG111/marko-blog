@@ -70,8 +70,14 @@ namespace API.Core
                         errorMessage = conflictException.Message;
                         response = new { message = errorMessage };
                         break;
+                    case UnauthorizedUserAccessException unauthorizedUserAccessException:
+                        statusCode = StatusCodes.Status403Forbidden;
+                        errorMessage = unauthorizedUserAccessException.Message;
+                        response = new { message = errorMessage };
+                        break;
                     default:
                         _logger.LogError(ex, "Unhandled exception occurred.");
+                        statusCode = StatusCodes.Status500InternalServerError;
                         break;
                 }
 

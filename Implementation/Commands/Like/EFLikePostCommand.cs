@@ -22,16 +22,14 @@ namespace Implementation.Commands.Like
         private readonly LikePostValidator _validator;
         private readonly IApplicationActor _actor;
         private readonly ILikeService _likeService;
-        private readonly INotificationHubService _notificationHubService;
         private readonly INotificationService _notificationService;
 
-        public EFLikePostCommand(ILikeService likeService, LikePostValidator validator, BlogContext context, IApplicationActor actor, INotificationHubService notificationHubService, INotificationService notificationService)
+        public EFLikePostCommand(ILikeService likeService, LikePostValidator validator, BlogContext context, IApplicationActor actor, INotificationService notificationService)
         {
             _validator = validator;
             _context = context;
             _actor = actor;
             _likeService = likeService;
-            _notificationHubService = notificationHubService;
             _notificationService = notificationService;
         }
 

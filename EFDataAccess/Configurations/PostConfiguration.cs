@@ -18,15 +18,17 @@ namespace EFDataAccess.Configurations
             builder.HasMany(x => x.PostCategories)
                 .WithOne(y => y.Post)
                 .HasForeignKey(x => x.IdPost)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.Comments)
                 .WithOne(y => y.Post)
-                .HasForeignKey(x => x.IdPost);
+                .HasForeignKey(x => x.IdPost)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.Likes)
                 .WithOne(y => y.Post)
-                .HasForeignKey(x => x.IdPost);
+                .HasForeignKey(x => x.IdPost)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

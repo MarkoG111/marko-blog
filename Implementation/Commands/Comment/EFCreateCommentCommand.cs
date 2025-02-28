@@ -20,15 +20,13 @@ namespace Implementation.Commands.Comment
         private readonly BlogContext _context;
         private readonly CreateCommentValidator _validator;
         private readonly IApplicationActor _actor;
-        private readonly INotificationHubService _notificationHubService;
         private readonly INotificationService _notificationService;
 
-        public EFCreateCommentCommand(BlogContext context, CreateCommentValidator validator, IApplicationActor actor, INotificationHubService notificationHubService, INotificationService notificationService)
+        public EFCreateCommentCommand(BlogContext context, CreateCommentValidator validator, IApplicationActor actor, INotificationService notificationService)
         {
             _context = context;
             _validator = validator;
             _actor = actor;
-            _notificationHubService = notificationHubService;
             _notificationService = notificationService;
         }
 
