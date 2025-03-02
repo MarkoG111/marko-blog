@@ -16,9 +16,10 @@ namespace EFDataAccess.Configurations
             builder.Property(x => x.Link).IsRequired().HasMaxLength(250);
             builder.Property(x => x.Type).IsRequired().HasColumnType("int");
             builder.Property(x => x.IsRead).IsRequired().HasDefaultValue(false);
+            builder.Property(x => x.FromIdUser).IsRequired(false);
 
             builder.HasOne(x => x.UserReceiver).WithMany().HasForeignKey(x => x.IdUser).OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(x => x.FromUser).WithMany().HasForeignKey(x => x.FromIdUser).OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(x => x.FromUser).WithMany().HasForeignKey(x => x.FromIdUser).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

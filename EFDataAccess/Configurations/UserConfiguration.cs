@@ -23,17 +23,17 @@ namespace EFDataAccess.Configurations
             builder.HasMany(x => x.Posts)
                 .WithOne(y => y.User)
                 .HasForeignKey(x => x.IdUser)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(x => x.Comments)
                 .WithOne(y => y.User)
                 .HasForeignKey(x => x.IdUser)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(x => x.Likes)
                 .WithOne(y => y.User)
                 .HasForeignKey(x => x.IdUser)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.Role)
                 .WithMany(y => y.Users)
