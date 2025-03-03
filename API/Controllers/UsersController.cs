@@ -60,22 +60,16 @@ namespace API.Controllers
         [HttpGet("profile-image/{profilePicture}")]
         public IActionResult GetUserImage(string profilePicture)
         {
-            if (string.IsNullOrEmpty(profilePicture))
+            var imageData = _imageService.GetImage("UserImages", profilePicture);
+
+            if (imageData == null)
             {
-                return BadRequest("Invalid image name.");
+                return NotFound("User image not found");
             }
 
-            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages", profilePicture);
-
-            if (!System.IO.File.Exists(imagePath))
-            {
-                return NotFound("User image not found.");
-            }
-
-            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
             var mimeType = _imageService.GetMimeType(profilePicture);
 
-            return File(imageBytes, mimeType);
+            return File(imageData, mimeType);
         }
     }
 }

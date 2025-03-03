@@ -48,7 +48,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{image-name}")]
-        public IActionResult GetImage([FromRoute(Name = "image-name")] string imageName)
+        public IActionResult GetPostImage([FromRoute(Name = "image-name")] string imageName)
         {
             var image = _imageService.GetImage("Images", imageName);
 

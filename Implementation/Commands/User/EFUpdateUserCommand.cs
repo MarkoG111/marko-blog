@@ -16,13 +16,11 @@ namespace Implementation.Commands.User
     {
         private readonly BlogContext _context;
         private readonly UpdateUserValidator _validator;
-        private readonly UpdateUserWithoutImageValidator _validatorWithoutImage;
 
-        public EFUpdateUserCommand(BlogContext context, UpdateUserValidator validator, UpdateUserWithoutImageValidator validatorWithoutImage)
+        public EFUpdateUserCommand(BlogContext context, UpdateUserValidator validator)
         {
             _context = context;
             _validator = validator;
-            _validatorWithoutImage = validatorWithoutImage;
         }
 
         public int Id => (int)UseCaseEnum.EFUpdateUserCommand;
@@ -30,14 +28,7 @@ namespace Implementation.Commands.User
 
         public async Task ExecuteAsync(UpsertUserDto request)
         {
-            if (request.Image != null)
-            {
-                await _validator.ValidateAndThrowAsync(request);
-            }
-            else
-            {
-                await _validatorWithoutImage.ValidateAndThrowAsync(request);
-            }
+            await _validator.ValidateAndThrowAsync(request);
 
             var user = await _context.Users.Include(x => x.UserUseCases).FirstOrDefaultAsync(x => x.Id == request.Id);
 
