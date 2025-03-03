@@ -9,7 +9,7 @@ namespace Implementation.Extensions
 {
     public static class FileExtension
     {
-        public static async Task<string> UploadImage(this IFormFile image, string folder, string oldFileName = null)
+        public static async Task<string> UploadProfileImage(this IFormFile image, string folder, string oldFileName = null)
         {
             if (!string.IsNullOrEmpty(oldFileName))
             {

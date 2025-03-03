@@ -11,5 +11,5 @@ export const getAvatarSrc = (profilePicture, imageError = false) => {
     return profilePicture
   }
 
-  return `/api/users/images/${profilePicture}`
+  return `/api/users/profile-image/${encodeURIComponent(profilePicture)}`;
 }

@@ -99,7 +99,7 @@ export default function DashUsers() {
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                 <Table.Cell>{new Date(user.createdAt).toLocaleDateString()}</Table.Cell>
                 <Table.Cell>
-                  <Link to={'/user/'}>
+                  <Link to={`/user/${user.id}`}>
                     <img src={getAvatarSrc(user.profilePicture)} referrerPolicy="no-referrer" className="w-10 h-10 object-cover bg-gray-500 rounded-full" />
                   </Link>
                 </Table.Cell>
@@ -110,7 +110,7 @@ export default function DashUsers() {
                   <span>{user.email}</span>
                 </Table.Cell>
                 <Table.Cell>
-                  <span>{user.role}</span>
+                  <span>{user.roleName}</span>
                 </Table.Cell>
                 <Table.Cell>
                   <span onClick={() => { setShowModal(true); setIdUserToDelete(user.id) }} className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span>

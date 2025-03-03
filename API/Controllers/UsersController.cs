@@ -57,20 +57,25 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpGet("{idUser}/profile-image")]
-        public IActionResult GetUserImage(int idUser)
+        [HttpGet("profile-image/{profilePicture}")]
+        public IActionResult GetUserImage(string profilePicture)
         {
-            var imageName = $"{idUser}.jpg";
-            var image = _imageService.GetImage("UserImages", imageName);
+            if (string.IsNullOrEmpty(profilePicture))
+            {
+                return BadRequest("Invalid image name.");
+            }
 
-            if (image == null)
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages", profilePicture);
+
+            if (!System.IO.File.Exists(imagePath))
             {
                 return NotFound("User image not found.");
             }
 
-            var mimeType = _imageService.GetMimeType(imageName);
+            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            var mimeType = _imageService.GetMimeType(profilePicture);
 
-            return File(image, mimeType);
+            return File(imageBytes, mimeType);
         }
     }
 }

@@ -53,7 +53,7 @@ namespace Implementation.Commands.User
 
             if (request.Image != null)
             {
-                user.ProfilePicture = await request.Image.UploadImage("UserImages");
+                user.ProfilePicture = await request.Image.UploadProfileImage("UserImages");
             }
 
             if (!string.IsNullOrEmpty(request.Password) || !string.IsNullOrWhiteSpace(request.Password))
