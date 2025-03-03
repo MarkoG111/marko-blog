@@ -22,12 +22,12 @@ namespace Implementation.Services
 
         public async Task<Domain.Like> ToggleLike(LikeDto request)
         {
-            var existingLike = await _likeRepository.GetLike(request.IdUser, request.IdPost, request.IdComment);
-
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request), "Request cannot be null.");
             }
+
+            var existingLike = await _likeRepository.GetLike(request.IdUser, request.IdPost, request.IdComment);
 
             if (existingLike != null)
             {

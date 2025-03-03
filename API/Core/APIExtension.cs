@@ -137,7 +137,6 @@ namespace API.Core
             services.AddTransient<CreatePostValidator>();
             services.AddTransient<CreateCategoryValidator>();
             services.AddTransient<CreateCommentValidator>();
-            services.AddTransient<CreateUserValidator>();
 
             services.AddTransient<LikePostValidator>();
             services.AddTransient<LikeCommentValidator>();

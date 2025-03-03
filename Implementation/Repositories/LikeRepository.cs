@@ -18,8 +18,7 @@ namespace Implementation.Repositories
 
         public async Task<Like> GetLike(int idUser, int idPost, int? idComment)
         {
-            return await _context.Likes
-                .FirstOrDefaultAsync(x => x.IdUser == idUser && x.IdPost == idPost && x.IdComment == idComment);
+            return await _context.Likes.FirstOrDefaultAsync(x => x.IdUser == idUser && x.IdPost == idPost && x.IdComment == idComment);
         }
 
         public async Task AddLike(Like like)

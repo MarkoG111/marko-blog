@@ -44,7 +44,7 @@ namespace Implementation.Commands.Like
             {
                 try
                 {
-                    var like = _likeService.ToggleLike(request);
+                    var like = await _likeService.ToggleLike(request);
 
                     if (like != null)
                     {
