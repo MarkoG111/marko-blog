@@ -6,7 +6,7 @@ using Application.DataTransfer.Posts;
 
 namespace Application.Commands.Post
 {
-    public interface IUpdatePersonalPostCommand : ICommand<UpsertPostDto>
+    public interface IUpdatePersonalPostCommand : IAsyncCommand<UpsertPostDto>
     {
         
     }

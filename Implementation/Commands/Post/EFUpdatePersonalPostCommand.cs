@@ -30,55 +30,69 @@ namespace Implementation.Commands.Post
         public int Id => (int)UseCaseEnum.EFUpdatePersonalPostCommand;
         public string Name => UseCaseEnum.EFUpdatePersonalPostCommand.ToString();
 
-        public void Execute(UpsertPostDto request)
+        public async Task ExecuteAsync(UpsertPostDto request)
         {
             _validator.ValidateAndThrow(request);
 
-            var post = _context.Posts.Include(x => x.PostCategories).FirstOrDefault(x => x.Id == request.Id);
-
-            if (post == null)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                throw new EntityNotFoundException(request.Id, typeof(Domain.Post));
-            }
-
-            if (_actor.Id != post.IdUser)
-            {
-                throw new UnauthorizedUserAccessException(_actor, Name);
-            }
-
-            post.Title = request.Title;
-            post.Content = request.Content;
-            post.IdImage = request.IdImage;
-            post.ModifiedAt = DateTime.Now;
-
-            // Get current category IDs associated with the post
-            var currentCategoryIds = post.PostCategories.Select(pc => pc.IdCategory).ToList();
-
-            // Find category IDs to remove (existing IDs not in the request)
-            var categoryIdsToRemove = currentCategoryIds.Except(request.CategoryIds).ToList();
-
-            // Find category IDs to add (IDs in the request but not currently associated)
-            var categoryIdsToAdd = request.CategoryIds.Except(currentCategoryIds).ToList();
-
-            // Remove categories
-            foreach (var categoryId in categoryIdsToRemove)
-            {
-                var postCategory = post.PostCategories.First(pc => pc.IdCategory == categoryId);
-                post.PostCategories.Remove(postCategory);
-            }
-
-            // Add new categories
-            foreach (var categoryId in categoryIdsToAdd)
-            {
-                post.PostCategories.Add(new Domain.PostCategory
+                try
                 {
-                    IdPost = post.Id,
-                    IdCategory = categoryId,
-                    IsActive = true
-                });
-            }
+                    var post = await _context.Posts
+                        .Include(x => x.PostCategories)
+                        .FirstOrDefaultAsync(x => x.Id == request.Id);
 
-            _context.SaveChanges();
+                    if (post == null)
+                    {
+                        throw new EntityNotFoundException(request.Id, typeof(Domain.Post));
+                    }
+
+                    if (_actor.Id != post.IdUser)
+                    {
+                        throw new UnauthorizedUserAccessException(_actor, Name);
+                    }
+
+                    post.Title = request.Title;
+                    post.Content = request.Content;
+                    post.IdImage = request.IdImage;
+                    post.ModifiedAt = DateTime.UtcNow;
+
+                    // Get current category IDs associated with the post
+                    var currentCategoryIds = post.PostCategories.Select(pc => pc.IdCategory).ToList();
+
+                    // Find category IDs to remove (existing IDs not in the request)
+                    var categoryIdsToRemove = currentCategoryIds.Except(request.CategoryIds).ToList();
+
+                    // Find category IDs to add (IDs in the request but not currently associated)
+                    var categoryIdsToAdd = request.CategoryIds.Except(currentCategoryIds).ToList();
+
+                    // Remove categories
+                    foreach (var categoryId in categoryIdsToRemove)
+                    {
+                        var postCategory = post.PostCategories.First(pc => pc.IdCategory == categoryId);
+                        _context.PostCategories.Remove(postCategory);
+                    }
+
+                    // Add new categories
+                    foreach (var categoryId in categoryIdsToAdd)
+                    {
+                        post.PostCategories.Add(new Domain.PostCategory
+                        {
+                            IdPost = post.Id,
+                            IdCategory = categoryId,
+                            IsActive = true
+                        });
+                    }
+
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
         }
     }
 }

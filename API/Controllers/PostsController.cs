@@ -6,6 +6,7 @@ using Application.Commands.Post;
 using Application.Queries.Post;
 using Application.Searches;
 using Application.Commands.Like;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -65,10 +66,10 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}/personal")]
-        public IActionResult UpdatePersonalPost(int id, [FromBody] UpsertPostDto dtoRequest, [FromServices] IUpdatePersonalPostCommand command)
+        public async Task<IActionResult> UpdatePersonalPost(int id, [FromBody] UpsertPostDto dtoRequest, [FromServices] IUpdatePersonalPostCommand command)
         {
             dtoRequest.Id = id;
-            _executor.ExecuteCommand(command, dtoRequest);
+            await _executor.ExecuteCommandAsync(command, dtoRequest);
             return NoContent();
         }
 
