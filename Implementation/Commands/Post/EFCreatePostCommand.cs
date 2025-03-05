@@ -11,6 +11,7 @@ using Domain;
 using EFDataAccess;
 using FluentValidation;
 using Implementation.Validators.Post;
+using Microsoft.EntityFrameworkCore;
 
 namespace Implementation.Commands.Post
 {
@@ -42,13 +43,12 @@ namespace Implementation.Commands.Post
                 Content = request.Content,
                 IdImage = request.IdImage,
                 CreatedAt = DateTime.UtcNow,
-                IdUser = _actor.Id
+                IdUser = _actor.Id,
+                PostCategories = request.CategoryIds.Select(categoryId => new PostCategory
+                {
+                    IdCategory = categoryId,
+                }).ToList()
             };
-
-            post.PostCategories = request.CategoryIds.Select(categoryId => new PostCategory
-            {
-                IdCategory = categoryId
-            }).ToList();
 
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
@@ -59,23 +59,6 @@ namespace Implementation.Commands.Post
 
                     request.Id = post.Id;
 
-                    var followers = _context.Followers.Where(f => f.IdFollowing == post.IdUser).Select(f => f.IdFollower).ToList();
-
-                    foreach (var idFollower in followers)
-                    {
-                        var notificationDto = new InsertNotificationDto
-                        {
-                            IdUser = idFollower,
-                            FromIdUser = post.IdUser,
-                            Type = NotificationType.Post,
-                            Content = $"{_actor.Identity} has published a new post: {post.Title}",
-                            CreatedAt = DateTime.Now,
-                            IdPost = post.Id
-                        };
-
-                        await _notificationService.CreateNotification(notificationDto);
-                    }
-
                     await transaction.CommitAsync();
                 }
                 catch (Exception ex)
@@ -84,6 +67,25 @@ namespace Implementation.Commands.Post
                     throw;
                 }
             }
+
+            var followers = await _context.Followers.Where(f => f.IdFollowing == post.IdUser).Select(f => f.IdFollower).ToListAsync();
+
+            var notificationTasks = followers.Select(idFollower =>
+            {
+                var notificationDto = new InsertNotificationDto
+                {
+                    IdUser = idFollower,
+                    FromIdUser = post.IdUser,
+                    Type = NotificationType.Post,
+                    Content = $"{_actor.Identity} has published a new post: {post.Title}",
+                    CreatedAt = DateTime.UtcNow,
+                    IdPost = post.Id
+                };
+
+                return _notificationService.CreateNotification(notificationDto);
+            });
+
+            await Task.WhenAll(notificationTasks);
         }
     }
 }
