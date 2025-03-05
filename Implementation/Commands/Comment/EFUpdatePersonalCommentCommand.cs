@@ -45,9 +45,8 @@ namespace Implementation.Commands.Comment
                 throw new UnauthorizedUserAccessException(_actor, Name);
             }
 
-            var query = _context.Comments.Where(x => x.Id == request.Id).FirstOrDefault();
-
             comment.CommentText = request.CommentText;
+            comment.ModifiedAt = DateTime.UtcNow;
 
             _context.SaveChanges();
         }

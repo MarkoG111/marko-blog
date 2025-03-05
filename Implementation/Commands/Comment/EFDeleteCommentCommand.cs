@@ -18,7 +18,6 @@ namespace Implementation.Commands.Comment
         }
 
         public int Id => (int)UseCaseEnum.EFDeleteCommentCommand;
-
         public string Name => UseCaseEnum.EFDeleteCommentCommand.ToString();
 
         public void Execute(int request)

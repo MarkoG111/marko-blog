@@ -38,7 +38,7 @@ namespace Implementation.Validators.User
 
                     if (img != null)
                     {
-                        allowedFormats.Any(ext => ext.ToLower() == Path.GetExtension(img.FileName).ToLower());
+                        return img != null && allowedFormats.Any(ext => ext.ToLower() == Path.GetExtension(img.FileName).ToLower());
                     }
 
                     return true;

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application;
 using Application.Commands.Follow;
 using Application.DataTransfer.Followers;
 using Application.DataTransfer.Notifications;
@@ -36,8 +35,6 @@ namespace Implementation.Commands.Follow
         public async Task ExecuteAsync(InsertFollowDto request)
         {
             _validator.ValidateAndThrow(request);
-
-            request.IdUser = _actor.Id;
 
             var follow = new Domain.Follower
             {

@@ -29,7 +29,7 @@ namespace Implementation.Commands.Category
         {
             var category = _context.Categories.Find(request.Id);
 
-            if (request == null)
+            if (category == null)
             {
                 throw new EntityNotFoundException(request.Id, typeof(Domain.Category));
             }

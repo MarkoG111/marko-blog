@@ -28,7 +28,7 @@ namespace Implementation.Commands.AuthorRequest
         {
             var authorRequest = _context.AuthorRequests.Find(request.Id);
 
-            if (request == null)
+            if (authorRequest == null)
             {
                 throw new EntityNotFoundException(request.Id, typeof(Domain.AuthorRequest));
             }

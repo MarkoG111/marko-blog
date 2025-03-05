@@ -43,7 +43,6 @@ namespace Implementation.Commands.Post
             post.IdImage = request.IdImage;
             post.ModifiedAt = DateTime.Now;
 
-
             // Get current category IDs associated with the post
             var currentCategoryIds = post.PostCategories.Select(pc => pc.IdCategory).ToList();
 

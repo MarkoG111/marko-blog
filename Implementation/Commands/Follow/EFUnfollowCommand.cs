@@ -20,13 +20,12 @@ namespace Implementation.Commands.Follow
             _actor = actor;
         }
 
-        public int Id => (int)UseCaseEnum.EFFollowCommand;
-        public string Name => UseCaseEnum.EFFollowCommand.ToString();
+        public int Id => (int)UseCaseEnum.EFUnfollowCommand;
+        public string Name => UseCaseEnum.EFUnfollowCommand.ToString();
 
         public void Execute(int idFollowing)
         {
-            var follow = _context.Followers
-                .FirstOrDefault(f => f.IdFollower == _actor.Id && f.IdFollowing == idFollowing);
+            var follow = _context.Followers.FirstOrDefault(f => f.IdFollower == _actor.Id && f.IdFollowing == idFollowing);
 
             if (follow != null)
             {

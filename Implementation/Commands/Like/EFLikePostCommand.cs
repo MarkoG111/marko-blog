@@ -50,18 +50,20 @@ namespace Implementation.Commands.Like
                     {
                         var post = await _context.Posts.FindAsync(request.IdPost);
 
-                        if (post != null)
+                        if (post == null)
                         {
-                            await _notificationService.CreateNotification(new InsertNotificationDto
-                            {
-                                IdUser = post.IdUser,
-                                FromIdUser = _actor.Id,
-                                Type = NotificationType.Like,
-                                Content = $"{_actor.Identity} liked your post.",
-                                IdPost = request.IdPost,
-                                CreatedAt = DateTime.Now
-                            });
+                            throw new EntityNotFoundException(request.IdPost, typeof(Domain.Post));
                         }
+
+                        await _notificationService.CreateNotification(new InsertNotificationDto
+                        {
+                            IdUser = post.IdUser,
+                            FromIdUser = _actor.Id,
+                            Type = NotificationType.Like,
+                            Content = $"{_actor.Identity} liked your post.",
+                            IdPost = request.IdPost,
+                            CreatedAt = DateTime.Now
+                        });
                     }
 
                     await transaction.CommitAsync();

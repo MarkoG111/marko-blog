@@ -145,7 +145,6 @@ namespace API.Core
             services.AddTransient<UpdateCategoryValidator>();
             services.AddTransient<UpdateCommentValidator>();
             services.AddTransient<UpdateUserValidator>();
-            services.AddTransient<UpdateUserWithoutImageValidator>();
 
             services.AddTransient<DeletePostValidator>();
             services.AddTransient<DeleteCategoryValidator>();
