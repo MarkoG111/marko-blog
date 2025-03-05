@@ -42,10 +42,10 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] UpsertPostDto dtoRequest, [FromServices] IUpdatePostCommand command)
+        public async Task <IActionResult> Put(int id, [FromBody] UpsertPostDto dtoRequest, [FromServices] IUpdatePostCommand command)
         {
             dtoRequest.Id = id;
-            _executor.ExecuteCommand(command, dtoRequest);
+            await _executor.ExecuteCommandAsync(command, dtoRequest);
             return NoContent();
         }
 
