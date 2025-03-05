@@ -48,7 +48,17 @@ namespace Implementation.Commands.Like
 
                     if (like != null)
                     {
-                        var comment = _context.Comments.FirstOrDefault(x => x.Id == request.IdComment);
+                        if (!request.IdComment.HasValue)
+                        {
+                            throw new ArgumentException("IdComment is required.");
+                        }
+
+                        var comment = await _context.Comments.FindAsync(request.IdComment.Value);
+
+                        if (comment == null)
+                        {
+                            throw new EntityNotFoundException(request.IdComment.Value, typeof(Domain.Comment));
+                        }
 
                         await _notificationService.CreateNotification(new InsertNotificationDto
                         {
