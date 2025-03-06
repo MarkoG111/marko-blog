@@ -26,11 +26,6 @@ namespace Implementation.Queries.Comment
         {
             var comments = _context.Comments.Include(x => x.User).Include(x => x.Likes).Include(x => x.Post).AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(search.Username))
-            {
-                comments = comments.Where(c => c.User.Username.ToLower().Contains(search.Username.ToLower()));
-            }
-
             var skipCount = search.PerPage * (search.Page - 1);
             DateTime thirtyDaysAgo = DateTime.Now.AddDays(-30);
 
@@ -52,7 +47,7 @@ namespace Implementation.Queries.Comment
                     PostTitle = c.Post.Title,
                     IdPost = c.Post.Id,
                     IdUser = c.User.Id,
-                    LikesCount = c.Likes.Count(l => l.IdComment != null),
+                    LikesCount = c.Likes.Count(),
                     Likes = c.Likes.Select(l => new GetCommentLikesDto
                     {
                         IdComment = l.IdComment,

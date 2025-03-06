@@ -7,6 +7,6 @@ namespace Application.Searches
 {
     public class CommentSearch : PagedSearch
     {
-        public string? Username { get; set; }
+        
     }
 }

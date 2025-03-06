@@ -44,7 +44,7 @@ namespace Implementation.Commands.User
                 Email = requestDto.Email,
                 Password = BCrypt.Net.BCrypt.HashPassword(requestDto.Password),
                 ProfilePicture = DefaultProfilePictureUrl,
-                IdRole = (int)RoleEnum.Admin
+                IdRole = (int)RoleEnum.User
             };
 
             using var transaction = _context.Database.BeginTransaction();

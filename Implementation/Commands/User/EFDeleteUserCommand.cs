@@ -32,7 +32,7 @@ namespace Implementation.Commands.User
                 throw new AlreadyDeletedException(request, typeof(Domain.User));
             }
 
-            user.DeletedAt = DateTime.Now;
+            user.DeletedAt = DateTime.UtcNow;
             user.IsDeleted = true;
             user.IsActive = false;
 

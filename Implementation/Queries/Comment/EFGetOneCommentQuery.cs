@@ -40,7 +40,7 @@ namespace Implementation.Queries.Comment
                 LastName = comment.User.LastName,
                 PostTitle = comment.Post.Title,
                 IdPost = comment.Post.Id,
-                LikesCount = comment.Likes.Count(l => l.IdComment != null),
+                LikesCount = comment.Likes.Count(),
                 CreatedAt = comment.CreatedAt,
                 IdParent = comment.IdParent,
                 IsDeleted = comment.IsDeleted

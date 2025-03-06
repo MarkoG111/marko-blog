@@ -1,6 +1,6 @@
 using API.Core;
-using Application;
 using EFDataAccess;
+using Application;
 using Application.Settings;
 using Application.Commands.Email;
 using Implementation.Logging;

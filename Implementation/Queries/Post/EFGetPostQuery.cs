@@ -12,11 +12,11 @@ using System.Text;
 
 namespace Implementation.Queries.Post
 {
-    public class EFGetPostQuery : IGetPostQuery
+    public class EFGetOnePostQuery : IGetPostQuery
     {
         private readonly BlogContext _context;
 
-        public EFGetPostQuery(BlogContext context)
+        public EFGetOnePostQuery(BlogContext context)
         {
             _context = context;
         }

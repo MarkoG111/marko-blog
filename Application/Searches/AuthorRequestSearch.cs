@@ -7,6 +7,6 @@ namespace Application.Searches
 {
     public class AuthorRequestSearch : PagedSearch
     {
-        public string? Reason { get; set; }
+        
     }
 }

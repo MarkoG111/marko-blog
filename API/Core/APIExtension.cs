@@ -109,7 +109,7 @@ namespace API.Core
 
             // Queries
             services.AddTransient<IGetPostsQuery, EFGetPostsQuery>();
-            services.AddTransient<IGetPostQuery, EFGetPostQuery>();
+            services.AddTransient<IGetPostQuery, EFGetOnePostQuery>();
 
             services.AddTransient<IGetCategoriesQuery, EFGetCategoriesQuery>();
             services.AddTransient<IGetCategoryQuery, EFGetOneCategoryQuery>();

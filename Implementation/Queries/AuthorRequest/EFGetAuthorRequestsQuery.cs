@@ -26,11 +26,6 @@ namespace Implementation.Queries.AuthorRequest
         {
             var query = _context.AuthorRequests.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(search.Reason))
-            {
-                query = query.Where(x => x.Reason.ToLower().Contains(search.Reason.ToLower()));
-            }
-
             query = query.Where(x => x.IsActive == true);
 
             var skipCount = search.PerPage * (search.Page - 1);
