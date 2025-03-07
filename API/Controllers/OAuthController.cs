@@ -23,7 +23,7 @@ namespace API.Controllers
                 var token = await _authService.AuthenticateUser(requestDto);
                 if (token == null)
                 {
-                    return StatusCode(500, "Authentication failed.");
+                    return BadRequest("Authentication failed.");
                 }
 
                 return Ok(new { token });

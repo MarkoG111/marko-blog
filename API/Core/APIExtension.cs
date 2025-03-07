@@ -56,8 +56,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
-using API.Services;
-
 namespace API.Core
 {
     public static class APIExtension
@@ -178,10 +176,8 @@ namespace API.Core
 
         public static void AddJWT(this IServiceCollection services, JWTSettings jwtSettings)
         {
-            services.AddScoped<JWTService>(x => new JWTService(jwtSettings.JwtIssuer, jwtSettings.JwtSecretKey));
-            
             services.AddScoped<JWTManager>();
-
+            
             services.AddAuthentication(options =>
             {
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -202,20 +198,6 @@ namespace API.Core
                     ValidateIssuerSigningKey = true,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
-                };
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        // If SignalR is passed the token via query string, capture it
-                        var accessToken = context.Request.Query["access_token"];
-                        if (!string.IsNullOrEmpty(accessToken))
-                        {
-                            context.Token = accessToken;
-                        }
-                        return Task.CompletedTask;
-                    }
                 };
             });
         }

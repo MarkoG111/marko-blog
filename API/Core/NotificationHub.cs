@@ -43,9 +43,9 @@ namespace API.Core
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task MarkAllAsRead(int IdUser)
+        public async Task MarkAllAsRead(int idUser)
         {
-            await Clients.User(IdUser.ToString()).SendAsync("NotificationsMarkedAsRead");
+            await Clients.Group(idUser.ToString()).SendAsync("NotificationsMarkedAsRead"); 
         }
     }
 }

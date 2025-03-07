@@ -35,8 +35,6 @@ namespace API
 
             services.AddControllers();
 
-            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
-
             services.AddDbContext<BlogContext>();
 
             services.AddScoped<JWTService>(provider =>

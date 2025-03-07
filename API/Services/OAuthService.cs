@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
 using EFDataAccess;
 using Domain;
 using Implementation;
-using API.Core;
 using BCrypt.Net;
 using Application.DataTransfer.Auth;
 
@@ -57,7 +53,7 @@ namespace API.Services
                 FirstName = firstName,
                 LastName = lastName,
                 Username = GenerateUsername(requestDto.Name),
-                Password = BCrypt.Net.BCrypt.HashPassword(GenerateRandomPassword()),
+                Password = BCrypt.Net.BCrypt.HashPassword(GenerateSimplePassword()),
                 Email = requestDto.Email,
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true,
@@ -77,15 +73,9 @@ namespace API.Services
 
         private static string GenerateUsername(string name) => $"{name.ToLower().Replace(" ", "")}{Guid.NewGuid().ToString("N").Substring(0, 6)}";
 
-        private static string GenerateRandomPassword()
+        private static string GenerateSimplePassword()
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            var data = new byte[16];
-
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(data);
-
-            return new string(data.Select(b => chars[b % chars.Length]).ToArray());
+            return $"User{new Random().Next(1000, 9999)}";
         }
     }
 }
