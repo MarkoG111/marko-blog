@@ -1,7 +1,8 @@
+using Domain;
 using EFDataAccess;
 using Microsoft.EntityFrameworkCore;
-using Domain;
 using API.Services;
+using Application.Exceptions;
 
 namespace API.Core
 {
@@ -20,18 +21,18 @@ namespace API.Core
         {
             var user = FetchUser(username, password);
 
-            if (user == null)
-            {
-                throw new ArgumentException("User not found.");
-            }
-
             var claims = _jwtService.GenerateClaims(user);
 
             return _jwtService.GenerateToken(claims);
         }
 
-        public User FetchUser(string username, string password)
+        private User FetchUser(string username, string password)
         {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                throw new AuthenticationException("Username and password are required.");
+            }
+
             var user = _context.Users
                 .Include(u => u.UserUseCases)
                 .Include(u => u.Role)
@@ -39,7 +40,7 @@ namespace API.Core
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                throw new ArgumentException("User not found.");
+                throw new AuthenticationException("Invalid username or password.");
             }
 
             return user;

@@ -47,6 +47,11 @@ namespace API.Core
                         errorMessage = "You are not allowed to execute this operation.";
                         response = new { message = errorMessage };
                         break;
+                    case AuthenticationException authException:
+                        statusCode = StatusCodes.Status401Unauthorized;
+                        errorMessage = authException.Message;
+                        response = new { message = errorMessage };
+                        break;
                     case EntityNotFoundException entityNotFoundException:
                         statusCode = StatusCodes.Status404NotFound;
                         errorMessage = "Content not found.";
