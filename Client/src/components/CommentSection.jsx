@@ -176,7 +176,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
         Status: voteType,
       })
 
-      const response = await fetch(`/api/comments/${idComment}/like`, {
+      const response = await fetch(`/api/likes/comments/${idComment}`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,

@@ -62,6 +62,21 @@ namespace API.Controllers
             return File(image, mimeType);
         }
 
+        [HttpGet("profile-image/{profilePicture}")]
+        public IActionResult GetUserImage(string profilePicture)
+        {
+            var imageData = _imageService.GetImage("UserImages", profilePicture);
+
+            if (imageData == null)
+            {
+                return NotFound("User image not found");
+            }
+
+            var mimeType = _imageService.GetMimeType(profilePicture);
+
+            return File(imageData, mimeType);
+        }
+
         [HttpPost("proxy")]
         public async Task<IActionResult> ProxyImage([FromBody] ImageProxyDto requestDto)
         {

@@ -1,5 +1,4 @@
 using Application;
-using Application.Queries;
 using Application.Queries.UseCaseLogs;
 using Application.Searches;
 using Microsoft.AspNetCore.Mvc;

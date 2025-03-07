@@ -4,8 +4,6 @@ using Application.Commands.User;
 using Application.DataTransfer.Users;
 using Application.Queries.User;
 using Application.Searches;
-using Application.Services;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -14,12 +12,10 @@ namespace API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
-        private readonly IImageService _imageService;
 
-        public UsersController(UseCaseExecutor executor, IImageService imageService)
+        public UsersController(UseCaseExecutor executor)
         {
             _executor = executor;
-            _imageService = imageService;
         }
 
         [HttpGet]
@@ -55,21 +51,6 @@ namespace API.Controllers
         {
             _executor.ExecuteCommand(command, id);
             return NoContent();
-        }
-
-        [HttpGet("profile-image/{profilePicture}")]
-        public IActionResult GetUserImage(string profilePicture)
-        {
-            var imageData = _imageService.GetImage("UserImages", profilePicture);
-
-            if (imageData == null)
-            {
-                return NotFound("User image not found");
-            }
-
-            var mimeType = _imageService.GetMimeType(profilePicture);
-
-            return File(imageData, mimeType);
         }
     }
 }

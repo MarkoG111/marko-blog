@@ -1,10 +1,8 @@
 using Application;
 using Application.Commands.Comment;
 using Application.DataTransfer.Comments;
-using Application.DataTransfer.Likes;
 using Application.Queries.Comment;
 using Application.Searches;
-using Application.Commands.Like;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -55,13 +53,6 @@ namespace API.Controllers
         {
             _executor.ExecuteCommand(command, id);
             return NoContent();
-        }
-
-        [HttpPost("{id}/like")]
-        public async Task <IActionResult> Like([FromBody] LikeDto dtoRequest, [FromServices] ILikeCommentCommand command)
-        {
-            await _executor.ExecuteCommandAsync(command, dtoRequest);
-            return Ok(dtoRequest);
         }
 
         [HttpDelete("{id}/personal")]

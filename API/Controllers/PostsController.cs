@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Application;
 using Application.DataTransfer.Posts;
-using Application.DataTransfer.Likes;
 using Application.Commands.Post;
 using Application.Queries.Post;
 using Application.Searches;
-using Application.Commands.Like;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -15,12 +12,10 @@ namespace API.Controllers
     public class PostsController : ControllerBase
     {
         private readonly UseCaseExecutor _executor;
-        private readonly IApplicationActor _actor;
 
-        public PostsController(UseCaseExecutor executor, IApplicationActor actor)
+        public PostsController(UseCaseExecutor executor)
         {
             _executor = executor;
-            _actor = actor;
         }
 
         [HttpPost]
@@ -55,14 +50,6 @@ namespace API.Controllers
         {
             _executor.ExecuteCommand(command, id);
             return NoContent();
-        }
-
-        [HttpPost("{id}/like")]
-        public async Task<IActionResult> Like([FromBody] LikeDto dtoRequest, [FromServices] ILikePostCommand command)
-        {
-            dtoRequest.IdUser = _actor.Id;
-            await _executor.ExecuteCommandAsync(command, dtoRequest);
-            return Ok(dtoRequest);
         }
 
         [HttpPut("{id}/personal")]

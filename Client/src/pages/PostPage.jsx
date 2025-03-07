@@ -73,7 +73,7 @@ export default function PostPage() {
         Status: status,
       })
 
-      const response = await fetch(`/api/posts/${idPost}/like`, {
+      const response = await fetch(`/api/likes/posts/${idPost}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

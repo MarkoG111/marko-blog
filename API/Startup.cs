@@ -35,15 +35,6 @@ namespace API
 
             services.AddControllers();
 
-            services.AddLogging(loggingBuilder =>
-            {
-                loggingBuilder.AddSentry(o =>
-                {
-                    o.Dsn = "https://42856e7ceca42c96759e8d360f357474@o4508383067504640.ingest.de.sentry.io/4508383079235664";
-                    o.TracesSampleRate = 1.0;
-                });
-            });
-
             services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
             services.AddDbContext<BlogContext>();
@@ -134,8 +125,6 @@ namespace API
 
             // Adds middleware for authentication, which allows the application to authenticate users based on incoming credentials or tokens.
             app.UseAuthentication();
-            // Adds middleware for authorization, which allows the application to check if the user has the necessary permissions to access a particular resource.
-            app.UseAuthorization();
 
             // Adds middleware for Swagger support, which generates API documentation based on route and controller definitions in the application.
             app.UseSwagger();
