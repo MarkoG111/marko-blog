@@ -32,5 +32,31 @@ namespace API.Controllers
             await _executor.ExecuteCommandAsync(command, dtoRequest);
             return Ok(dtoRequest);
         }
+
+        [HttpDelete("comments/{id}")]
+        public async Task<IActionResult> UnlikeComment(int id, [FromServices] IUnlikeCommentCommand command)
+        {
+            var dtoRequest = new LikeDto
+            {
+                IdUser = _actor.Id,
+                IdComment = id
+            };
+            
+            await _executor.ExecuteCommandAsync(command, dtoRequest);
+            return NoContent();
+        }
+
+        [HttpDelete("posts/{id}")]
+        public async Task<IActionResult> UnlikePost(int id, [FromServices] IUnlikePostCommand command)
+        {
+            var dtoRequest = new LikeDto
+            {
+                IdUser = _actor.Id,
+                IdPost = id
+            };
+
+            await _executor.ExecuteCommandAsync(command, dtoRequest);
+            return NoContent();
+        }
     }
 }

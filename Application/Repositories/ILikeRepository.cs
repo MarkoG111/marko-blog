@@ -7,6 +7,7 @@ namespace Application.Repositories
   {
     Task<Like> GetLike(int idUser, int idPost, int? idComment);
     Task AddLike(Like like);
+    Task RemoveLike(Like like);  // Dodata metoda
     Task SaveChangesAsync();
   }
 }

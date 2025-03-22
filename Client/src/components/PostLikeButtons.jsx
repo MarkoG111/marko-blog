@@ -1,7 +1,10 @@
 import { FaThumbsUp, FaThumbsDown, FaRegCommentDots } from 'react-icons/fa'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 const PostLikeButtons = ({ post, idPost, onPostVote, commentsNumber }) => {
+  const { currentUser } = useSelector((state) => state.user)
+
   return (
     <div className="text-sm mb-8 mt-12 flex items-center justify-between gap-1">
       <div className="flex">
@@ -13,6 +16,7 @@ const PostLikeButtons = ({ post, idPost, onPostVote, commentsNumber }) => {
       <div className="flex ml-10">
         <button
           type="button"
+          disabled={currentUser && currentUser.id === post.idUser}
           onClick={() => onPostVote(idPost, 1)}
           className="text-gray-400 hover:text-blue-500 ml-6"
         >
@@ -22,6 +26,7 @@ const PostLikeButtons = ({ post, idPost, onPostVote, commentsNumber }) => {
 
         <button
           type="button"
+          disabled={currentUser && currentUser.id === post.idUser}
           onClick={() => onPostVote(idPost, 2)}
           className="text-gray-400 hover:text-red-500 ml-2"
         >
@@ -43,6 +48,7 @@ PostLikeButtons.propTypes = {
     ).isRequired,
   }).isRequired,
   idPost: PropTypes.number.isRequired,
+  idUser: PropTypes.number.isRequired,
   onPostVote: PropTypes.func.isRequired,
   commentsNumber: PropTypes.number.isRequired,
 }

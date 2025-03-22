@@ -25,7 +25,7 @@ namespace API.Controllers
         {
             dtoRequest.IdUser = _actor.Id;
             _executor.ExecuteCommand(command, dtoRequest);
-            return StatusCode(StatusCodes.Status201Created);
+            return Ok(dtoRequest);
         }
 
         [HttpGet]

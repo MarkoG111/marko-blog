@@ -95,6 +95,8 @@ namespace API.Core
 
             services.AddTransient<ILikePostCommand, EFLikePostCommand>();
             services.AddTransient<ILikeCommentCommand, EFLikeCommentCommand>();
+            services.AddTransient<IUnlikeCommentCommand, EFUnlikeCommentCommand>();
+            services.AddTransient<IUnlikePostCommand, EFUnlikePostCommand>();
 
             services.AddTransient<ICreateAuthorRequestCommand, EFCreateAuthorRequestCommand>();
             services.AddTransient<IUpdateAuthorRequestCommand, EFUpdateAuthorRequestCommand>();

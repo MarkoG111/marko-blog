@@ -31,7 +31,18 @@ namespace Implementation.Services
 
             if (existingLike != null)
             {
-                existingLike.Status = request.Status;
+                if (existingLike.Status == request.Status)
+                {
+                    await _likeRepository.RemoveLike(existingLike);
+                    await _likeRepository.SaveChangesAsync();
+                    return null; // Indikator da je glas uklonjen
+                }
+                else
+                {
+                    existingLike.Status = request.Status;
+                    await _likeRepository.SaveChangesAsync();
+                    return existingLike;
+                }
             }
             else
             {
@@ -49,6 +60,17 @@ namespace Implementation.Services
 
             await _likeRepository.SaveChangesAsync();
             return existingLike;
+        }
+
+        public async Task RemoveLike(LikeDto request)
+        {
+            var existingLike = await _likeRepository.GetLike(request.IdUser, request.IdPost, request.IdComment);
+
+            if (existingLike != null)
+            {
+                await _likeRepository.RemoveLike(existingLike);
+                await _likeRepository.SaveChangesAsync();
+            }
         }
     }
 }

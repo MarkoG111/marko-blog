@@ -63,7 +63,22 @@ export default function PostPage() {
       }
 
       const isAlreadyVoted = checkIfAlreadyVotedOnPost(post, idPost, currentUser.id, status)
+
       if (isAlreadyVoted) {
+        const response = await fetch(`/api/likes/posts/${idPost}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (response.ok) {
+          const updatedPost = removeDislikeOrLikeIfPresentInPost(post, idPost, currentUser.id, status)
+          setPost(updatedPost)
+        } else {
+          await handleApiError(response, showError)
+        }
+
         return
       }
 
@@ -84,11 +99,8 @@ export default function PostPage() {
 
       if (response.ok) {
         const data = await response.json()
-        
-        const updatedPost = removeDislikeOrLikeIfPresentInPost(post, idPost, currentUser.id, status === 1 ? 2 : 1)
-        const updatePostWithLikes = updatePostLikes(updatedPost, idPost, data, currentUser.id)
-
-        setPost(updatePostWithLikes)
+        const updatedPost = updatePostLikes(post, idPost, data, currentUser.id)
+        setPost(updatedPost)
       } else {
         await handleApiError(response, showError)
       }

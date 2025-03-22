@@ -26,11 +26,10 @@ export default function RequestAuthorForm() {
       }
 
       const body = JSON.stringify({
-        idUser: currentUser.id,
-        username: currentUser.username,
-        profilePicture: currentUser.profilePicture,
         status: 1,
-        reason: reason
+        reason: reason,
+        idUser: currentUser.id,
+        idRole: currentUser.idRole
       })
 
       const response = await fetch(`/api/authorrequests`, {

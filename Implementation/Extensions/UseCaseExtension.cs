@@ -32,8 +32,8 @@ namespace Implementation
                     (int)UseCaseEnum.EFUpdatePersonalCommentCommand,
                     (int)UseCaseEnum.EFDeletePersonalCommentCommand,
 
-                    (int)UseCaseEnum.EFLikePost,
-                    (int)UseCaseEnum.EFLikeComment,
+                    (int)UseCaseEnum.EFLikePostCommand,
+                    (int)UseCaseEnum.EFLikeCommentCommand,
 
                     (int)UseCaseEnum.EFGetUseCaseLogQuery,
 
@@ -77,8 +77,10 @@ namespace Implementation
                     (int)UseCaseEnum.EFUpdatePersonalCommentCommand,
                     (int)UseCaseEnum.EFDeletePersonalCommentCommand,
 
-                    (int)UseCaseEnum.EFLikePost,
-                    (int)UseCaseEnum.EFLikeComment,
+                    (int)UseCaseEnum.EFLikePostCommand,
+                    (int)UseCaseEnum.EFLikeCommentCommand,
+                    (int)UseCaseEnum.EFUnlikeCommentCommand,
+                    (int)UseCaseEnum.EFUnlikePostCommand,
 
                     (int)UseCaseEnum.EFUpdateUserCommand,
                     (int)UseCaseEnum.EFGetOneUserQuery,
@@ -112,8 +114,10 @@ namespace Implementation
                     (int)UseCaseEnum.EFUpdatePersonalCommentCommand,
                     (int)UseCaseEnum.EFDeletePersonalCommentCommand,
 
-                    (int)UseCaseEnum.EFLikePost,
-                    (int)UseCaseEnum.EFLikeComment,
+                    (int)UseCaseEnum.EFLikePostCommand,
+                    (int)UseCaseEnum.EFLikeCommentCommand,
+                    (int)UseCaseEnum.EFUnlikeCommentCommand,
+                    (int)UseCaseEnum.EFUnlikePostCommand,
 
                     (int)UseCaseEnum.EFUpdateUserCommand,
                     (int)UseCaseEnum.EFGetOneUserQuery,

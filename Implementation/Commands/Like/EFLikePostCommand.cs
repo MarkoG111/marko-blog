@@ -33,8 +33,8 @@ namespace Implementation.Commands.Like
             _notificationService = notificationService;
         }
 
-        public int Id => (int)UseCaseEnum.EFLikePost;
-        public string Name => UseCaseEnum.EFLikePost.ToString();
+        public int Id => (int)UseCaseEnum.EFLikePostCommand;
+        public string Name => UseCaseEnum.EFLikePostCommand.ToString();
 
         public async Task ExecuteAsync(LikeDto request)
         {

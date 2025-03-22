@@ -25,7 +25,8 @@ const userSlice = createSlice({
         email: payload.Email,
         allowedUseCases: payload.AllowedUseCases,
         profilePicture: payload.ProfilePicture,
-        roleName: payload.RoleName
+        roleName: payload.RoleName,
+        idRole: payload.IdRole
       }
 
       state.loading = false

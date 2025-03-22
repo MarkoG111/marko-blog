@@ -29,36 +29,37 @@ namespace Implementation
         EFUpdatePersonalCommentCommand = 14,
         EFDeletePersonalCommentCommand = 15,
 
-        EFLikePost = 16,
-        EFLikeComment = 17,
+        EFLikePostCommand = 16,
+        EFLikeCommentCommand = 17,
+        EFUnlikeCommentCommand = 18,
+        EFUnlikePostCommand = 19,
 
-        EFGetUseCaseLogQuery = 18,
+        EFGetUseCaseLogQuery = 20,
 
-        EFUpdateUserCommand = 19,
-        EFDeleteUserCommand = 20,
-        EFGetOneUserQuery = 21,
-        EFGetUsersQuery = 22,
+        EFUpdateUserCommand = 21,
+        EFDeleteUserCommand = 22,
+        EFGetOneUserQuery = 23,
+        EFGetUsersQuery = 24,
 
-        EFCreateCategoryCommand = 23,
-        EFUpdateCategoryCommand = 24,
-        EFDeleteCategoryCommand = 25,
-        EFGetOneCategoryQuery = 26,
-        EFGetCategoriesQuery = 27,
+        EFCreateCategoryCommand = 25,
+        EFUpdateCategoryCommand = 26,
+        EFDeleteCategoryCommand = 27,
+        EFGetOneCategoryQuery = 28,
+        EFGetCategoriesQuery = 29,
 
-        EFCreateAuthorRequestCommand = 28,
-        EFUpdateAuthorRequestCommand = 29,
-        EFGetAuthorRequestsQuery = 30,
+        EFCreateAuthorRequestCommand = 30,
+        EFUpdateAuthorRequestCommand = 31,
+        EFGetAuthorRequestsQuery = 32,
 
-        EFFollowCommand = 31,
-        EFUnfollowCommand = 32,
-        EFCheckFollowStatusQuery = 33,
+        EFFollowCommand = 33,
+        EFUnfollowCommand = 34,
+        EFCheckFollowStatusQuery = 35,
 
-        EFCreateNotificationCommand = 34,
-        EFGetNotificationsQuery = 35,
+        EFGetFollowersQuery = 36,
+        EFGetFollowingsQuery = 37,
 
-        EFMarkAllNotificationsAsReadCommand = 36,
-        
-        EFGetFollowersQuery = 37,
-        EFGetFollowingsQuery = 38,
+        EFCreateNotificationCommand = 38,
+        EFGetNotificationsQuery = 39,
+        EFMarkAllNotificationsAsReadCommand = 40,
     }
 }

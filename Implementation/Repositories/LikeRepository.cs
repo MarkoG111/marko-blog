@@ -26,6 +26,11 @@ namespace Implementation.Repositories
             await _context.Likes.AddAsync(like);
         }
 
+        public async Task RemoveLike(Like like)  
+        {
+            _context.Likes.Remove(like);
+        }
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();

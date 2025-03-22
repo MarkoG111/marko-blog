@@ -9,11 +9,6 @@ import Comment from './Comment'
 import { useError } from '../contexts/ErrorContext'
 import { getAvatarSrc } from "../utils/getAvatarSrc"
 
-import {
-  checkIfAlreadyVoted,
-  removeDislikeOrLikeIfPresent,
-  updateCommentLikes,
-} from '../utils/commentUtils'
 export default function CommentSection({ idPost, onCommentsNumberChange }) {
   const { currentUser } = useSelector(state => state.user)
 
@@ -155,6 +150,41 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
     }
   }
 
+  const findExistingVote = (comments, idComment, userId) => {
+    const comment = comments.find(c => c.id === idComment)
+
+    return comment?.likes.find(like => like.idUser === userId) || null
+  }
+
+  const updateVoteInState = (idComment, newVote, userId) => {
+    setComments(prevComments =>
+      prevComments.map(comment => {
+        if (comment.id === idComment) {
+          const filteredLikes = comment.likes.filter(like => like.idUser !== userId)
+
+          return {
+            ...comment,
+            likes: [...filteredLikes, newVote]
+          }
+        }
+        return comment
+      })
+    )
+  }
+
+  const removeVoteFromState = (idComment, userId) => {
+    setComments(prev => prev.map(comment => {
+      if (comment.id === idComment) {
+        return {
+          ...comment,
+          likes: comment.likes.filter(like => like.idUser !== userId)
+        }
+      }
+
+      return comment
+    }))
+  }
+
   const handleVoteComment = async (idComment, voteType) => {
     const token = localStorage.getItem("token")
     if (!token) {
@@ -162,9 +192,27 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
       return
     }
 
-    const isAlreadyVoted = checkIfAlreadyVoted(comments, idComment, currentUser.id, voteType) || checkIfAlreadyVoted(childComments, idComment, currentUser.id, voteType)
+    const existingVote = findExistingVote(comments, idComment, currentUser.id) || findExistingVote(childComments, idComment, currentUser.id)
 
-    if (isAlreadyVoted) {
+    if (existingVote && existingVote.status === voteType) {
+      try {
+        const response = await fetch(`/api/likes/comments/${idComment}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        })
+
+        if (response.ok) {
+          removeVoteFromState(idComment, currentUser.id)
+        } else {
+          await handleApiError(response, showError)
+        }
+      } catch (error) {
+        showError(error.message)
+      }
+
       return
     }
 
@@ -187,12 +235,7 @@ export default function CommentSection({ idPost, onCommentsNumberChange }) {
 
       if (response.ok) {
         const data = await response.json()
-
-        const updatedComments = updateCommentLikes(removeDislikeOrLikeIfPresent(comments, idComment, currentUser.id, voteType === 1 ? 2 : 1), idComment, data, currentUser.id)
-        const updatedChildComments = updateCommentLikes(removeDislikeOrLikeIfPresent(childComments, idComment, currentUser.id, voteType === 1 ? 2 : 1), idComment, data, currentUser.id)
-
-        setComments(updatedComments)
-        setChildComments(updatedChildComments)
+        updateVoteInState(idComment, data, currentUser.id)
       } else {
         await handleApiError(response, showError)
       }

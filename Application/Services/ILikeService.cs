@@ -10,5 +10,7 @@ namespace Application.Services
     public interface ILikeService
     {
         Task<Like> ToggleLike(LikeDto request);
+
+        Task RemoveLike(LikeDto request);
     }
 }
