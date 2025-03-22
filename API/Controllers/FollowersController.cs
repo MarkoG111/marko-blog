@@ -21,11 +21,11 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task <IActionResult> Post([FromBody] InsertFollowDto dtoRequest, [FromServices] IFollowCommand command)
+        public async Task<IActionResult> Post([FromBody] InsertFollowDto dtoRequest, [FromServices] IFollowCommand command)
         {
             dtoRequest.IdUser = _actor.Id;
             await _executor.ExecuteCommandAsync(command, dtoRequest);
-            return Ok();
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpGet("{id}/followers")]

@@ -20,11 +20,6 @@ namespace API.Core
             Console.WriteLine($"User {idUser} joined group {Context.ConnectionId}");
         }
 
-        public async Task SendNotificationToUser(int idUser, string message)
-        {
-            await Clients.Group(idUser.ToString()).SendAsync("ReceiveNotification", message);  // Send message to user group
-        }
-
         public override async Task OnConnectedAsync()
         {
             var idUser = Context.User?.FindFirst("IdUser")?.Value;

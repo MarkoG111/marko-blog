@@ -24,7 +24,7 @@ namespace API.Controllers
         public async Task <IActionResult> Post([FromBody] UpsertCommentDto dtoRequest, [FromServices] ICreateCommentCommand command)
         {
             await _executor.ExecuteCommandAsync(command, dtoRequest);
-            return Ok(dtoRequest);
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpGet]

@@ -25,7 +25,7 @@ namespace API.Controllers
         {
             dtoRequest.IdUser = _actor.Id;
             _executor.ExecuteCommand(command, dtoRequest);
-            return Ok(dtoRequest);
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpGet]
@@ -40,7 +40,7 @@ namespace API.Controllers
             dtoRequest.Id = id;
             dtoRequest.IdRole = 2;
             _executor.ExecuteCommand(command, dtoRequest);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPut("reject")]
@@ -49,7 +49,7 @@ namespace API.Controllers
             dtoRequest.Id = id;
             dtoRequest.IdRole = 3;
             _executor.ExecuteCommand(command, dtoRequest);
-            return Ok();
+            return NoContent();
         }
     }
 }

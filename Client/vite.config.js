@@ -8,6 +8,7 @@ const proxyPaths = [
   '/api/auth',
   '/api/users',
   '/api/comments',
+  '/api/likes',
   '/api/images',
   '/api/followers',
   '/api/authorrequests',

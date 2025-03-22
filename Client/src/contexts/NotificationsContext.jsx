@@ -51,7 +51,7 @@ export const NotificationsProvider = ({ children }) => {
 
         if (response.ok) {
           const data = await response.json()
-          
+
           setNotifications(data.items)
           updateUnreadCount(data.items)
         } else {

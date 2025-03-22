@@ -26,7 +26,7 @@ namespace API.Controllers
         {
             dtoRequest.FromIdUser = _actor.Id;
             await _executor.ExecuteCommandAsync(command, dtoRequest);
-            return Ok();
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpGet]

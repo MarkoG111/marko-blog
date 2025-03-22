@@ -19,10 +19,10 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task <IActionResult> Post([FromBody] UpsertPostDto dtoRequest, [FromServices] ICreatePostCommand command)
+        public async Task<IActionResult> Post([FromBody] UpsertPostDto dtoRequest, [FromServices] ICreatePostCommand command)
         {
             await _executor.ExecuteCommandAsync(command, dtoRequest);
-            return Ok();
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpGet]
@@ -38,7 +38,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task <IActionResult> Put(int id, [FromBody] UpsertPostDto dtoRequest, [FromServices] IUpdatePostCommand command)
+        public async Task<IActionResult> Put(int id, [FromBody] UpsertPostDto dtoRequest, [FromServices] IUpdatePostCommand command)
         {
             dtoRequest.Id = id;
             await _executor.ExecuteCommandAsync(command, dtoRequest);
